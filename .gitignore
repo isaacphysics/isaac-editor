@@ -1,0 +1,6 @@
+src/main/webapp/static/css/app.css
+target/
+.settings/
+.classpath
+.externalToolBuilders/SASS Builder.launch
+.project

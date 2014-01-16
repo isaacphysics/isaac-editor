@@ -1,0 +1,42 @@
+
+@import "settings";
+@import "../normalize";
+@import "../foundation";
+
+@import "../foundicons/general_foundicons/general_foundicons";
+
+
+#content-panel {
+	margin-top: 10px;
+}
+
+#file-browser {
+
+	a.git-type-file:before {
+	    content: "\f009";
+	    font-family: "GeneralFoundicons";
+	    margin-right: 10px;
+	    color: #788;
+	}
+	
+	a.git-type-dir:before {
+	    content: "\f02a";
+	    font-family: "GeneralFoundicons";
+	    margin-right: 10px;
+	    color: #788;
+	}
+
+}
+
+.CodeMirror {
+	height: 100%;
+	border: 1px solid grey;
+}
+
+#json-editor-holder {
+	position: absolute;
+	top: 50px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
