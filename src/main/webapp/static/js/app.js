@@ -1,6 +1,7 @@
 var gitHub = null;
 var gitPath = ["src", "main", "resources", "concepts", "maths"];//[];
 var gitFile = "";
+var file = null;
 
 var repoOwner = "daviesian";
 var repoName = "rutherford-content";
@@ -49,10 +50,16 @@ function getCookie(c_name)
     return c_value;
 }
 
+function clearSequeCookies()
+{
+    document.cookie = 'segue-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
 $(function() {
 	$(document).foundation();
 	
-	$("#content-panel").height($(window).height() - $("#content-panel").offset().top - 20);
+	
+	$("#content-panel").height($(window).height() - $("#content-panel").offset().top - 120);
 	
     // Document ready
 
@@ -123,9 +130,18 @@ $("body").on("click", ".login-button", function(e)
 		    document.location.href="https://gitHub.com/login/oauth/authorize?scope=repo&client_id=" + github_client_id;
 		});
 
+$("body").on("click", ".logout-button", function(e)
+		{
+			closeFile(function() {
+				clearSequeCookies();
+			    gitHub = null;
+			    displayGithubStatus();
+			});
+		});
+
 $("body").on("click", ".save:not(.disabled)", function(e) {
 	console.log("Save", file);
-	saveFile(file);
+	saveFile();
 });
 
 
@@ -135,10 +151,14 @@ function modalError(title, message) {
 
 function displayGithubStatus(){
 	console.warn("Displaying github status", gitHub);
-}
-
-
-
+	if (gitHub == null) {
+		$(".require-logout").show();
+		$(".require-login").hide();
+	} else {
+		$(".require-logout").hide();
+		$(".require-login").show();
+	}
+}	
 
 function updateFileBrowser(){
 	if (gitHub == null) {
@@ -195,26 +215,32 @@ function updateFileBrowser(){
 }
 
 function loadFile(path) {
-	console.log("Load", path);
-	gitHub.getFile(repoOwner, repoName, path, function(f) {
+	
+	closeFile(function(){
 		
-		if (path.endsWith(".json")) {
-			loadJsonEditor(f);
-		} else if (path.endsWith(".tex")) {
-			loadTexRaw(f);
-		} else {
-			loadFileRaw(f);
-		}
+		// We succeeded in closing the file
 		
-		file = f;
-		updateSaveButtons();
-		
-		$(".git-file-name").html(file.name);
-		
-		gitFile = f.name;
-		updateFileBrowser();
-	}, function(e) {
-		console.error("Could not load file:", e);
+		console.log("Load", path);
+		gitHub.getFile(repoOwner, repoName, path, function(f) {
+			
+			if (path.endsWith(".json")) {
+				loadJsonEditor(f);
+			} else if (path.endsWith(".tex")) {
+				loadTexRaw(f);
+			} else {
+				loadFileRaw(f);
+			}
+			
+			file = f;
+			updateSaveButtons();
+			
+			$(".git-file-name").html(file.name);
+			
+			gitFile = f.name;
+			updateFileBrowser();
+		}, function(e) {
+			console.error("Could not load file:", e);
+		});
 	});
 }
 
@@ -230,7 +256,13 @@ $("body").on("click", ".git-type-dir", function(e) {
 });
 
 $("body").on("click", ".git-type-file", function(e) {
-	loadFile($(e.target).data("git-path"));
+	
+	var path = $(e.target).data("git-path");
+	
+	if (file != null && path == file.path)
+		return;
+	
+	loadFile(path);
 	
 });
 
@@ -313,16 +345,12 @@ function loadJsonEditor(file)
 	modePanel.appendTo($("#content-panel"));
 	holder.appendTo($("#content-panel"));
 	                       	
-	var jsonEditor = new jsoneditor.JSONEditor(holder[0], {mode: mode, indentation: indentation});
+	var currentJson = null;
 	
-	var json = atob(file.content.replace(/\s/g, ''));
-
-
-	jsonEditor.setText(json);
-	
-
-	var currentJson = jsonEditor.getText();
-	setInterval(function(e) {
+	function jsonChange(e) {
+		if (currentJson == null)
+   		 return;
+   	 
 		var newJson = jsonEditor.getText();
 		
 		if (mode === "tree")
@@ -335,17 +363,80 @@ function loadJsonEditor(file)
 			updateSaveButtons();
 			currentJson = newJson;
 		}
-	}, 100);
+	}
 	
+	var jsonEditor = new jsoneditor.JSONEditor(holder[0], 
+			{mode: mode,
+		     indentation: indentation,
+		     change: jsonChange});
+	
+	var json = atob(file.content.replace(/\s/g, ''));
+
+
+	jsonEditor.setText(json);
+	
+	currentJson = jsonEditor.getText();
 }
 
-function closeFile()
+function closeFile(successCallback, failCallback)
 {
-	$("#content-panel").empty();
+	if (fileIsEdited()) 
+	{
+		$("#modal").on("closed", function(e) {
+			$("#modal").off("closed");
+			if (failCallback)
+				failCallback();
+		});
+		
+		$("#modal").on("click", ".close-cancel", function(e) {
+			$("#modal").off("click");			
+			$("#modal").foundation("reveal", "close");
+		});
+		
+		$("#modal").on("click", ".close-save", function(e) {
+			$("#modal").off("click");
+			$("#modal").off("closed");
+			
+			saveFile();
+			
+			$("#content-panel").empty();
+			file = null;
+			if (successCallback)
+				successCallback();
+
+			$("#modal").foundation("reveal", "close");
+		});
+		
+		$("#modal").on("click", ".close-discard", function(e) {
+			$("#modal").off("click");
+			$("#modal").off("closed");
+			
+			$("#content-panel").empty();
+			file = null;
+			if (successCallback)
+				successCallback();
+
+			$("#modal").foundation("reveal", "close");
+		});
+		
+		$("#modal").foundation("reveal", "open");
+	}
+	else
+	{
+		$("#content-panel").empty();
+		file = null;
+		if (successCallback)
+			successCallback();
+	}
+}
+
+function fileIsEdited() {
+	if (file == null)
+		return false;
+	if (file.editedContent == null || file.editedContent == undefined)
+		return false;
 	return true;
 }
-
-var file = null;
 
 function updateSaveButtons() {
 	if (file == null)
@@ -353,27 +444,26 @@ function updateSaveButtons() {
 		// We don't have a file open.
 		$(".save").hide();
 	}
-	else if (file.editedContent == null || file.editedContent == undefined)
-	{
-		// We have not edited the file
-		$(".save").addClass("disabled")
-		  		  .addClass("secondary")
-		  		  .removeClass("alert")
-		  		  .html("Saved")
-		  		  .show();	
-			
-	}
-	else
+	else if (fileIsEdited())
 	{
 		// We have edited the file
 		$(".save").removeClass("disabled")
         		  .removeClass("secondary")
-        		  .addClass("alert")
+        		  .addClass("success")
         		  .html("Save")
         		  .show();	
+			
+	}
+	else
+	{
+		// We have not edited the file
+		$(".save").addClass("disabled")
+		  		  .addClass("secondary")
+		  		  .removeClass("success")
+		  		  .html("Saved")
+		  		  .show();	
 	}
 }
-
 
 function updateBranchList() {
 	gitHub.listBranches(repoOwner, repoName, function(branches) {
@@ -395,9 +485,8 @@ function updateBranchList() {
 function chooseBranch(e) {
 	var branch = $(e.target).data("git-branch-name");
 	var openFile = file;
-	
-	if (closeFile())
-	{
+
+	closeFile(function() {
 		gitHub.branch = branch;
 		updateFileBrowser();
 		$(".current-branch").html(branch);
@@ -405,15 +494,25 @@ function chooseBranch(e) {
 		if (openFile != null) {
 			loadFile(openFile.path);
 		}
-	}	
+	});
 }
 
-function saveFile(file) 
+function saveFile() 
 {
+	if (file == null)
+		return;
+		
 	gitHub.commitChange(file, file.editedContent, "Edited " + file.name, function(f) {
 		console.log("File saved:", f);
-		loadFile(f.content.path);
+		
+		// Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
+		for (var attr in f.content) {
+			file[attr] = f.content[attr];
+		}
+		delete file.editedContent;
+
 		updateSaveButtons();
+		
 	}, function(e) {
 		console.error("Could not save file:", e);
 	});

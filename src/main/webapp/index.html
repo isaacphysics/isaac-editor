@@ -17,7 +17,7 @@
   	<nav class="top-bar" data-topbar>
 	  <ul class="title-area">
 	    <li class="name">
-	      <h1><a href="#">Segue Content Editor</a></h1>
+	      <h1><a href="#"><i class="general foundicon-edit"></i> Segue Content Editor</a></h1>
 	    </li>
 	    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
 	  </ul>
@@ -26,35 +26,41 @@
 	    <!-- Right Nav Section -->
 	    <ul class="right">
 	    
-	      <li class="name"><h1><a class="git-file-name"></a></h1></li>
-	      
-	      <li>
-	      <a href="#" class="save button radius secondary disabled">Saved</a>
-	      </li>
-
-	      <li class="has-dropdown">
-	        <a href="#">Branch: <span class="current-branch">master</span></a>
-	        <ul id="branch-list" class="dropdown">
-	        </ul>
-	      </li>
+	      <span class="require-login">
+		      <li class="name"><h1><a class="git-file-name"></a></h1></li>
+		      
+		      <li>
+		      <a href="#" class="save button radius secondary disabled">Saved</a>
+		      </li>
+	
+		      <li class="has-dropdown">
+		        <a href="#">Branch: <span class="current-branch">master</span></a>
+		        <ul id="branch-list" class="dropdown">
+		        </ul>
+		      </li>
+	      	<li><a class="logout-button button radius" href="#">Logout</a></li>
+	      </span>
+	      <span class="require-logout">
+	      	<li><a class="login-button success button radius" href="#">Login with GitHub</a></li>
+	      </span>
 	    </ul>
 	
-	    <!-- Left Nav Section -->
+	    <!-- Left Nav Section 
 	    <ul class="left">
 	      <li><a class="login-button button" href="#">Login with GitHub</a></li>
-	    </ul>
+	    </ul>-->
   	  </section>
 	</nav>
   </div>
   
   
-<div class="row">
+<div class="row require-login">
  	<div class="small-12 columns" >
  		<nav id="git-path" class="breadcrumbs"></nav>
  	</div>
  </div>
   
- <div class="row">
+ <div class="row require-login">
  
    	<div class="small-2 columns">
   		<div id="file-browser">
@@ -70,38 +76,41 @@
   	</div>
  </div>
  
- 
+<div id="modal" class="reveal-modal medium" data-reveal>
+  <h2>Changes not saved</h2>
+  <p class="lead">Do you really want to close this file?</p>
+  <a class="close-reveal-modal">&#215;</a>
+  <div class="right">
+  	<a class="button alert radius close-discard">Discard changes</a>
+  	<a class="button success radius close-save">Save changes</a>
+  	<a class="button secondary radius close-cancel" >Cancel</a>
+  </div>
+</div>
  
   
-     <div class="row">
-      <div class="large-12 columns">
-        <h1>Welcome to Foundation</h1>
+  
+  
+    <div class="row require-logout">
+      <div class="large-8 columns small-centered">
+        <h1>Segue Content Editor</h1>
       </div>
     </div>
     
-    
+    <hr class="require-logout"/>
 
-    <div class="row">
-      <div class="large-12 columns">
-        <div class="panel">
-          <h3>We&rsquo;re stoked you want to try Foundation! </h3>
-          <p>To get going, this file (index.html) includes some basic styles you can modify, play around with, or totally destroy to get going.</p>
-          <p>Once you've exhausted the fun in this document, you should check out:</p>
-          <div class="row">
-            <div class="large-4 medium-4 columns">
-          <p><a href="http://foundation.zurb.com/docs">Foundation Documentation</a><br />Everything you need to know about using the framework.</p>
-        </div>
-            <div class="large-4 medium-4 columns">
-              <p><a href="http://github.com/zurb/foundation">Foundation on Github</a><br />Latest code, issue reports, feature requests and more.</p>
-            </div>
-            <div class="large-4 medium-4 columns">
-              <p><a href="http://twitter.com/foundationzurb">@foundationzurb</a><br />Ping us on Twitter if you have questions. If you build something with this we'd love to see it (and send you a totally boss sticker).</p>
-            </div>
+    <div class="row require-logout">
+      <div class="large-8 columns small-centered">
+        
+          <a class="button radius success login-button">Login with GitHub...</a>
+          
           </div>
-        </div>
-      </div>
+      
     </div>
     
+    
+    
+ <span style="display:none;">
+ 
     <div class="row">
 
     
@@ -225,7 +234,7 @@
         </div>
       </div>
     </div>
- 
+ </span>
 
   
 
