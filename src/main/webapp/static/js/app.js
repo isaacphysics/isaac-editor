@@ -23,9 +23,7 @@ String.prototype.endsWith = function(str) {
     return this.indexOf(str) == this.length - str.length;
 };
 
-
-function getCookie(c_name)
-{
+function getCookie(c_name) {
     var c_value = document.cookie;
     var c_start = c_value.indexOf(" " + c_name + "=");
 
@@ -50,8 +48,7 @@ function getCookie(c_name)
     return c_value;
 }
 
-function clearSequeCookies()
-{
+function clearSequeCookies() {
     document.cookie = 'segue-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
@@ -144,6 +141,14 @@ $("body").on("click", ".save:not(.disabled)", function(e) {
 	saveFile();
 });
 
+$("body").on("click", ".preview-tex", function(e) {
+    if (file == null || !file.name.endsWith(".tex"))
+        return;
+        
+    $.ajax("/api/compile", {data: {file: file}, type: "POST"}).success(function(e) { 
+        window.open("data:application/pdf;base64," + e) 
+    });
+});
 
 function modalError(title, message) {
 	console.error(title, message);
@@ -224,6 +229,7 @@ function loadFile(path) {
 		gitHub.getFile(repoOwner, repoName, path, function(f) {
 			
 			f.originalContent = atob(f.content.replace(/\s/g, ''));
+            f.editedContent = f.originalContent;
 			
 			if (path.endsWith(".json")) {
 				loadJsonEditor(f);
@@ -290,20 +296,17 @@ function loadFileRaw(file) {
 	return cm;
 }
 
-function loadJsonRaw(file)
-{
+function loadJsonRaw(file) {
 	var cm = loadFileRaw(file);
 	cm.setOption("mode", {name: "javascript", json: true});
 }
 
-function loadTexRaw(file)
-{
+function loadTexRaw(file) {
 	var cm = loadFileRaw(file);
 	cm.setOption("mode", "stex");
 }
 
-function loadJsonEditor(file)
-{
+function loadJsonEditor(file) {
 	$("#content-panel").empty();
 	
 	var holder = $("<div/>").attr("id", "json-editor-holder");
@@ -380,8 +383,7 @@ function loadJsonEditor(file)
 	jsonEditor.setText(file.originalContent);
 }
 
-function closeFile(successCallback, failCallback)
-{
+function closeFile(successCallback, failCallback) {
 	if (fileIsEdited()) 
 	{
 		$("#modal").on("closed", function(e) {
@@ -465,6 +467,12 @@ function updateSaveButtons() {
 		  		  .html("Saved")
 		  		  .show();	
 	}
+    
+    if (file == null || !file.name.endsWith(".tex")) {
+        $(".preview-tex").hide();
+    } else {
+        $(".preview-tex").show();
+    }
 }
 
 function updateBranchList() {
@@ -499,8 +507,7 @@ function chooseBranch(e) {
 	});
 }
 
-function saveFile() 
-{
+function saveFile() {
 	if (file == null)
 		return;
 		
@@ -511,7 +518,9 @@ function saveFile()
 		for (var attr in f.content) {
 			file[attr] = f.content[attr];
 		}
+		file.originalContent = file.editedContent;
 		delete file.editedContent;
+		
 
 		updateSaveButtons();
 		

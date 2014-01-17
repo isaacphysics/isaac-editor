@@ -4,3 +4,4 @@ target/
 .classpath
 .externalToolBuilders/SASS Builder.launch
 .project
+.lein-repl-history
