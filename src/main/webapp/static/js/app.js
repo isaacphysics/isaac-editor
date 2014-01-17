@@ -223,6 +223,8 @@ function loadFile(path) {
 		console.log("Load", path);
 		gitHub.getFile(repoOwner, repoName, path, function(f) {
 			
+			f.originalContent = atob(f.content.replace(/\s/g, ''));
+			
 			if (path.endsWith(".json")) {
 				loadJsonEditor(f);
 			} else if (path.endsWith(".tex")) {
@@ -269,13 +271,13 @@ $("body").on("click", ".git-type-file", function(e) {
 function loadFileRaw(file) {
 	$("#content-panel").empty();
 	
-	var content = atob(file.content.replace(/\s/g, ''));
+	
 	
 	var cm = CodeMirror($("#content-panel")[0], 
 			{mode: "",
 			 theme: "eclipse",//"solarized light",
 			 lineNumbers: false,
-			 value: content,
+			 value: file.originalContent,
 			 lineWrapping: true});
 	
 	
@@ -344,38 +346,38 @@ function loadJsonEditor(file)
 	
 	modePanel.appendTo($("#content-panel"));
 	holder.appendTo($("#content-panel"));
-	                       	
-	var currentJson = null;
-	
+	                    	
 	function jsonChange(e) {
-		if (currentJson == null)
-   		 return;
-   	 
+
+		if (!jsonEditor)
+			return; // We are not initialised yet.
+		
+		
 		var newJson = jsonEditor.getText();
-		
+
 		if (mode === "tree")
-			newJson = JSON.stringify(jsonEditor.get(), null, indentation);
-		
-		if (currentJson != newJson)
 		{
-			console.log("JSON updated:", newJson);
-			file.editedContent = newJson;
-			updateSaveButtons();
-			currentJson = newJson;
+			// When changing away from Tree mode, we temporarily get invalid JSON, so the parse fails.
+			// Just ignore this, as it will be valid again before the mode finishes changing.
+			try {
+				newJson = JSON.stringify(jsonEditor.get(), null, indentation);
+			} catch (e) {
+				console.error("Tree not returning valid JSON");
+				//return;
+			}
 		}
+		
+		file.editedContent = newJson;
+		updateSaveButtons();
 	}
+	
 	
 	var jsonEditor = new jsoneditor.JSONEditor(holder[0], 
 			{mode: mode,
 		     indentation: indentation,
 		     change: jsonChange});
-	
-	var json = atob(file.content.replace(/\s/g, ''));
 
-
-	jsonEditor.setText(json);
-	
-	currentJson = jsonEditor.getText();
+	jsonEditor.setText(file.originalContent);
 }
 
 function closeFile(successCallback, failCallback)
@@ -433,7 +435,7 @@ function closeFile(successCallback, failCallback)
 function fileIsEdited() {
 	if (file == null)
 		return false;
-	if (file.editedContent == null || file.editedContent == undefined)
+	if (file.editedContent == null || file.editedContent == undefined || file.editedContent == file.originalContent)
 		return false;
 	return true;
 }
