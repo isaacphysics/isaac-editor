@@ -48,6 +48,28 @@ function getCookie(c_name) {
     return c_value;
 }
 
+function svg2png(url) {
+
+	var cvs = $("<canvas />")[0];
+	var p = new promise.Promise();
+
+	$.ajax(url, {dataType: "text", headers: {"Accept": "application/vnd.github.v3.raw"}}).success(function (e) {
+		var s = new Image();
+		s.src = 'data:image/svg+xml,' + e;
+		
+		cvs.width = s.width;
+		cvs.height = s.height;
+
+		var ctx = cvs.getContext("2d");
+		ctx.drawImage(s,0,0);
+
+		console.warn("PNG:", url, cvs.toDataURL("image/png"));
+		p.done(cvs.toDataURL("image/png"));
+	})
+	return p;
+}
+
+
 function clearSequeCookies() {
     document.cookie = 'segue-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
@@ -141,13 +163,64 @@ $("body").on("click", ".save:not(.disabled)", function(e) {
 	saveFile();
 });
 
+var pngs = {};
+var waitingForPngs = 0;
+
+function cachePngs() {
+    var p = new promise.Promise();
+    
+    gitHub.getTree(repoOwner, repoName, "src/main/resources", function(t) {
+        for(var n in t.tree) {
+            var node = t.tree[n];
+            if (node.type === "blob") {
+                if (node.path.endsWith(".svg")) {
+                    waitingForPngs++;
+                    (function(path) {
+                    svg2png("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch)
+                        .then(function(d) {
+                            pngs[path] = atob(d.split(",")[1]);
+                            waitingForPngs--;
+                        });})(node.path);
+                }
+            }
+        }
+    }, function(e) { console.error(e); });
+    
+    
+    return p;
+}
+
 $("body").on("click", ".preview-tex", function(e) {
     if (file == null || !file.name.endsWith(".tex"))
         return;
         
+        
+    gitHub.getTree(repoOwner, repoName, "src/main/resources", function(t) {
+        
+        var p = new PDFTeX();
+        for(var n in t.tree) {
+            var node = t.tree[n];
+            if (node.type === "tree") {
+                p.addExtraFolder(node.path);
+            } else if (node.type === "blob") {
+                if (node.path.endsWith(".svg")) {
+                    p.addExtraFile(node.path.replace(".svg", ".png"), pngs[node.path]);
+                } else {
+                    p.addExtraLazyFile(node.path, "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch, node.size);
+                }
+            }
+        }
+        
+        
+        p.compile(file.editedContent).then(function(d) {
+            console.log("DONE:", d);
+        });
+        
+    }, function(e) { console.error(e); });
+        /*
     $.ajax("/api/compile", {data: {file: file}, type: "POST"}).success(function(e) { 
         window.open("data:application/pdf;base64," + e) 
-    });
+    });*/
 });
 
 function modalError(title, message) {

@@ -97,19 +97,41 @@
             .success(successCallback)
             .error(errorCallback);
     };
-    /*
-     * DOESN'T YET SUPPORT BRANCHES
-    GitHub.prototype.getTree = function(repoOwner, repoName, sha, successCallback, errorCallback)
+    
+    GitHub.prototype.getFolder = function(repoOwner, repoName, path, successCallback, errorCallback)
     {
-        $.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/git/trees/" + sha + "?recursive=1",
-            {
-                data: {"access_token": this.token},
-                type: "GET",
-                cache: true
-            })
-            .success(successCallback)
-            .error(errorCallback);
-    };*/
+        var fs = path.split("/");
+        var name = fs[fs.length-1]
+        var parent = path.substr(path, path.length - name.length - 1);
+        
+        this.listFiles(repoOwner, repoName, parent, function(e) {
+            
+            for(var n in e){
+                if (e[n].path == path)
+                {
+                    successCallback(e[n]);
+                    return;
+                }
+            }
+            
+        }, errorCallback);
+    }
+    
+    GitHub.prototype.getTree = function(repoOwner, repoName, rootPath, successCallback, errorCallback)
+    {
+        var gh = this;
+        
+        gh.getFolder(repoOwner, repoName, rootPath, function(f) {
+            $.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/git/trees/" + f.sha + "?recursive=1",
+                {
+                    data: {"access_token": gh.token},
+                    type: "GET",
+                    cache: true
+                })
+                .success(successCallback)
+                .error(errorCallback);
+        }, errorCallback);
+    };
 
     GitHub.prototype.getOrCreateFile = function(repoOwner, repoName, path, successCallback, errorCallback)
     {
