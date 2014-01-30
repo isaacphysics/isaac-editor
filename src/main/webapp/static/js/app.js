@@ -6,6 +6,10 @@ var file = null;
 var repoOwner = "daviesian";
 var repoName = "rutherford-content";
 
+RSVP.on('error', function(reason) {
+  console.error(reason.message, reason.stack);
+});
+
 var urlParams;
 (window.onpopstate = function () {
     var match,
@@ -49,28 +53,31 @@ function getCookie(c_name) {
 }
 
 function svg2png(url) {
+	return new RSVP.Promise(function(resolve, reject) {
 
-	var cvs = $("<canvas />")[0];
-	var p = new promise.Promise();
+        $.ajax(url, {dataType: "text", headers: {"Accept": "application/vnd.github.v3.raw"}}).success(function (e) {
+            
+            try {
+                var cvs = $("<canvas />")[0];
+                var s = new Image();
+                s.src = 'data:image/svg+xml,' + encodeURI(e);
+                cvs.width = s.width;
+                cvs.height = s.height;
 
-	$.ajax(url, {dataType: "text", headers: {"Accept": "application/vnd.github.v3.raw"}}).success(function (e) {
-		var s = new Image();
-		s.src = 'data:image/svg+xml,' + e;
-		
-		cvs.width = s.width;
-		cvs.height = s.height;
+                var ctx = cvs.getContext("2d");
+                ctx.drawImage(s,0,0);
 
-		var ctx = cvs.getContext("2d");
-		ctx.drawImage(s,0,0);
-
-		console.warn("PNG:", url, cvs.toDataURL("image/png"));
-		p.done(cvs.toDataURL("image/png"));
-	})
-	return p;
+                console.warn("PNG:", url, cvs.toDataURL("image/png"));
+                resolve(cvs.toDataURL("image/png"));
+            } catch (e) {
+                reject(e);
+            }
+        }).error(function(e) {reject(e);});
+    });
 }
 
 
-function clearSequeCookies() {
+function clearSegueCookies() {
     document.cookie = 'segue-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
@@ -104,7 +111,7 @@ $(function() {
                 }
                 else
                 {
-                    clearTealightCookies();
+                    clearSegueCookies();
                     modalError("Login error", "The tealight auth server returned the following error: <code>" + r.error + "</code>");
                 }
             }).error(function(e)
@@ -116,17 +123,14 @@ $(function() {
     else if (getCookie("segue-token"))
     {
         // We already have a token stored in the cookie, login as that user.
-        GitHub.login(getCookie("segue-token"), function(g)
-        {
+        GitHub.login(getCookie("segue-token")).then(function(g) {
             gitHub = g;
             updateFileBrowser();
             displayGithubStatus();
         	updateBranchList();
-        }, function(e)
-        {
-            clearTealightCookies();
+        }).catch(function(e) {
+            clearSegueCookies();
             modalError("Login failed", "Github returned the following error message during login: <p><code>" + e.responseJSON.message + "</code>. <p>Your access token may have expired, in which case refreshing this page should fix the problem.");
-            ajaxError(e);
         });
     }
     else
@@ -163,64 +167,64 @@ $("body").on("click", ".save:not(.disabled)", function(e) {
 	saveFile();
 });
 
-var pngs = {};
-var waitingForPngs = 0;
-
-function cachePngs() {
-    var p = new promise.Promise();
+function cacheSvgsAsPngs(repoPath) {
     
-    gitHub.getTree(repoOwner, repoName, "src/main/resources", function(t) {
+    return gitHub.getTree(repoOwner, repoName, repoPath).then(function(t) {
+        
+        // Build a hash of sha => (promise that will resolve to PNG data URL)
+        var promises = {};
+        
         for(var n in t.tree) {
             var node = t.tree[n];
-            if (node.type === "blob") {
-                if (node.path.endsWith(".svg")) {
-                    waitingForPngs++;
-                    (function(path) {
-                    svg2png("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch)
-                        .then(function(d) {
-                            pngs[path] = atob(d.split(",")[1]);
-                            waitingForPngs--;
-                        });})(node.path);
-                }
-            }
+            
+            if (localStorage[node.sha])
+                continue; // This node is already cached in local storage
+        
+            if (node.type === "blob" && node.path.endsWith(".svg")) // This is an SVG file.
+                promises[node.sha] = svg2png("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch);
         }
-    }, function(e) { console.error(e); });
+        
+        return RSVP.hash(promises);
+    }).then(function (dataUrls) {
     
-    
-    return p;
+        // Extract raw PNG data from hash, store in localStorage.
+        for(var sha in dataUrls) 
+            localStorage[sha] = atob(dataUrls[sha].split(",")[1]);
+        
+    });
 }
 
 $("body").on("click", ".preview-tex", function(e) {
     if (file == null || !file.name.endsWith(".tex"))
         return;
-        
-        
-    gitHub.getTree(repoOwner, repoName, "src/main/resources", function(t) {
-        
-        var p = new PDFTeX();
-        for(var n in t.tree) {
-            var node = t.tree[n];
-            if (node.type === "tree") {
-                p.addExtraFolder(node.path);
-            } else if (node.type === "blob") {
-                if (node.path.endsWith(".svg")) {
-                    p.addExtraFile(node.path.replace(".svg", ".png"), pngs[node.path]);
-                } else {
-                    p.addExtraLazyFile(node.path, "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch, node.size);
+    
+    function createPdfTex() {
+        return gitHub.getTree(repoOwner, repoName, "src/main/resources").then(function(t) {
+            var p = new PDFTeX();
+            for(var n in t.tree) {
+                var node = t.tree[n];
+                if (node.type === "tree") {
+                    p.addExtraFolder(node.path);
+                } else if (node.type === "blob") {
+                    if (node.path.endsWith(".svg")) {
+                        p.addExtraFile(node.path.replace(".svg", ".png"), localStorage[node.sha]);
+                    } else {
+                        p.addExtraLazyFile(node.path, "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch, node.size);
+                    }
                 }
             }
-        }
-        
-        
-        p.compile(file.editedContent).then(function(d) {
-            console.log("DONE:", d);
+            return p;
         });
-        
-    }, function(e) { console.error(e); });
-        /*
-    $.ajax("/api/compile", {data: {file: file}, type: "POST"}).success(function(e) { 
-        window.open("data:application/pdf;base64," + e) 
-    });*/
+    }
+    
+    
+    cacheSvgsAsPngs("src/main/resources")
+        .then(createPdfTex)
+        .then(function(pdfTex) {
+            return pdfTex.compile(file.editedContent);
+        }).then(function(dataUrl) {
+            console.log("DONE:", dataUrl);
+        });//.catch(function(e) { console.error("Error creating PDF:", e); });
 });
 
 function modalError(title, message) {
@@ -244,7 +248,7 @@ function updateFileBrowser(){
 		return;
 	}
 	
-	gitHub.listFiles(repoOwner, repoName, gitPath.join("/"), function(fs) {
+	gitHub.listFiles(repoOwner, repoName, gitPath.join("/")).then(function(fs) {
 		
 		var pathNav = $("#git-path").html("");
 		
@@ -287,7 +291,7 @@ function updateFileBrowser(){
 			
 			
 		}
-	}, function(e) { 
+	}).catch(function(e) { 
 		console.error("Could not list files:", e);
 	});
 }
@@ -299,7 +303,7 @@ function loadFile(path) {
 		// We succeeded in closing the file
 		
 		console.log("Load", path);
-		gitHub.getFile(repoOwner, repoName, path, function(f) {
+		gitHub.getFile(repoOwner, repoName, path).then(function(f) {
 			
 			f.originalContent = atob(f.content.replace(/\s/g, ''));
             f.editedContent = f.originalContent;
@@ -319,7 +323,7 @@ function loadFile(path) {
 			
 			gitFile = f.name;
 			updateFileBrowser();
-		}, function(e) {
+		}).catch(function(e) {
 			console.error("Could not load file:", e);
 		});
 	});
@@ -549,7 +553,7 @@ function updateSaveButtons() {
 }
 
 function updateBranchList() {
-	gitHub.listBranches(repoOwner, repoName, function(branches) {
+	gitHub.listBranches(repoOwner, repoName).then(function(branches) {
 		console.log("Branches:", branches);
 		
 		$("#branch-list").empty();
@@ -560,7 +564,7 @@ function updateBranchList() {
 			$("#branch-list").append(li);
 		}
 		
-	}, function(e) {
+	}).catch(function(e) {
 		console.error("Error listing branches:", e);
 	});
 }
@@ -584,7 +588,7 @@ function saveFile() {
 	if (file == null)
 		return;
 		
-	gitHub.commitChange(file, file.editedContent, "Edited " + file.name, function(f) {
+	gitHub.commitChange(file, file.editedContent, "Edited " + file.name).then(function(f) {
 		console.log("File saved:", f);
 		
 		// Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
@@ -593,11 +597,10 @@ function saveFile() {
 		}
 		file.originalContent = file.editedContent;
 		delete file.editedContent;
-		
 
 		updateSaveButtons();
 		
-	}, function(e) {
+	}).catch(function(e) {
 		console.error("Could not save file:", e);
 	});
 }

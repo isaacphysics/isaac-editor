@@ -25,6 +25,7 @@ var PDFTeX = function() {
     console.error("E", msg);
   }
 
+  var onReady = new RSVP.defer();
 
   worker.onmessage = function(ev) {
     var data = JSON.parse(ev.data);
@@ -34,7 +35,7 @@ var PDFTeX = function() {
       console.log("missing command!", data);
     switch(data['command']) {
       case 'ready':
-        onready.done(true);
+        onReady.resolve(true);
         break;
       case 'stdout':
       case 'stderr':
@@ -48,28 +49,27 @@ var PDFTeX = function() {
         //console.debug('< received', ev.data);
         msg_id = data['msg_id'];
         if(('msg_id' in data) && (msg_id in promises)) {
-          promises[msg_id].done(data['result']);
+          promises[msg_id].resolve(data['result']);
         }
         else
           console.warn('Unknown worker message '+msg_id+'!');
     }
   }
 
-  var onready = new promise.Promise();
   var promises = [];
   var chunkSize = undefined;
 
   var sendCommand = function(cmd) {
-    var p = new promise.Promise();
+    var p = new RSVP.defer();
     var msg_id = promises.push(p)-1;
 
-    onready.then(function() {
+    onReady.promise.then(function() {
       cmd['msg_id'] = msg_id;
       //console.debug('> sending', cmd);
       worker.postMessage(JSON.stringify(cmd));
     });
 
-    return p;
+    return p.promise;
   };
 
   var determineChunkSize = function() {
@@ -154,17 +154,15 @@ var PDFTeX = function() {
   }
 
   self.compile = function(source_code) {
-    var p = new promise.Promise();
 
-    self.compileRaw(source_code).then(function(binary_pdf) {
+    return self.compileRaw(source_code).then(function(binary_pdf) {
       if(binary_pdf === false)
-        return p.done(false);
+        throw new Error("No PDF Produced");
 
       pdf_dataurl = 'data:application/pdf;charset=binary;base64,' + window.btoa(binary_pdf);
 
-      return p.done(pdf_dataurl);
+      return pdf_dataurl;
     });
-    return p;
   }
 
   self.compileRaw = function(source_code) {
@@ -200,11 +198,16 @@ var PDFTeX = function() {
     };
 
     var getPDF = function() {
-      console.log(arguments);
       return self.FS_readFile('input.pdf');
     }
 
-    return promise.chain(commands.concat(extraFolderCommands).concat(extraFileCommands))
+    var allCommands = commands.concat(extraFolderCommands).concat(extraFileCommands);
+    var ps = [];
+    for(var c in allCommands) {
+        var f = allCommands[c];
+        ps.push(f());
+    }
+    return RSVP.all(ps)
       .then(sendCompile)
       .then(getPDF);
   };
