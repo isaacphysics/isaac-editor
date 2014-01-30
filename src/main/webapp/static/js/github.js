@@ -25,7 +25,7 @@
     function getUser(token, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         return wrapAjax($.ajax("https://api.github.com/user",
                                {data: {"access_token": token},
@@ -39,7 +39,7 @@
     GitHub.login = function(token, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         return getUser(token).then(function(u) {
             return new GitHub(u, token);
@@ -53,7 +53,7 @@
     GitHub.prototype.getRepo = function(user, repoName, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         return wrapAjax($.ajax("https://api.github.com/repos/" + user + "/" + repoName,
                                {data: {"access_token": this.token}}));
@@ -62,7 +62,7 @@
     GitHub.prototype.forkRepo = function(repoOwner, repoName, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         var p = wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/forks",
                                { headers: {"Authorization": "token " + this.token},
@@ -80,7 +80,7 @@
     GitHub.prototype.createFile = function(repoOwner, repoName, path, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         var p = wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
                                 {
@@ -104,7 +104,7 @@
     GitHub.prototype.getFile = function(repoOwner, repoName, path, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         return wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
                                {
@@ -118,7 +118,7 @@
     GitHub.prototype.getFolder = function(repoOwner, repoName, path, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         var fs = path.split("/");
         var name = fs[fs.length-1]
@@ -137,7 +137,7 @@
     GitHub.prototype.getTree = function(repoOwner, repoName, rootPath, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         var gh = this;
         
@@ -154,7 +154,7 @@
     GitHub.prototype.getOrCreateFile = function(repoOwner, repoName, path, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         gh = this;
         
@@ -172,7 +172,7 @@
     GitHub.prototype.listFiles = function(repoOwner, repoName, directory, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         return this.getFile(repoOwner, repoName, directory);
     };
@@ -180,7 +180,7 @@
     GitHub.prototype.commitChange = function(originalFile, newContent, message, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
         var p = wrapAjax($.ajax(originalFile.url,
                                 {type: "PUT",
@@ -205,7 +205,7 @@
     GitHub.prototype.listBranches = function(repoOwner, repoName, successCallback, errorCallback)
     {
         if (successCallback || errorCallback)
-            console.error("USED SUCCESS OR ERROR:", successCallback, errorCallback);
+            console.error("Callbacks are deprecated:", successCallback, errorCallback);
         
     	return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/branches",
                                {

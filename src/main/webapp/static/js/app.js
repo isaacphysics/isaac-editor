@@ -7,6 +7,7 @@ var repoOwner = "daviesian";
 var repoName = "rutherford-content";
 
 RSVP.on('error', function(reason) {
+  console.error(reason);
   console.error(reason.message, reason.stack);
 });
 
@@ -54,7 +55,7 @@ function getCookie(c_name) {
 
 function svg2png(url) {
 	return new RSVP.Promise(function(resolve, reject) {
-
+        
         $.ajax(url, {dataType: "text", headers: {"Accept": "application/vnd.github.v3.raw"}}).success(function (e) {
             
             try {
@@ -67,7 +68,7 @@ function svg2png(url) {
                 var ctx = cvs.getContext("2d");
                 ctx.drawImage(s,0,0);
 
-                console.warn("PNG:", url, cvs.toDataURL("image/png"));
+                console.log("Caching PNG:", url, cvs.toDataURL("image/png"));
                 resolve(cvs.toDataURL("image/png"));
             } catch (e) {
                 reject(e);
@@ -147,20 +148,18 @@ $(function() {
 	updateSaveButtons();
 });
 
-$("body").on("click", ".login-button", function(e)
-		{
-		    $(".login-button").html("loading");
-		    document.location.href="https://gitHub.com/login/oauth/authorize?scope=repo&client_id=" + github_client_id;
-		});
+$("body").on("click", ".login-button", function(e) {
+    $(".login-button").html("loading");
+    document.location.href="https://gitHub.com/login/oauth/authorize?scope=repo&client_id=" + github_client_id;
+});
 
-$("body").on("click", ".logout-button", function(e)
-		{
-			closeFile(function() {
-				clearSequeCookies();
-			    gitHub = null;
-			    displayGithubStatus();
-			});
-		});
+$("body").on("click", ".logout-button", function(e) {
+    closeFile(function() {
+        clearSequeCookies();
+        gitHub = null;
+        displayGithubStatus();
+    });
+});
 
 $("body").on("click", ".save:not(.disabled)", function(e) {
 	console.log("Save", file);
@@ -199,6 +198,7 @@ $("body").on("click", ".preview-tex", function(e) {
         return;
     
     function createPdfTex() {
+        console.log("Building PDFTex File system");
         return gitHub.getTree(repoOwner, repoName, "src/main/resources").then(function(t) {
             var p = new PDFTeX();
             for(var n in t.tree) {
@@ -217,10 +217,10 @@ $("body").on("click", ".preview-tex", function(e) {
         });
     }
     
-    
     cacheSvgsAsPngs("src/main/resources")
         .then(createPdfTex)
         .then(function(pdfTex) {
+            console.log("Compiling", file.name);
             return pdfTex.compile(file.editedContent);
         }).then(function(dataUrl) {
             console.log("DONE:", dataUrl);
@@ -275,21 +275,13 @@ function updateFileBrowser(){
 		var browser = $("#git-files").html("");
 		for(var f in fs){
 			f = fs[f];
-			console.log(f);
 			
 			var li = $("<li/>");
-			
 			var a = $("<a/>").html(f.name).addClass("git-type-" + f.type).addClass("foundicon-idea").data("git-path", f.path);
-			
-			
 			
 			li.append(a);
 			
-
-			
 			browser.append(li);
-			
-			
 		}
 	}).catch(function(e) { 
 		console.error("Could not list files:", e);
@@ -297,12 +289,11 @@ function updateFileBrowser(){
 }
 
 function loadFile(path) {
+    console.log("Loading", path);
 	
-	closeFile(function(){
+	closeFile().then(function(){
 		
 		// We succeeded in closing the file
-		
-		console.log("Load", path);
 		gitHub.getFile(repoOwner, repoName, path).then(function(f) {
 			
 			f.originalContent = atob(f.content.replace(/\s/g, ''));
@@ -326,12 +317,14 @@ function loadFile(path) {
 		}).catch(function(e) {
 			console.error("Could not load file:", e);
 		});
-	});
+	}).catch(function() {
+        console.warn("Aborting file load - previous file not closed");
+    });
 }
 
 $("body").on("click", ".git-type-dir", function(e) {
 	var targetPath = $(e.target).data("git-path");
-	console.log(targetPath);
+	console.log("Switching to", targetPath);
 	if (targetPath !== "")
 		gitPath = targetPath.split("/");
 	else
@@ -460,55 +453,53 @@ function loadJsonEditor(file) {
 	jsonEditor.setText(file.originalContent);
 }
 
-function closeFile(successCallback, failCallback) {
-	if (fileIsEdited()) 
-	{
-		$("#modal").on("closed", function(e) {
-			$("#modal").off("closed");
-			if (failCallback)
-				failCallback();
-		});
-		
-		$("#modal").on("click", ".close-cancel", function(e) {
-			$("#modal").off("click");			
-			$("#modal").foundation("reveal", "close");
-		});
-		
-		$("#modal").on("click", ".close-save", function(e) {
-			$("#modal").off("click");
-			$("#modal").off("closed");
-			
-			saveFile();
-			
-			$("#content-panel").empty();
-			file = null;
-			if (successCallback)
-				successCallback();
+function closeFile() {
+    return new RSVP.Promise(function(resolve, reject) {
+        if (fileIsEdited()) 
+        {
+            $("#modal").on("closed", function(e) {
+                $("#modal").off("closed");
+                reject("Close cancelled");
+            });
+            
+            $("#modal").on("click", ".close-cancel", function(e) {
+                $("#modal").off("click");			
+                $("#modal").foundation("reveal", "close");
+            });
+            
+            $("#modal").on("click", ".close-save", function(e) {
+                $("#modal").off("click");
+                $("#modal").off("closed");
+                
+                saveFile().then(function() {
+                    $("#content-panel").empty();
+                    file = null;
+                    resolve();
+                });
 
-			$("#modal").foundation("reveal", "close");
-		});
-		
-		$("#modal").on("click", ".close-discard", function(e) {
-			$("#modal").off("click");
-			$("#modal").off("closed");
-			
-			$("#content-panel").empty();
-			file = null;
-			if (successCallback)
-				successCallback();
+                $("#modal").foundation("reveal", "close");
+            });
+            
+            $("#modal").on("click", ".close-discard", function(e) {
+                $("#modal").off("click");
+                $("#modal").off("closed");
+                
+                $("#content-panel").empty();
+                file = null;
+                resolve();
 
-			$("#modal").foundation("reveal", "close");
-		});
-		
-		$("#modal").foundation("reveal", "open");
-	}
-	else
-	{
-		$("#content-panel").empty();
-		file = null;
-		if (successCallback)
-			successCallback();
-	}
+                $("#modal").foundation("reveal", "close");
+            });
+            
+            $("#modal").foundation("reveal", "open");
+        }
+        else
+        {
+            $("#content-panel").empty();
+            file = null;
+            resolve();
+        }
+    });
 }
 
 function fileIsEdited() {
@@ -573,7 +564,7 @@ function chooseBranch(e) {
 	var branch = $(e.target).data("git-branch-name");
 	var openFile = file;
 
-	closeFile(function() {
+	closeFile().then(function() {
 		gitHub.branch = branch;
 		updateFileBrowser();
 		$(".current-branch").html(branch);
@@ -585,24 +576,27 @@ function chooseBranch(e) {
 }
 
 function saveFile() {
-	if (file == null)
-		return;
-		
-	gitHub.commitChange(file, file.editedContent, "Edited " + file.name).then(function(f) {
-		console.log("File saved:", f);
-		
-		// Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
-		for (var attr in f.content) {
-			file[attr] = f.content[attr];
-		}
-		file.originalContent = file.editedContent;
-		delete file.editedContent;
+    return new RSVP.Promise(function(resolve, reject) {
+        if (file == null)
+            resolve();
+            
+        gitHub.commitChange(file, file.editedContent, "Edited " + file.name).then(function(f) {
+            console.log("File saved:", f);
+            
+            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
+            for (var attr in f.content) {
+                file[attr] = f.content[attr];
+            }
+            file.originalContent = file.editedContent;
 
-		updateSaveButtons();
-		
-	}).catch(function(e) {
-		console.error("Could not save file:", e);
-	});
+            updateSaveButtons();
+            resolve();
+            
+        }).catch(function(e) {
+            console.error("Could not save file:", e);
+            reject();
+        });
+    });
 }
 
 
