@@ -9,7 +9,10 @@ Module['preInit'] = function() {
     return FS.root.contents;
   }
 };
-var FS_createLazyFilesFromList = function(msg_id, parent, list, parent_url, canRead, canWrite) {
+
+Module['TOTAL_MEMORY'] = 268435456;
+
+var FS_createLazyFilesFromList = function(msg_id, local, parent, list, parent_url, canRead, canWrite) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', list, false);
   xhr.responseType = 'text';
@@ -20,10 +23,11 @@ var FS_createLazyFilesFromList = function(msg_id, parent, list, parent_url, canR
       pos = lines[i].lastIndexOf("/");
       filename = lines[i].slice(pos+1);
       path = lines[i].slice(0, pos);
-      if(filename === '.')
+      if ((parent+path+"/"+filename) in local)
+        Module['FS_createDataFile'](parent+path, filename, local[parent+path+"/"+filename], true, true);
+      else if(filename === '.')
         Module['FS_createPath']('/', parent+path, canRead, canWrite);
-      else
-        if(filename.length > 0) {
+      else if(filename.length > 0) {
           Module['FS_createLazyFile'](parent+path, filename, parent_url+path+'/'+filename, canRead, canWrite);
           }
     }
@@ -79,18 +83,25 @@ self['onmessage'] = function(ev) {
       try {
         fn = cmd.substr(3);
         res = FS[fn].apply(FS, args);
-        if(cmd === 'FS_readFile')
-          res = String.fromCharCode.apply(null, res);
+        if(cmd === 'FS_readFile') {
+            //res = String.fromCharCode.apply(null, res);
+            s = "";
+
+            for (var c in res)
+                s += String.fromCharCode(res[c]);
+
+            res = s;
+        }
         else
           res = true;
       }
       catch(e) {
         res = false;
       }
-    break;
+      break;
     case 'set_TOTAL_MEMORY':
-      Module.TOTAL_MEMORY = args[0];
-      res = Module.TOTAL_MEMORY;
+      Module['TOTAL_MEMORY'] = args[0];
+      res = Module['TOTAL_MEMORY'];
     break;
     case 'set_ENV':
       ENV[args[0]] = args[1];

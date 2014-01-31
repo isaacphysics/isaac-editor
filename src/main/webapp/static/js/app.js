@@ -27,6 +27,9 @@ var urlParams;
 String.prototype.endsWith = function(str) {
     return this.indexOf(str) == this.length - str.length;
 };
+String.prototype.startsWith = function(str) {
+    return this.substr(0, str.length) == str;
+};
 
 function getCookie(c_name) {
     var c_value = document.cookie;
@@ -57,7 +60,7 @@ function svg2png(url) {
 	return new RSVP.Promise(function(resolve, reject) {
         
         $.ajax(url, {dataType: "text", headers: {"Accept": "application/vnd.github.v3.raw"}}).success(function (e) {
-            
+            00
             try {
                 var cvs = $("<canvas />")[0];
                 var s = new Image();
@@ -178,7 +181,7 @@ function cacheSvgsAsPngs(repoPath) {
             
             if (localStorage[node.sha])
                 continue; // This node is already cached in local storage
-        
+                
             if (node.type === "blob" && node.path.endsWith(".svg")) // This is an SVG file.
                 promises[node.sha] = svg2png("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch);
         }
@@ -193,39 +196,91 @@ function cacheSvgsAsPngs(repoPath) {
     });
 }
 
+function createPdfTex() {
+    console.log("Building PDFTex File system");
+    return gitHub.getTree(repoOwner, repoName, "src/main/resources").then(function(t) {
+        var p = new PDFTeX();
+        if (preamble)
+            p.addExtraFile("preamble.fmt", preamble, true, true); // Overwrite!
+        for(var n in t.tree) {
+            var node = t.tree[n];
+            if (node.type === "tree") {
+                p.addExtraFolder(node.path);
+            } else if (node.type === "blob") {
+                if (node.path.endsWith(".svg")) {
+                    p.addExtraFile(node.path.replace(".svg", ".png"), localStorage[node.sha]);
+                } else {
+                    p.addExtraLazyFile(node.path, "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch, node.size);
+                }
+            }
+        }
+        return p;
+    });
+}
+
+var usedFiles = {};
+
+function cacheUsedFiles(fls) {
+    var lines = fls.split("\n");
+    for (var line in lines) {
+        line = lines[line];
+        if (line.startsWith("INPUT //texmf-dist/")) {
+            var url = "http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/" + line.substr(8);
+            //console.log("Used file:", url);
+            usedFiles[line.substr(6)] = new RSVP.Promise(function (resolve, reject) {
+                var oReq = new XMLHttpRequest();
+                oReq.open("GET", url, true);
+                // retrieve data unprocessed as a binary string
+                oReq.overrideMimeType("text/plain; charset=x-user-defined");
+                oReq.onload = function (e) { resolve(oReq.response); };
+                oReq.onerror = reject;
+                oReq.send();
+                //$.ajax(url, {dataType: "text"}).success(resolve).error(reject);
+            });
+        }
+    }
+
+    RSVP.hash(usedFiles).then(function(h) {
+        usedFiles = h
+        console.log("Finished caching used files");
+    });
+}
+
 $("body").on("click", ".preview-tex", function(e) {
     if (file == null || !file.name.endsWith(".tex"))
         return;
     
-    function createPdfTex() {
-        console.log("Building PDFTex File system");
-        return gitHub.getTree(repoOwner, repoName, "src/main/resources").then(function(t) {
-            var p = new PDFTeX();
-            for(var n in t.tree) {
-                var node = t.tree[n];
-                if (node.type === "tree") {
-                    p.addExtraFolder(node.path);
-                } else if (node.type === "blob") {
-                    if (node.path.endsWith(".svg")) {
-                        p.addExtraFile(node.path.replace(".svg", ".png"), localStorage[node.sha]);
-                    } else {
-                        p.addExtraLazyFile(node.path, "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contents/src/main/resources/" + node.path + "?access_token=" + gitHub.token + "&ref=" + gitHub.branch, node.size);
-                    }
-                }
-            }
-            return p;
-        });
-    }
-    
+    var start = new Date().getTime();
+
     cacheSvgsAsPngs("src/main/resources")
         .then(createPdfTex)
         .then(function(pdfTex) {
             console.log("Compiling", file.name);
-            return pdfTex.compile(file.editedContent);
-        }).then(function(dataUrl) {
-            console.log("DONE:", dataUrl);
+            return pdfTex.compile(file.editedContent, usedFiles);
+        }).then(function(files) {
+            console.log("Done in", (new Date().getTime() - start), "ms:", files.pdf_dataurl);
+            if (Object.keys(usedFiles).length == 0)
+                cacheUsedFiles(files.fls);
         });//.catch(function(e) { console.error("Error creating PDF:", e); });
 });
+
+var preamble = null;
+
+function preCompile() {
+    return cacheSvgsAsPngs("src/main/resources")
+        .then(createPdfTex)
+        .then(function (pdfTex) {
+            console.log("Precompiling Preamble");
+            return gitHub.getFile(repoOwner, repoName, "src/main/resources/common/required.tex").then(function (f) {
+                return atob(f.content.replace(/\s/g, ''));
+            }).then(function (preamble) {
+                return pdfTex.preCompile(preamble);
+            });
+        }).then(function (p) {
+            preamble = p.fmt;
+            console.log("Preamble Compiled");
+        });
+}
 
 function modalError(title, message) {
 	console.error(title, message);
