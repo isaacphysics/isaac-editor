@@ -200,8 +200,6 @@ function createPdfTex() {
     console.log("Building PDFTex File system");
     return gitHub.getTree(repoOwner, repoName, "src/main/resources").then(function(t) {
         var p = new PDFTeX();
-        if (preamble)
-            p.addExtraFile("preamble.fmt", preamble, true, true); // Overwrite!
         for(var n in t.tree) {
             var node = t.tree[n];
             if (node.type === "tree") {
@@ -218,34 +216,6 @@ function createPdfTex() {
     });
 }
 
-var usedFiles = {};
-
-function cacheUsedFiles(fls) {
-    var lines = fls.split("\n");
-    for (var line in lines) {
-        line = lines[line];
-        if (line.startsWith("INPUT //texmf-dist/")) {
-            var url = "http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/" + line.substr(8);
-            //console.log("Used file:", url);
-            usedFiles[line.substr(6)] = new RSVP.Promise(function (resolve, reject) {
-                var oReq = new XMLHttpRequest();
-                oReq.open("GET", url, true);
-                // retrieve data unprocessed as a binary string
-                oReq.overrideMimeType("text/plain; charset=x-user-defined");
-                oReq.onload = function (e) { resolve(oReq.response); };
-                oReq.onerror = reject;
-                oReq.send();
-                //$.ajax(url, {dataType: "text"}).success(resolve).error(reject);
-            });
-        }
-    }
-
-    RSVP.hash(usedFiles).then(function(h) {
-        usedFiles = h
-        console.log("Finished caching used files");
-    });
-}
-
 $("body").on("click", ".preview-tex", function(e) {
     if (file == null || !file.name.endsWith(".tex"))
         return;
@@ -256,31 +226,11 @@ $("body").on("click", ".preview-tex", function(e) {
         .then(createPdfTex)
         .then(function(pdfTex) {
             console.log("Compiling", file.name);
-            return pdfTex.compile(file.editedContent, usedFiles);
+            return pdfTex.compile(file.editedContent);
         }).then(function(files) {
             console.log("Done in", (new Date().getTime() - start), "ms:", files.pdf_dataurl);
-            if (Object.keys(usedFiles).length == 0)
-                cacheUsedFiles(files.fls);
         });//.catch(function(e) { console.error("Error creating PDF:", e); });
 });
-
-var preamble = null;
-
-function preCompile() {
-    return cacheSvgsAsPngs("src/main/resources")
-        .then(createPdfTex)
-        .then(function (pdfTex) {
-            console.log("Precompiling Preamble");
-            return gitHub.getFile(repoOwner, repoName, "src/main/resources/common/required.tex").then(function (f) {
-                return atob(f.content.replace(/\s/g, ''));
-            }).then(function (preamble) {
-                return pdfTex.preCompile(preamble);
-            });
-        }).then(function (p) {
-            preamble = p.fmt;
-            console.log("Preamble Compiled");
-        });
-}
 
 function modalError(title, message) {
 	console.error(title, message);

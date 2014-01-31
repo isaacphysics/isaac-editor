@@ -161,7 +161,7 @@ var PDFTeX = function () {
           curry(self, 'FS_createLazyFile', ['/resources', 'latex.fmt', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/latex.fmt', true, true]),
           curry(self, 'FS_createFolder', ['/bin/', 'share', true, true]),
           curry(self, 'FS_createLazyFile', ['/bin/', 'texmf.cnf', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/texmf-dist/web2c/texmf.cnf', true, true]),
-          curry(self, 'FS_createLazyFilesFromList', [{}, '/', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive.lst', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/', true, true]),
+          curry(self, 'FS_createLazyFilesFromList', ['/', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive.lst', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/', true, true]),
           curry(self, 'FS_chdir', ['/resources']),
         ];
 
@@ -174,22 +174,9 @@ var PDFTeX = function () {
         return RSVP.all(ps);
     }
 
-    self.preCompile = function (preambleTex) {
-        if (typeof (chunkSize) === "undefined")
-            chunkSize = determineChunkSize();
-        return initFS(preambleTex).then(function () {
-            return sendCommand({
-                'command': "run",
-                'arguments': ['-interaction=nonstopmode', '-output-format', 'pdf', '-ini', '-jobname', 'preamble', '&latex', 'input.tex\\dump'],
-            });
-        }).then(function () {
-            return RSVP.hash({ fmt: self.FS_readFile("preamble.fmt") });
-        });
-    }
+    self.compile = function (source_code) {
 
-    self.compile = function (source_code, cachedFiles) {
-
-        return self.compileRaw(source_code, cachedFiles).then(function (files) {
+        return self.compileRaw(source_code).then(function (files) {
             if (files.pdf === false)
                 throw new Error("No PDF Produced");
 
@@ -199,7 +186,7 @@ var PDFTeX = function () {
         });
     }
 
-    self.compileRaw = function (source_code, cachedFiles) {
+    self.compileRaw = function (source_code) {
         if (typeof (chunkSize) === "undefined")
             chunkSize = determineChunkSize();
 
@@ -217,7 +204,7 @@ var PDFTeX = function () {
               curry(self, 'FS_createLazyFile', ['/resources', 'latex.fmt', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/latex.fmt', true, true]),
               curry(self, 'FS_createFolder', ['/bin/', 'share', true, true]),
               curry(self, 'FS_createLazyFile', ['/bin/', 'texmf.cnf', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/texmf-dist/web2c/texmf.cnf', true, true]),
-              curry(self, 'FS_createLazyFilesFromList', [cachedFiles, '/', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive.lst', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/', true, true]),
+              curry(self, 'FS_createLazyFilesFromList', ['/', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive.lst', 'http://www.cl.cam.ac.uk/~ipd21/texlive_cdn/texlive/', true, true]),
 
               curry(self, 'FS_chdir', ['/resources']),
             ];
@@ -226,7 +213,7 @@ var PDFTeX = function () {
             initialized = true;
             return sendCommand({
                 'command': 'run',
-                'arguments': ['-recorder', '-interaction=nonstopmode', '-output-format', 'pdf', '&preamble', 'input.tex'],
+                'arguments': ['-interaction=nonstopmode', '-output-format', 'pdf', '&latex', 'input.tex'],
                 //        'arguments': ['-debug-format', '-output-format', 'pdf', '&latex', 'input.tex'],
             });
         };
@@ -246,7 +233,6 @@ var PDFTeX = function () {
           .then(function () {
               return RSVP.hash({
                   pdf: self.FS_readFile('input.pdf'),
-                  fls: self.FS_readFile('input.fls'),
                   aux: self.FS_readFile('input.aux'),
               });
           });
