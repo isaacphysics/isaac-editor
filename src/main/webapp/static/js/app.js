@@ -80,7 +80,6 @@ function svg2png(url) {
     });
 }
 
-
 function clearSegueCookies() {
     document.cookie = 'segue-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
@@ -88,7 +87,8 @@ function clearSegueCookies() {
 $(function() {
 	$(document).foundation();
 	
-	
+	$("#modal-compile").height($(window).height() -200);
+	$("#compile-console").height($("#modal-compile").height() - 100);
 	$("#content-panel").height($(window).height() - $("#content-panel").offset().top - 120);
 	
     // Document ready
@@ -170,7 +170,7 @@ $("body").on("click", ".save:not(.disabled)", function(e) {
 });
 
 function cacheSvgsAsPngs(repoPath) {
-    
+    console.groupCollapsed("Caching and converting SVGs");
     return gitHub.getTree(repoOwner, repoName, repoPath).then(function(t) {
         
         // Build a hash of sha => (promise that will resolve to PNG data URL)
@@ -193,6 +193,7 @@ function cacheSvgsAsPngs(repoPath) {
         for(var sha in dataUrls) 
             localStorage[sha] = atob(dataUrls[sha].split(",")[1]);
         
+        console.groupEnd();
     });
 }
 
@@ -219,18 +220,65 @@ function createPdfTex() {
 $("body").on("click", ".preview-tex", function(e) {
     if (file == null || !file.name.endsWith(".tex"))
         return;
-    
-    var start = new Date().getTime();
 
-    cacheSvgsAsPngs("src/main/resources")
+    var worker = null;
+
+    function stdOutCallback(msg) {
+        $("#compile-console").append(msg + "\n");
+        $("#compile-console").scrollTop(99999999); // Scroll to bottom (!)
+    }
+
+    // Start compilation
+
+    var compilePromise = cacheSvgsAsPngs("src/main/resources")
         .then(createPdfTex)
-        .then(function(pdfTex) {
-            console.log("Compiling", file.name);
-            return pdfTex.compile(file.editedContent);
-        }).then(function(files) {
-            console.log("Done in", (new Date().getTime() - start), "ms:", files.pdf_dataurl);
+        .then(function (pdfTex) {
+            worker = pdfTex;
+            console.time("Compilation");
+            console.groupCollapsed("Compiling", file.name);
+            
+            return pdfTex.compile(file.editedContent, stdOutCallback);
+        }).then(function (files) {
+            console.groupEnd();
+            console.timeEnd("Compilation");
+            console.log("Compiled:", files.pdf_dataurl);
+            $(".compile-view-pdf").data("pdf-data-url", files.pdf_dataurl).show();
+        }).finally(function () {
+            console.groupEnd()
         });//.catch(function(e) { console.error("Error creating PDF:", e); });
+
+    // Configure modal popup
+
+    var m = $("#modal-compile");
+    $(".compile-view-pdf").hide();
+    m.foundation("reveal", "open");
+    $("#compile-console").empty();
+
+    m.on("closed", function (e) {
+        m.off("closed");
+        m.off("click");
+        compilePromise.catch(function (e) { console.log("Compilation cancelled cleanly"); });
+        worker.terminate();
+        console.warn("Terminating Compilation");
+    });
+
+    m.on("click", ".compile-cancel", function (e) {
+        m.foundation("reveal", "close");
+    });
+
+    m.on("click", ".compile-view-pdf", function (e) {
+        previewPdf($(e.target).data("pdf-data-url"));
+        m.off("closed");
+        m.off("click");
+        m.foundation("reveal", "close");
+    });
+
+    
 });
+
+function previewPdf(dataUrl) {
+    window.open(dataUrl, "_blank");
+}
 
 function modalError(title, message) {
 	console.error(title, message);

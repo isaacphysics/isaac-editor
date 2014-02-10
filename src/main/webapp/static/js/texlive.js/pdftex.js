@@ -2,6 +2,8 @@ var PDFTeX = function () {
     var worker = new Worker("/static/js/texlive.js/pdftex-worker.js");
     var self = this;
     var initialized = false;
+    var stdOutCallback = null;
+    var stdErrCallback = null;
 
     self.on_filenotfound = function (file) {
         console.error("FILE NOT FOUND:", file);
@@ -11,7 +13,9 @@ var PDFTeX = function () {
     }
 
     self.on_stdout = function (msg) {
-        console.log("L", msg);
+        console.log(msg);
+        if (stdOutCallback)
+            stdOutCallback(msg);
 
         var p = /!.*File `(.*)' not found/i
         var m = p.exec(msg);
@@ -21,7 +25,9 @@ var PDFTeX = function () {
     }
 
     self.on_stderr = function (msg) {
-        console.error("E", msg);
+        console.error(msg);
+        if (stdErrCallback)
+            stdErrCallback(msg);
     }
 
     var onReady = new RSVP.defer();
@@ -148,7 +154,6 @@ var PDFTeX = function () {
         extraFileCommands.push(curry(self, 'FS_createLazyFile', ['/resources', path, url, true, false, length]));
     }
     self.addExtraFile = function (path, content) {
-        console.warn("Adding extra file:", path);
         extraFileCommands.push(curry(self, 'FS_createDataFile', ['/resources', path, content, true, true]));
     }
 
@@ -174,8 +179,14 @@ var PDFTeX = function () {
         return RSVP.all(ps);
     }
 
-    self.compile = function (source_code) {
+    self.terminate = function () {
+        promises[promises.length - 1].reject("Cancelled");
+        worker.terminate();
+    }
 
+    self.compile = function (source_code, stdOut, stdErr) {
+        stdOutCallback = stdOut;
+        stdErrCallback = stdErr;
         return self.compileRaw(source_code).then(function (files) {
             if (files.pdf === false)
                 throw new Error("No PDF Produced");
