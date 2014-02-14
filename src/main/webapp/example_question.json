@@ -1,0 +1,95 @@
+{
+ "attribution": null, 
+ "title": "Three Collisions", 
+ "relatedContent": [
+  "energy", 
+  "momentum"
+ ], 
+ "author": null, 
+ "encoding": "latex", 
+ "layout": "1-col", 
+ "content": [
+  {
+   "content": "{Three particles A, B, and C, each of mass \\vari {m}, lie at rest in that order in a straight line on a smooth horizontal table. The particle A is then projected directly towards B with speed \\vari {u}.}", 
+   "type": "content", 
+   "encoding": "latex"
+  },
+  {
+    "type":"video",
+    "src":"/some/video.mp4",
+    "content":"A video caption.",
+    "encoding": "latex"
+  },
+  {
+   "encoding": "latex", 
+   "content": "{Find the velocities of the three particles immediately after the second impact, assuming the collisions are perfectly elastic.}", 
+   "answer": {
+    "content": "{v_{1} = 0 & $\\displaystyle  $$\\displaystyle  w_{2} = 0  $$\\displaystyle  $$\\displaystyle  w_{3} = u  $}", 
+    "type": "content", 
+    "encoding": "latex"
+   }, 
+   "type": "question", 
+   "hints": [
+    {
+     "content": "{In a completely elastic collision, no kinetic energy is lost.}", 
+     "type": "content", 
+     "encoding": "latex"
+    }
+   ]
+  }, 
+  {
+    "type":"image",
+    "src":"/some/otherimage.png",
+    "content":[
+    {"type":"content",
+     "content": "Some caption text"},
+     {"type":"image",
+      "src": "caption_image.png",
+      "encoding": "markdown",
+      "content": "Caption of an image in a caption!"
+    }
+    ]
+  },
+  {
+   "content": "{The masses of A, B, and C are now \\vari {m}, \\vari {2m} and \\vari {3m} respectively:}", 
+   "type": "content", 
+   "encoding": "latex"
+  }, 
+  {
+   "encoding": "latex", 
+   "content": "{Again find the velocities of the three particles immediately after the second impact, assuming the collisions are perfectly elastic.}", 
+   "answer": {
+    "content": "{v_{1} = - \\frac{1}{3}u & $\\displaystyle  $$\\displaystyle  w_{2} = - \\frac{2}{15}u  $$\\displaystyle  $$\\displaystyle  w_{3} = \\frac{8}{15}u  $}", 
+    "type": "content", 
+    "encoding": "latex"
+   }, 
+   "type": "question", 
+   "hints": [
+    {
+     "content": "{Completely inelastically means that the particles stick together to form a new particle of mass \\valuedef {m_{new}}{{m_{1} + m_2}}{}.}", 
+     "type": "content", 
+     "encoding": "latex"
+    }
+   ]
+  }, 
+  {
+   "encoding": "latex", 
+   "content": "{What is the velocity of the composite particle after the second impact, if the balls now collide completely inelastically?}", 
+   "answer": {
+    "content": "{v_{f} & $\\displaystyle = \\frac{1}{6} u  $}", 
+    "type": "content", 
+    "encoding": "latex"
+   }, 
+   "type": "question", 
+   "hints": [
+    {
+     "content": "{Draw several diagrams.}", 
+     "type": "content", 
+     "encoding": "latex"
+    }
+   ]
+  }
+ ], 
+ "type": "legacy_latex_question_numeric", 
+ "id": "three_collisions"
+}

@@ -157,8 +157,8 @@ $("body").on("click", ".login-button", function(e) {
 });
 
 $("body").on("click", ".logout-button", function(e) {
-    closeFile(function() {
-        clearSequeCookies();
+    closeFile().then(function() {
+        clearSegueCookies();
         gitHub = null;
         displayGithubStatus();
     });
