@@ -36,7 +36,7 @@ var ContentLiteral = React.createClass({
 		case "render":
 			return (
 				<div className="row">
-					<div className="large-6 large-offset-3 end columns">
+					<div className="large-12 columns">
 						<div onClick={this.switchToEdit} className="content-literal">{"<" + this.props.encoding + "> " + this.props.content}</div>
 					</div>
 				</div>
@@ -107,10 +107,18 @@ var ContentList = React.createClass({
 			self.onItemChange(index,oldDoc,newDoc);
 		}
 
+		function mouseEnter(e) {
+			self.insertMouseEnter(index);
+		}
+
+		function mouseLeave(e) {
+			self.insertMouseLeave(index);
+		}
+
 		return (<div key={this.state.keys[index]} className="list-ops-wrapper">
-					<InsertOp onClick={insertBefore}/>
+					<InsertOp onClick={insertBefore} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} ref={"insertBefore" + index}/>
            			
-           			<VariantBlock doc={item} disableListOps onChange={change} /> 
+           			<VariantBlock doc={item} disableListOps onChange={change} ref={"item" + index}/> 
 					<DeleteOp onClick={deleteChild}/>
            		</div>);
 	},
@@ -119,13 +127,42 @@ var ContentList = React.createClass({
 		this.onItemInsert(this.props.items.length);
 	},
 
+	insertMouseEnter: function(indexAfter) {
+		if (indexAfter < this.props.items.length)
+			$(this.refs["item" + indexAfter].getDOMNode()).addClass("highlight").addClass("below-split");
+		if (indexAfter > 0)
+			$(this.refs["item" + (indexAfter - 1)].getDOMNode()).addClass("highlight").addClass("above-split");
+		$(this.refs["insertBefore" + indexAfter].getDOMNode()).addClass("highlight");
+	},
+
+	insertMouseLeave: function(indexAfter) {
+		if (indexAfter < this.props.items.length)
+			$(this.refs["item" + indexAfter].getDOMNode()).removeClass("highlight").removeClass("below-split");
+		if (indexAfter > 0)
+			$(this.refs["item" + (indexAfter - 1)].getDOMNode()).removeClass("highlight").removeClass("above-split");
+		$(this.refs["insertBefore" + indexAfter].getDOMNode()).removeClass("highlight");
+	},
+
 	render: function() {
 		var children = this.props.items.map(this.getItemComponent, this);
+
+		var self = this;
+		function endInsertMouseEnter() {
+			self.insertMouseEnter(self.props.items.length)
+		}
+
+		function endInsertMouseLeave() {
+			self.insertMouseLeave(self.props.items.length);
+		}
 
 		return (
 			<div className="content-list">
 				{children}
-				<InsertOp onClick={this.insertAtEnd} disabled={this.props.disableListOps} />
+				<InsertOp onClick={this.insertAtEnd} 
+				          disabled={this.props.disableListOps} 
+				          onMouseEnter={endInsertMouseEnter} 
+				          onMouseLeave={endInsertMouseLeave} 
+				          ref={"insertBefore" + this.props.items.length}/>
 			</div>
 		);
 	}
@@ -184,12 +221,39 @@ var ContentLiteralOrList = React.createClass({
 				self.props.onChange(self, self.props.content, newContent);
 			}
 
+			function insertBeforeMouseEnter() {
+				$(self.refs.insertBefore.getDOMNode()).addClass("highlight");
+				$(self.refs.content.getDOMNode()).addClass("highlight").addClass("below-split");
+			}
+
+			function insertBeforeMouseLeave() {
+				$(self.refs.insertBefore.getDOMNode()).removeClass("highlight");
+				$(self.refs.content.getDOMNode()).removeClass("highlight").removeClass("below-split");
+			}
+
+			function insertAfterMouseEnter() {
+				$(self.refs.insertAfter.getDOMNode()).addClass("highlight");
+				$(self.refs.content.getDOMNode()).addClass("highlight").addClass("above-split");
+			}
+
+			function insertAfterMouseLeave() {
+				$(self.refs.insertAfter.getDOMNode()).removeClass("highlight");
+				$(self.refs.content.getDOMNode()).removeClass("highlight").removeClass("above-split");
+			}
 
 			var child = (
 				<div className="literal-ops-wrapper">
-					<InsertOp onClick={insertBefore} disabled={this.props.disableListOps} />
-					<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
-					<InsertOp onClick={insertAfter} disabled={this.props.disableListOps} />
+					<InsertOp onClick={insertBefore} 
+					          disabled={this.props.disableListOps} 
+					          ref="insertBefore"
+					          onMouseEnter={insertBeforeMouseEnter}
+					          onMouseLeave={insertBeforeMouseLeave} />
+					<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange} ref="content"/>
+					<InsertOp onClick={insertAfter} 
+					          disabled={this.props.disableListOps} 
+					          ref="insertAfter"
+					          onMouseEnter={insertAfterMouseEnter}
+					          onMouseLeave={insertAfterMouseLeave} />
 				</div>);		
 		}
 
@@ -206,10 +270,10 @@ var InsertOp = React.createClass({
 		if (this.props.disabled)
 			return <div  />;
 
-		return (
-			<div className="row">
-				<div className="small-6 small-centered columns op-insert text-center">
-					<code onClick={this.props.onClick}>INSERT</code>
+		return this.transferPropsTo(
+			<div className="op-insert row">
+				<div className="small-6 small-centered columns text-center">
+					<i onClick={this.props.onClick} className="general foundicon-plus"></i>
 				</div>
 			</div>
 		);
@@ -222,7 +286,7 @@ var DeleteOp = React.createClass({
 		if (this.props.disabled)
 			return <div  />;
 
-		return (
+		return this.transferPropsTo(
 			<div className="right"><code onClick={this.props.onClick}>DELETE</code></div>
 		);
 
@@ -346,7 +410,7 @@ var Block = React.createClass({
 			<div className={"block type-" + this.props.type}  ref="block">
 				<div className="row">
 					<div className="large-12 columns">
-						<h1 className="left" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>{this.props.blockTypeTitle}</h1>
+						<h1 onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>{this.props.blockTypeTitle}</h1>
 						{this.props.children}
 					</div>
 				</div>
