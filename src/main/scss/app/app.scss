@@ -55,12 +55,18 @@
 
 
 
+.block {
+	border-top: #ddd;
+}
+
+.block h1 {
+	color: #ccc;
+}
 
 
 
 .content-list {
 	background-color: #eee;
-	padding-left: 20px;
 }
 
 .content-literal {
@@ -71,25 +77,26 @@
 	background-color: #fef;
 }
 
-.block-type-unknown {
+.block.type-unknown {
 	background-color: #fdd;
 }
 
-.block-type-figure {
+.block.type-figure {
 	background-color: #ddf;
 }
 
 
-.block-type-figure .content-list {
+.block.type-figure .content-list {
 	background-color: #bdb;
 }
 
-.block-type-figure .content-literal {
+.block.type-figure .content-literal {
 	background-color: #dfd;
 }
-
+/*
 #react-container div {
 	border: 1px solid #aaa;
 	margin: 3px;
 	padding: 3px;
 }
+*/

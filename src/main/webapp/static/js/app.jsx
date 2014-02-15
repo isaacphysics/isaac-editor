@@ -26,11 +26,21 @@ var ContentLiteral = React.createClass({
 		this.setState({editedContent: e.target.value})
 	},
 
+	componentWillReceiveProps: function(p) {
+		console.log("receiving props:", this, p);
+	},
+
 	render: function() {
 		switch (this.state.mode)
 		{
 		case "render":
-			return <div onClick={this.switchToEdit} className="content-literal">{"<" + this.props.encoding + "> " + this.props.content}</div>;
+			return (
+				<div className="row">
+					<div className="large-6 large-offset-3 end columns">
+						<div onClick={this.switchToEdit} className="content-literal">{"<" + this.props.encoding + "> " + this.props.content}</div>
+					</div>
+				</div>
+			);
 		case "edit":
 			return (
 				<div>
@@ -43,6 +53,12 @@ var ContentLiteral = React.createClass({
 });
 
 var ContentList = React.createClass({
+
+	getInitialState: function() {
+		return {keys: this.props.items.map(function(e,i) {
+			return Math.random();
+		})};
+	},
 
 	onItemChange: function(index, oldDoc, newDoc) {
 		var oldItems = this.props.items;
@@ -57,6 +73,10 @@ var ContentList = React.createClass({
 		var newItems = oldItems.slice(0);
 		newItems.splice(insertBeforeIndex,0,{content: "New thing!", "type": "content"});
 
+		newKeys = this.state.keys.slice(0);
+		newKeys.splice(insertBeforeIndex,0,Math.random());
+		this.setState({keys: newKeys});
+
 		this.props.onChange(this, oldItems, newItems);
 	},
 
@@ -64,6 +84,10 @@ var ContentList = React.createClass({
 		var oldItems = this.props.items;
 		var newItems = oldItems.slice(0);
 		newItems.splice(itemIndex,1);
+
+		newKeys = this.state.keys.slice(0);
+		newKeys.splice(itemIndex,1);
+		this.setState({keys: newKeys});
 
 		this.props.onChange(this, oldItems, newItems);
 	},
@@ -83,7 +107,7 @@ var ContentList = React.createClass({
 			self.onItemChange(index,oldDoc,newDoc);
 		}
 
-		return (<div key={Math.random()} className="list-ops-wrapper">
+		return (<div key={this.state.keys[index]} className="list-ops-wrapper">
            			<code onClick={insertBefore}>INSERT_BEFORE</code>
            			<code onClick={deleteChild}> DEL </code> 
            			
@@ -161,11 +185,18 @@ var ContentLiteralOrList = React.createClass({
 			}
 
 
-			var child = (<div className="literal-ops-wrapper">
-							{!this.props.disableListOps ? <code onClick={insertBefore}>INSERT_BEFORE </code> : null}
-							<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
-							{!this.props.disableListOps ? <code onClick={insertAfter}>INSERT_AFTER</code> : null}
-						 </div>);
+			var child = (
+				<div className="literal-ops-wrapper">
+					{!this.props.disableListOps ? (
+						<div className="row">
+							<div className="small-6 small-centered columns">
+								<code onClick={insertBefore}>INSERT_BEFORE </code>
+							</div>
+						</div>) : null}
+					
+					<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
+					<InsertOp onClick={insertAfter} disabled={this.props.disableListOps} />
+				</div>);		
 		}
 
 		return (
@@ -174,6 +205,22 @@ var ContentLiteralOrList = React.createClass({
 			</div>
 		);
 	},
+});
+
+var InsertOp = React.createClass({
+	render: function() {
+		if (this.props.disabled)
+			return <div  />;
+
+		return (
+			<div className="row">
+				<div className="small-6 small-centered columns op-insert">
+					<code onClick={this.props.onClick}>INSERT</code>
+				</div>
+			</div>
+		);
+
+	}
 });
 
 var VariantBlock = React.createClass({
@@ -200,7 +247,7 @@ var FigureBlock = React.createClass({
 		var optionalCaption = <ContentLiteralOrList content={this.props.doc.content} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
 
 		return (
-			<div className="block-type-figure">
+			<div className="block type-figure">
 				<img src={this.props.doc.src} />
 				{optionalCaption}
 			</div>
@@ -240,7 +287,7 @@ var QuestionBlock = React.createClass({
 		var optionalHints = <ContentLiteralOrList content={this.props.doc.hints} onChange={this.onHintsChange}/>
 
 		return (
-			<div className="question">
+			<div className="block type-question">
 				<code>QUESTION_BLOCK</code>
 				{exposition}
 				<div className="question-answer">[ANSWER]:<VariantBlock doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
@@ -262,12 +309,23 @@ var ContentBlock = React.createClass({
 
 	render: function() {
 		if (typeMap[this.props.doc.type] != ContentBlock) {
-			return <div className="block-type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
+			return <div className="block type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
 		}
 
-		return (<div className="block-type-content">
-					<ContentLiteralOrList content={this.props.doc.content} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
-				</div>);
+		return (
+			<div className="block type-content">
+				<div className="row">
+					<div className="large-3 columns">
+						<h1>Content</h1>
+					</div>
+				</div>
+				<div className="row">
+					<div className="large-12 columns">
+						<ContentLiteralOrList content={this.props.doc.content} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+					</div>
+				</div>
+			</div>
+		);
 	}
 });
 
