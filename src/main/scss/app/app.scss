@@ -54,9 +54,12 @@
 }
 
 
+.block.highlight {
+	background-color: #ffc;
+}
 
 .block {
-	border-top: #ddd;
+	border-top: 1px dashed #bbb;
 }
 
 .block h1 {
@@ -66,32 +69,32 @@
 
 
 .content-list {
-	background-color: #eee;
+	//background-color: #eee;
 }
 
 .content-literal {
-	background-color: #ddd;
+	//background-color: #ddd;
 }
 
 .content-literal-or-list {
-	background-color: #fef;
+	//background-color: #fef;
 }
 
 .block.type-unknown {
-	background-color: #fdd;
+	//background-color: #fdd;
 }
 
 .block.type-figure {
-	background-color: #ddf;
+	//background-color: #ddf;
 }
 
 
 .block.type-figure .content-list {
-	background-color: #bdb;
+	//background-color: #bdb;
 }
 
 .block.type-figure .content-literal {
-	background-color: #dfd;
+	//background-color: #dfd;
 }
 /*
 #react-container div {

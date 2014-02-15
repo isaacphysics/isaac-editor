@@ -108,10 +108,10 @@ var ContentList = React.createClass({
 		}
 
 		return (<div key={this.state.keys[index]} className="list-ops-wrapper">
-           			<code onClick={insertBefore}>INSERT_BEFORE</code>
-           			<code onClick={deleteChild}> DEL </code> 
+					<InsertOp onClick={insertBefore}/>
            			
            			<VariantBlock doc={item} disableListOps onChange={change} /> 
+					<DeleteOp onClick={deleteChild}/>
            		</div>);
 	},
 
@@ -125,7 +125,7 @@ var ContentList = React.createClass({
 		return (
 			<div className="content-list">
 				{children}
-				<code onClick={this.insertAtEnd}>INSERT_END</code>
+				<InsertOp onClick={this.insertAtEnd} disabled={this.props.disableListOps} />
 			</div>
 		);
 	}
@@ -187,13 +187,7 @@ var ContentLiteralOrList = React.createClass({
 
 			var child = (
 				<div className="literal-ops-wrapper">
-					{!this.props.disableListOps ? (
-						<div className="row">
-							<div className="small-6 small-centered columns">
-								<code onClick={insertBefore}>INSERT_BEFORE </code>
-							</div>
-						</div>) : null}
-					
+					<InsertOp onClick={insertBefore} disabled={this.props.disableListOps} />
 					<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
 					<InsertOp onClick={insertAfter} disabled={this.props.disableListOps} />
 				</div>);		
@@ -214,10 +208,22 @@ var InsertOp = React.createClass({
 
 		return (
 			<div className="row">
-				<div className="small-6 small-centered columns op-insert">
+				<div className="small-6 small-centered columns op-insert text-center">
 					<code onClick={this.props.onClick}>INSERT</code>
 				</div>
 			</div>
+		);
+
+	}
+});
+
+var DeleteOp = React.createClass({
+	render: function() {
+		if (this.props.disabled)
+			return <div  />;
+
+		return (
+			<div className="right"><code onClick={this.props.onClick}>DELETE</code></div>
 		);
 
 	}
@@ -247,10 +253,10 @@ var FigureBlock = React.createClass({
 		var optionalCaption = <ContentLiteralOrList content={this.props.doc.content} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
 
 		return (
-			<div className="block type-figure">
+			<Block type="figure" blockTypeTitle="Figure">
 				<img src={this.props.doc.src} />
 				{optionalCaption}
-			</div>
+			</Block>
 		);
 	}
 })
@@ -284,15 +290,14 @@ var QuestionBlock = React.createClass({
 	render: function() {
 
 		var exposition = <ContentLiteralOrList content={this.props.doc.content} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
-		var optionalHints = <ContentLiteralOrList content={this.props.doc.hints} onChange={this.onHintsChange}/>
+		var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentLiteralOrList content={this.props.doc.hints} onChange={this.onHintsChange}/></Block>
 
 		return (
-			<div className="block type-question">
-				<code>QUESTION_BLOCK</code>
+			<Block type="question" blockTypeTitle="Question">
 				{exposition}
-				<div className="question-answer">[ANSWER]:<VariantBlock doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
-				HINTS:{optionalHints}
-			</div>
+				<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
+				{optionalHints}
+			</Block>
 		);
 	}
 });
@@ -313,15 +318,36 @@ var ContentBlock = React.createClass({
 		}
 
 		return (
-			<div className="block type-content">
-				<div className="row">
-					<div className="large-3 columns">
-						<h1>Content</h1>
-					</div>
-				</div>
+			<Block type="content" blockTypeTitle={this.props.blockTypeTitle}>
+				<ContentLiteralOrList content={this.props.doc.content} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+			</Block>
+		);
+	}
+});
+
+var Block = React.createClass({
+
+	getDefaultProps: function() {
+		return {
+			blockTypeTitle: "",
+		};
+	},
+
+	onMouseEnter: function() {
+		$(this.refs.block.getDOMNode()).addClass("highlight");
+	},
+
+	onMouseLeave: function() {
+		$(this.refs.block.getDOMNode()).removeClass("highlight");
+	},
+
+	render: function() {
+		return (
+			<div className={"block type-" + this.props.type}  ref="block">
 				<div className="row">
 					<div className="large-12 columns">
-						<ContentLiteralOrList content={this.props.doc.content} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+						<h1 className="left" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>{this.props.blockTypeTitle}</h1>
+						{this.props.children}
 					</div>
 				</div>
 			</div>
