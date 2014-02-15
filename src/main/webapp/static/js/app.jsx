@@ -44,10 +44,10 @@ var ContentLiteral = React.createClass({
 
 var ContentList = React.createClass({
 
-	onItemChange: function(child, oldDoc, newDoc) {
+	onItemChange: function(index, oldDoc, newDoc) {
 		var oldItems = this.props.items;
 		var newItems = this.props.items.slice(0);
-		newItems[child.props.key] = newDoc;
+		newItems[index] = newDoc;
 
 		this.props.onChange(this, oldItems, newItems);
 	},
@@ -75,21 +75,24 @@ var ContentList = React.createClass({
 			self.onItemDelete(index);
 		}
 
-		function insertAfter() {
-			self.onItemInsert(index+1);
-		}
-
 		function insertBefore() {
 			self.onItemInsert(index);
 		}
 
-		return (<div className="block-ops-wrapper">
+		function change(c,oldDoc, newDoc) {
+			self.onItemChange(index,oldDoc,newDoc);
+		}
+
+		return (<div key={Math.random()} className="list-ops-wrapper">
            			<code onClick={insertBefore}>INSERT_BEFORE</code>
            			<code onClick={deleteChild}> DEL </code> 
-           			<code onClick={insertAfter}>INSERT_AFTER</code>
            			
-           			<VariantBlock doc={item} key={index} onChange={this.onItemChange} /> 
+           			<VariantBlock doc={item} disableListOps onChange={change} /> 
            		</div>);
+	},
+
+	insertAtEnd: function() {
+		this.onItemInsert(this.props.items.length);
 	},
 
 	render: function() {
@@ -98,6 +101,7 @@ var ContentList = React.createClass({
 		return (
 			<div className="content-list">
 				{children}
+				<code onClick={this.insertAtEnd}>INSERT_END</code>
 			</div>
 		);
 	}
@@ -116,13 +120,56 @@ var ContentLiteralOrList = React.createClass({
 	render: function() {
 		var isList = Array.isArray(this.props.content);
 		if (isList)
-			var child = <ContentList items={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
-		else
-			var child = <ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
+			var child = <ContentList items={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>;
+		else {
+			var self = this;
+
+			function insertBefore() {
+				// Transform to list, add new content object before this one.
+				var newContent = [
+					{
+						type: "content",
+						encoding: "text",
+						content: "New content!",
+					},
+					{
+						type: "content",
+						encoding: self.props.encoding,
+						content: self.props.content
+					}
+				];
+
+				self.props.onChange(self, self.props.content, newContent);
+			}
+
+			function insertAfter() {
+				// Transform to list, add new content object after this one.
+				var newContent = [
+					{
+						type: "content",
+						encoding: self.props.encoding,
+						content: self.props.content
+					},
+					{
+						type: "content",
+						encoding: "text",
+						content: "New content!"
+					}
+				];
+
+				self.props.onChange(self, self.props.content, newContent);
+			}
+
+
+			var child = (<div className="literal-ops-wrapper">
+							{!this.props.disableListOps ? <code onClick={insertBefore}>INSERT_BEFORE </code> : null}
+							<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange}/>
+							{!this.props.disableListOps ? <code onClick={insertAfter}>INSERT_AFTER</code> : null}
+						 </div>);
+		}
 
 		return (
 			<div className="content-literal-or-list">
-				<code>Literal-or-list (Currently {isList ? "LIST" : "LITERAL"})</code>
 				{child}
 			</div>
 		);
@@ -135,6 +182,7 @@ var VariantBlock = React.createClass({
 		return this.transferPropsTo(DocClass ? DocClass() : <ContentBlock />);
 	},
 });
+
 
 var FigureBlock = React.createClass({
 
@@ -196,7 +244,7 @@ var QuestionBlock = React.createClass({
 				<code>QUESTION_BLOCK</code>
 				{exposition}
 				<div className="question-answer">[ANSWER]:<VariantBlock doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
-				{optionalHints}
+				HINTS:{optionalHints}
 			</div>
 		);
 	}
@@ -218,7 +266,7 @@ var ContentBlock = React.createClass({
 		}
 
 		return (<div className="block-type-content">
-					<ContentLiteralOrList content={this.props.doc.content} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+					<ContentLiteralOrList content={this.props.doc.content} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
 				</div>);
 	}
 });
