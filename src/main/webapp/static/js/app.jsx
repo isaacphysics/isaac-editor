@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+var ReactTransitionGroup = React.addons.TransitionGroup;
+
 var ContentLiteral = React.createClass({
 	getInitialState: function() {
 		return { mode: "render" };
@@ -24,10 +26,6 @@ var ContentLiteral = React.createClass({
 
 	onContentChange: function(e) {
 		this.setState({editedContent: e.target.value})
-	},
-
-	componentWillReceiveProps: function(p) {
-		console.log("receiving props:", this, p);
 	},
 
 	render: function() {
@@ -80,13 +78,18 @@ var ContentList = React.createClass({
 		this.props.onChange(this, oldItems, newItems);
 	},
 
-	onItemDelete: function(itemIndex) {
+	onItemDelete: function(index) {
+		var node = $(this.refs["item" + index].getDOMNode());
+		node.animate({
+			height: "0"
+		}, 500);
+
 		var oldItems = this.props.items;
 		var newItems = oldItems.slice(0);
-		newItems.splice(itemIndex,1);
+		newItems.splice(index,1);
 
 		newKeys = this.state.keys.slice(0);
-		newKeys.splice(itemIndex,1);
+		newKeys.splice(index,1);
 		this.setState({keys: newKeys});
 
 		this.props.onChange(this, oldItems, newItems);
@@ -115,11 +118,18 @@ var ContentList = React.createClass({
 			self.insertMouseLeave(index);
 		}
 
-		return (<div key={this.state.keys[index]} className="list-ops-wrapper">
-					<InsertOp onClick={insertBefore} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} ref={"insertBefore" + index}/>
-           			
-           			<VariantBlock doc={item} disableListOps onChange={change} ref={"item" + index}/> 
-					<DeleteOp onClick={deleteChild}/>
+		function mouseEnterDelete(e) {
+			self.deleteMouseEnter(index);
+		}
+
+		function mouseLeaveDelete(e) {
+			self.deleteMouseLeave(index);
+		}
+
+		return (<div key={this.state.keys[index]} className="ops-wrapper list">
+					<InsertOp className="above" onClick={insertBefore} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} ref={"insertBefore" + index}/>
+           			<VariantBlock doc={item} disableListOps onChange={change} ref={"item" + index}/>
+					<DeleteOp onClick={deleteChild} onMouseEnter={mouseEnterDelete} onMouseLeave={mouseLeaveDelete}/>
            		</div>);
 	},
 
@@ -143,6 +153,15 @@ var ContentList = React.createClass({
 		$(this.refs["insertBefore" + indexAfter].getDOMNode()).removeClass("highlight");
 	},
 
+	deleteMouseEnter: function(index) {
+
+		$(this.refs["item" + index].getDOMNode()).addClass("highlight-delete")
+	},
+
+	deleteMouseLeave: function(index) {
+		$(this.refs["item" + index].getDOMNode()).removeClass("highlight-delete")
+	},
+
 	render: function() {
 		var children = this.props.items.map(this.getItemComponent, this);
 
@@ -156,9 +175,12 @@ var ContentList = React.createClass({
 		}
 
 		return (
-			<div className="content-list">
-				{children}
-				<InsertOp onClick={this.insertAtEnd} 
+			<div className="content-list ops-wrapper">
+				<ReactTransitionGroup transitionName="content-list">
+					{children}
+				</ReactTransitionGroup>
+				<InsertOp className="below" 
+				          onClick={this.insertAtEnd} 
 				          disabled={this.props.disableListOps} 
 				          onMouseEnter={endInsertMouseEnter} 
 				          onMouseLeave={endInsertMouseLeave} 
@@ -242,14 +264,14 @@ var ContentLiteralOrList = React.createClass({
 			}
 
 			var child = (
-				<div className="literal-ops-wrapper">
-					<InsertOp onClick={insertBefore} 
+				<div className="ops-wrapper literal">
+					<InsertOp className="above" onClick={insertBefore} 
 					          disabled={this.props.disableListOps} 
 					          ref="insertBefore"
 					          onMouseEnter={insertBeforeMouseEnter}
 					          onMouseLeave={insertBeforeMouseLeave} />
 					<ContentLiteral content={this.props.content} encoding={this.props.encoding} onChange={this.onChildContentChange} ref="content"/>
-					<InsertOp onClick={insertAfter} 
+					<InsertOp className="below" onClick={insertAfter} 
 					          disabled={this.props.disableListOps} 
 					          ref="insertAfter"
 					          onMouseEnter={insertAfterMouseEnter}
@@ -271,10 +293,8 @@ var InsertOp = React.createClass({
 			return <div  />;
 
 		return this.transferPropsTo(
-			<div className="op-insert row">
-				<div className="small-6 small-centered columns text-center">
-					<i onClick={this.props.onClick} className="general foundicon-plus"></i>
-				</div>
+			<div style={{position: "absolute"}} className="op-insert text-center" onClick={null} onMouseEnter={null} onMouseLeave={null}>
+				<i className="general foundicon-plus" onClick={this.props.onClick} onMouseEnter={this.props.onMouseEnter} onMouseLeave={this.props.onMouseLeave} />
 			</div>
 		);
 
@@ -287,7 +307,9 @@ var DeleteOp = React.createClass({
 			return <div  />;
 
 		return this.transferPropsTo(
-			<div className="right"><code onClick={this.props.onClick}>DELETE</code></div>
+			<div className="op-delete">
+				<i className="general foundicon-remove"/>
+			</div>
 		);
 
 	}
@@ -318,8 +340,14 @@ var FigureBlock = React.createClass({
 
 		return (
 			<Block type="figure" blockTypeTitle="Figure">
-				<img src={this.props.doc.src} />
-				{optionalCaption}
+				<div className="row">
+					<div className="small-6 columns">
+						<img src={this.props.doc.src} />
+					</div>
+					<div className="small-6 columns">
+						{optionalCaption}
+					</div>					
+				</div>
 			</Block>
 		);
 	}
@@ -432,5 +460,5 @@ function docChanged(c,oldDoc,newDoc) {
 $.get("example_question.json").then(function(d) {
 	d = JSON.parse(d);
 	console.log("Loaded:", d);
-	React.renderComponent(<ContentBlock doc={d} onChange={docChanged}/>, $("#react-container")[0]);
+	React.renderComponent(<ContentBlock doc={d} onChange={docChanged} blockTypeTitle="Content Object"/>, $("#react-container")[0]);
 });

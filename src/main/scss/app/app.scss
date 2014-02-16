@@ -55,17 +55,18 @@
 
 .highlight {
 	background-color: #ffe;
-	transition: -webkit-transform 0.1s, background-color 0.1s;
+	transition: all 0.1s;
+	z-index: 50;
 }
 
 .highlight.above-split {
-	-webkit-transform: skewY(-0.5deg);
+	-webkit-transform: translateY(-10px);
 	-webkit-transform-origin: 0%  100%;
 }
 
 
 .highlight.below-split {
-	-webkit-transform: skewY(-0.5deg);
+	-webkit-transform: translateY(10px);
 	-webkit-transform-origin: 100%  0%;
 }
 
@@ -77,50 +78,85 @@
 	color: #ccc;
 }
 
+$transformDelay: 0.2s;
+
 .op-insert {
-	color: #ccc;
-	line-height: 30px;
-	transition: line-height 0.1s, background-color 0.1s;
+	background-color: transparent;
+	z-index: 100;
+	position: absolute;
+	color: #000;
+	opacity: 0.2;
+	transition: all $transformDelay;
+	width: 100%;
+}
+
+.op-insert i {
+	cursor: pointer;
+}
+
+.op-insert.below {
+	bottom:-10px;
+}
+
+.op-insert.above {
+	top: -7px;
+}
+ 
+.ops-wrapper {
+	position:relative;
+}
+
+.ops-wrapper.list .block, .ops-wrapper.literal .content-literal{
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .op-insert.highlight {
-	background-color: #bfb;
-	//line-height: 40px;
-	transition: line-height 0.1s, background-color 0.1s;
+	background: radial-gradient(farthest-side, #bfc, transparent);
+	color: #3a3;
+	opacity: 1;
+	transition: all $transformDelay;
 }
 
-.content-list {
-	//background-color: #eee;
+.op-delete {
+	cursor: pointer;
+	z-index: 100;
+	position: absolute;
+	color: #000;
+	opacity: 0.2;
+	transition: all $transformDelay;
+	right: 10px;
+	top: 10px;
+	height: 20px;
+	width: 20px;
 }
 
-.content-literal {
-	//background-color: #ddd;
+.highlight-delete {
+	background-color: #f87;
+	opacity: 0.3;
+	transition: all $transformDelay;
 }
 
-.content-literal-or-list {
-	//background-color: #fef;
+.content-list-enter {
+  max-height: 0px;
+  opacity: 0;
+  overflow:hidden;
+  transition: all 0.4s ease-in;
 }
 
-.block.type-unknown {
-	//background-color: #fdd;
+.content-list-enter.content-list-enter-active {
+  max-height: 100px;
+  opacity: 1;
 }
 
-.block.type-figure {
-	//background-color: #ddf;
+.content-list-leave {
+  opacity: 1;
+  transition: opacity 0.4s ease-in;
+}
+
+.content-list-leave.content-list-leave-active {
+  opacity: 0;
 }
 
 
-.block.type-figure .content-list {
-	//background-color: #bdb;
-}
 
-.block.type-figure .content-literal {
-	//background-color: #dfd;
-}
-/*
-#react-container div {
-	border: 1px solid #aaa;
-	margin: 3px;
-	padding: 3px;
-}
-*/
