@@ -1,12 +1,12 @@
-
-(function() {
+define(["./github_application", "jquery", "rsvp"], function(gh_app, $) {
 
     // Create GitHub 'class'
-    GitHub = function(user, token)
+    function GitHub(user, token)
     {
         this.user = user;
         this.token = token;
         this.branch = "master";
+
     };
     
     GitHub.enableLogging = true;
@@ -22,11 +22,8 @@
         });
     }
 
-    function getUser(token, successCallback, errorCallback)
+    function getUser(token)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         return wrapAjax($.ajax("https://api.github.com/user",
                                {data: {"access_token": token},
                                 type: "GET"}));
@@ -36,34 +33,27 @@
     // Static methods
     /////////////////////////////////
     
-    GitHub.login = function(token, successCallback, errorCallback)
+    GitHub.login = function(token)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         return getUser(token).then(function(u) {
             return new GitHub(u, token);
         });
     };
 
+    GitHub.application = gh_app;
+
     /////////////////////////////////
     // Public instance methods
     /////////////////////////////////
     
-    GitHub.prototype.getRepo = function(user, repoName, successCallback, errorCallback)
+    GitHub.prototype.getRepo = function(user, repoName)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         return wrapAjax($.ajax("https://api.github.com/repos/" + user + "/" + repoName,
                                {data: {"access_token": this.token}}));
     };
 
-    GitHub.prototype.forkRepo = function(repoOwner, repoName, successCallback, errorCallback)
+    GitHub.prototype.forkRepo = function(repoOwner, repoName)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         var p = wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/forks",
                                { headers: {"Authorization": "token " + this.token},
                                  type: "POST",
@@ -77,11 +67,8 @@
         return p;
     };
 
-    GitHub.prototype.createFile = function(repoOwner, repoName, path, successCallback, errorCallback)
+    GitHub.prototype.createFile = function(repoOwner, repoName, path)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         var p = wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
                                 {
                                     type: "PUT",
@@ -101,11 +88,8 @@
         return p;
     };
 
-    GitHub.prototype.getFile = function(repoOwner, repoName, path, successCallback, errorCallback)
+    GitHub.prototype.getFile = function(repoOwner, repoName, path)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         return wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
                                {
                                    data: {"access_token": this.token,
@@ -115,11 +99,8 @@
                                }));
     };
     
-    GitHub.prototype.getFolder = function(repoOwner, repoName, path, successCallback, errorCallback)
+    GitHub.prototype.getFolder = function(repoOwner, repoName, path)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         var fs = path.split("/");
         var name = fs[fs.length-1]
         var parent = path.substr(path, path.length - name.length - 1);
@@ -134,11 +115,8 @@
         });
     }
     
-    GitHub.prototype.getTree = function(repoOwner, repoName, rootPath, successCallback, errorCallback)
+    GitHub.prototype.getTree = function(repoOwner, repoName, rootPath)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         var gh = this;
         
         return gh.getFolder(repoOwner, repoName, rootPath).then(function(f) {
@@ -151,11 +129,8 @@
         });
     };
 
-    GitHub.prototype.getOrCreateFile = function(repoOwner, repoName, path, successCallback, errorCallback)
+    GitHub.prototype.getOrCreateFile = function(repoOwner, repoName, path)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         gh = this;
         
         return this.getFile(repoOwner, repoName, path).catch(function() { // NOTE 'CATCH' HERE (NOT 'THEN')!
@@ -169,19 +144,13 @@
         });
     };
 
-    GitHub.prototype.listFiles = function(repoOwner, repoName, directory, successCallback, errorCallback)
+    GitHub.prototype.listFiles = function(repoOwner, repoName, directory)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         return this.getFile(repoOwner, repoName, directory);
     };
 
-    GitHub.prototype.commitChange = function(originalFile, newContent, message, successCallback, errorCallback)
+    GitHub.prototype.commitChange = function(originalFile, newContent, message)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
         var p = wrapAjax($.ajax(originalFile.url,
                                 {type: "PUT",
                                  headers: {"Authorization": "token " + this.token},
@@ -202,19 +171,18 @@
         return p;
     };
     
-    GitHub.prototype.listBranches = function(repoOwner, repoName, successCallback, errorCallback)
+    GitHub.prototype.listBranches = function(repoOwner, repoName)
     {
-        if (successCallback || errorCallback)
-            console.error("Callbacks are deprecated:", successCallback, errorCallback);
-        
-    	return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/branches",
+        return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/branches",
                                {
                                    data: {"access_token": this.token},
                                    type: "GET",
                                    //cache: false
                                }));
     };
-})();
+
+    return GitHub;
+});
 
 
 

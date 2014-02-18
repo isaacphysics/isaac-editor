@@ -2,6 +2,10 @@
 
 var ReactTransitionGroup = React.addons.TransitionGroup;
 
+function generateNewBlock() {
+	return {content: "", encoding:"text"};
+}
+
 var ContentLiteral = React.createClass({
 	getInitialState: function() {
 		return { mode: "render" };
@@ -69,7 +73,7 @@ var ContentList = React.createClass({
 	onItemInsert: function(insertBeforeIndex) {
 		var oldItems = this.props.items;
 		var newItems = oldItems.slice(0);
-		newItems.splice(insertBeforeIndex,0,{content: "New thing!", "type": "content"});
+		newItems.splice(insertBeforeIndex,0,generateNewBlock());
 
 		newKeys = this.state.keys.slice(0);
 		newKeys.splice(insertBeforeIndex,0,Math.random());
@@ -210,11 +214,7 @@ var ContentLiteralOrList = React.createClass({
 			function insertBefore() {
 				// Transform to list, add new content object before this one.
 				var newContent = [
-					{
-						type: "content",
-						encoding: "text",
-						content: "New content!",
-					},
+					generateNewBlock(),
 					{
 						type: "content",
 						encoding: self.props.encoding,
@@ -233,11 +233,7 @@ var ContentLiteralOrList = React.createClass({
 						encoding: self.props.encoding,
 						content: self.props.content
 					},
-					{
-						type: "content",
-						encoding: "text",
-						content: "New content!"
-					}
+					generateNewBlock()
 				];
 
 				self.props.onChange(self, self.props.content, newContent);
@@ -317,7 +313,10 @@ var DeleteOp = React.createClass({
 
 var VariantBlock = React.createClass({
 	render: function() {
-		var DocClass = typeMap[this.props.doc.type];
+		if (this.props.doc.type)
+			var DocClass = typeMap[this.props.doc.type];
+		else
+			var DocClass = UnknownBlock;
 		return this.transferPropsTo(DocClass ? DocClass() : <ContentBlock />);
 	},
 });
@@ -382,7 +381,7 @@ var QuestionBlock = React.createClass({
 	render: function() {
 
 		var exposition = <ContentLiteralOrList content={this.props.doc.content} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
-		var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentLiteralOrList content={this.props.doc.hints} onChange={this.onHintsChange}/></Block>
+		var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentLiteralOrList content={this.props.doc.hints || []} onChange={this.onHintsChange}/></Block>
 
 		return (
 			<Block type="question" blockTypeTitle="Question">
@@ -417,6 +416,55 @@ var ContentBlock = React.createClass({
 	}
 });
 
+var EquationBlock = React.createClass({
+	onContentChange: function(c, oldVal, newVal) {
+		// newVal could be a literal or a list.
+		var oldDoc = this.props.doc;
+		var newDoc = $.extend({}, oldDoc, {content: newVal});
+
+		this.props.onChange(this, oldDoc, newDoc);
+	},
+
+	render: function() {
+
+		return (
+			<Block type="equation" blockTypeTitle="Equation">
+				<div className="row">
+					<div className="large-10 large-offset-1 columns text-center">
+						<ContentLiteral content={this.props.doc.content} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+					</div>
+				</div>
+			</Block>
+		);
+	}
+
+})
+
+var UnknownBlock = React.createClass({
+
+	chooseType: function(e) {
+		var newDoc = $.extend({}, this.props.doc, {type: $(e.target).data("chosenType")});
+
+		this.props.onChange(this, this.props.doc, newDoc);
+	},
+
+	render: function() {
+		return (
+			<Block type="unknown" blockTypeTitle="?">
+				<div className="row">
+					<div className="large-8 large-offset-2 columns text-center">
+						Please choose a block type: <br/>
+						<a onClick={this.chooseType} data-chosen-type="content">content</a> | 
+						<a onClick={this.chooseType} data-chosen-type="question">question</a> | 
+						<a onClick={this.chooseType} data-chosen-type="figure">figure</a>
+					</div>
+				</div>
+			</Block>
+		);
+	}
+
+});
+
 var Block = React.createClass({
 
 	getDefaultProps: function() {
@@ -448,7 +496,12 @@ var Block = React.createClass({
 });
 
 typeMap = {"image": FigureBlock,
+		   "figure": FigureBlock,
 		   "content": ContentBlock,
+		   "concept": ContentBlock,
+		   "section": ContentBlock,
+		   "subsection": ContentBlock,
+		   "equation": EquationBlock,
 		   "legacy_latex_question_numeric": ContentBlock,
 			"question": QuestionBlock};
 
