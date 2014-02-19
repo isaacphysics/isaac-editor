@@ -1,14 +1,15 @@
-define(["require", "rsvp", "jquery", "foundation", "app/github", 'jsx!app/editor'], function(require) {
+define(["require", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", "app/github", 'jsx!app/content_editor'], function(require) {
 
 var gitHub = app.gitHub = null;
 var gitPath = app.gitPath = ["src", "main", "resources", "concepts", "maths"];//[];
 var gitFile = app.gitFile = "";
 var file = app.file = null;
+
 var repoOwner = app.repoOwner = "daviesian";
 var repoName = app.repoName = "rutherford-content";
 
 var GitHub = require("app/github");
-var Editor = require("jsx!app/editor");
+var ContentEditor = require("jsx!app/content_editor");
 
 RSVP.on('error', function(reason) {
   console.error(reason);
@@ -31,6 +32,7 @@ var urlParams;
 String.prototype.endsWith = function(str) {
     return this.indexOf(str) == this.length - str.length;
 };
+
 String.prototype.startsWith = function(str) {
     return this.substr(0, str.length) == str;
 };
@@ -276,8 +278,6 @@ $("body").on("click", ".preview-tex", function(e) {
         m.off("click");
         m.foundation("reveal", "close");
     });
-
-    
 });
 
 function previewPdf(dataUrl) {
@@ -345,7 +345,7 @@ function updateFileBrowser(){
 	});
 }
 
-function loadFile(path) {
+function openFile(path) {
     console.log("Loading", path);
 	
 	closeFile().then(function(){
@@ -397,16 +397,14 @@ $("body").on("click", ".git-type-file", function(e) {
 	if (file != null && path == file.path)
 		return;
 	
-	loadFile(path);
+	openFile(path);
 	
 });
 
 function loadFileRaw(file) {
 	$("#content-panel").empty();
 	
-	
-	
-	var cm = CodeMirror($("#content-panel")[0], 
+	var cm = app.cm = CodeMirror($("#content-panel")[0], 
 			{mode: "",
 			 theme: "eclipse",//"solarized light",
 			 lineNumbers: false,
@@ -434,82 +432,27 @@ function loadTexRaw(file) {
 }
 
 function loadJsonEditor(file) {
-	$("#content-panel").empty();
-    var editor = Editor.createEditor($("#content-panel")[0], JSON.parse(file.originalContent));
-	/*
-	var holder = $("<div/>").attr("id", "json-editor-holder");
-	var indentation = 2;
-	var modePanel = $("<dl/>").addClass("sub-nav")
-	                          .append("<dt>Mode:</dt>");
-	
-	var modes = ["Text", "Code", "Tree"];
-	
-	var mode = "code";
 
-	
-	for(var m in modes)
-	{
-		m = modes[m];
-		
-		var dd = $("<dd/>").append($("<a href=\"#\"/>")
-				.html(m)
-				.data("editor-mode", m.toLowerCase())
-				.click(function(e) {
-					
-			var newMode = $(e.target).data("editor-mode");
-			
-			try {
-				jsonEditor.setMode(newMode);
-				modePanel.find("dd").removeClass("active");
-				$(e.target).parent().addClass("active");
-				mode = newMode;
-			} catch (e) {
-				console.error("Error changing mode. Json probably not valid.");
-			}
+    //try {
+        // Try to load the file as a JSON object.
+        var obj = JSON.parse(file.originalContent);
 
-		}));
-		
-		if (m.toLowerCase() === mode)
-			dd.addClass("active");
-		
-		dd.appendTo(modePanel);
-	}
-	
-	modePanel.appendTo($("#content-panel"));
-	holder.appendTo($("#content-panel"));
-	                    	
-	function jsonChange(e) {
+        $("#content-panel").empty();
+        var editor = app.editor = new ContentEditor($("#content-panel")[0], obj);
 
-		if (!jsonEditor)
-			return; // We are not initialised yet.
-		
-		
-		var newJson = jsonEditor.getText();
+        var indentation = 2;
 
-		if (mode === "tree")
-		{
-			// When changing away from Tree mode, we temporarily get invalid JSON, so the parse fails.
-			// Just ignore this, as it will be valid again before the mode finishes changing.
-			try {
-				newJson = JSON.stringify(jsonEditor.get(), null, indentation);
-			} catch (e) {
-				console.error("Tree not returning valid JSON");
-				//return;
-			}
-		}
-		
-		file.editedContent = newJson;
-		updateSaveButtons();
-	}
-	
-	
-	var jsonEditor = new jsoneditor.JSONEditor(holder[0], 
-			{mode: mode,
-		     indentation: indentation,
-		     change: jsonChange});
+        $("#content-panel").on("docChanged", function(e, oldDoc, newDoc) {
 
-	jsonEditor.setText(file.originalContent);
-    */
+            newJson = JSON.stringify(newDoc, null, indentation);
+            file.editedContent = newJson;
+            updateSaveButtons();
+        });
+    
+    //} catch (e) {
+    //    // Could not parse JSON. Load as a raw file instead.
+    //    loadJsonRaw(file);
+    //} 
 }
 
 function closeFile() {
@@ -621,15 +564,15 @@ function updateBranchList() {
 
 function chooseBranch(e) {
 	var branch = $(e.target).data("git-branch-name");
-	var openFile = file;
+	var currentFile = file;
 
 	closeFile().then(function() {
 		gitHub.branch = branch;
 		updateFileBrowser();
 		$(".current-branch").html(branch);
 		
-		if (openFile != null) {
-			loadFile(openFile.path);
+		if (currentFile != null) {
+			openFile(currentFile.path);
 		}
 	});
 }

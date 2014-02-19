@@ -53,8 +53,9 @@
 	overflow: auto;
 }
 
+
 .highlight {
-	background-color: #ffe;
+	background-color: #f5f5f5;
 	transition: all 0.1s;
 	z-index: 50;
 }
@@ -71,7 +72,7 @@
 }
 
 .block {
-	border-top: 1px dashed #bbb;
+	//border-top: 1px dashed #bbb;
 }
 
 .block h1 {
@@ -88,10 +89,21 @@ $transformDelay: 0.2s;
 	opacity: 0.2;
 	transition: all $transformDelay;
 	width: 100%;
+	display:none;
 }
 
 .op-insert i {
 	cursor: pointer;
+}
+
+.ops-wrapper:hover>.op-delete {
+	display: block;
+}
+.ops-wrapper:hover>span>.ops-wrapper>.op-insert {
+	display: block;
+}
+.ops-wrapper:hover>.op-insert {
+	display: block;
 }
 
 .op-insert.below {
@@ -106,7 +118,7 @@ $transformDelay: 0.2s;
 	position:relative;
 }
 
-.ops-wrapper.list .block, .ops-wrapper.literal .content-literal{
+.ops-wrapper.children .block, .ops-wrapper.value .content-value{
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
@@ -129,32 +141,33 @@ $transformDelay: 0.2s;
 	top: 10px;
 	height: 20px;
 	width: 20px;
+	display:none;
 }
 
 .highlight-delete {
-	background-color: #f87;
-	opacity: 0.3;
+	//background-color: #f87;
+	opacity: 0.2;
 	transition: all $transformDelay;
 }
 
-.content-list-enter {
+.content-children-enter {
   max-height: 0px;
   opacity: 0;
   overflow:hidden;
   transition: all 0.4s ease-in;
 }
 
-.content-list-enter.content-list-enter-active {
+.content-children-enter.content-children-enter-active {
   max-height: 100px;
   opacity: 1;
 }
 
-.content-list-leave {
+.content-children-leave {
   opacity: 1;
   transition: opacity 0.4s ease-in;
 }
 
-.content-list-leave.content-list-leave-active {
+.content-children-leave.content-children-leave-active {
   opacity: 0;
 }
 
