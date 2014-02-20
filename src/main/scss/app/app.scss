@@ -111,7 +111,6 @@
 	-webkit-transform-origin: 100%  0%;
 }
 
-
 .block h1 {
 	color: #ccc;
 }
@@ -156,11 +155,11 @@ $transformDelay: 0.2s;
 }
 
 .op-insert.highlight {
-	background: radial-gradient(farthest-side, #bfc, transparent);
+	background: radial-gradient(farthest-side, #ddd, transparent);
 	width: 100%;
 	left: 0;
 	margin-left: 0;
-	color: #3a3;
+	color: #333;
 	opacity: 1;
 	transition: color,opacity,background $transformDelay;
 }

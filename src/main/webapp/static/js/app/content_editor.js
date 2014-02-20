@@ -1,8 +1,16 @@
 /** @jsx React.DOM */
-define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
+define(["react", "jquery", "codemirrorJS", "showdown", "mathjax"], function(React, $) {
 	
 	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
+
+	MathJax.Hub.Config({
+	    tex2jax: {
+	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+	      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+	      processEscapes: true
+	    },
+	  });
 
 /////////////////////////////////
 // Constructor
@@ -17,7 +25,7 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 		this.history = [];
 
 		React.renderComponent(this.editor, container);
-
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	}
 
 /////////////////////////////////
@@ -51,6 +59,9 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 		},
 
 		onDone: function(e) {
+
+			$(this.getDOMNode()).find(".CodeMirror").remove();
+
 			// Could do some validation here.
 			var oldValue = this.props.value;
 			var newValue = this.state.editedValue;
@@ -76,8 +87,13 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 				cm.on("change", (function(inst, changeObj) { 
 					this.setState({editedValue: inst.getValue()});
 				}).bind(this));
-				console.warn(cm);
 			}
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+		},
+
+		componentDidMount: function() {
+					MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 		},
 
 		render: function() {
@@ -111,7 +127,7 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 			case "edit":
 				return (
 					<div>
-						<div ref="placeholder">Hello</div>
+						<div ref="placeholder" />
 						<button type="button" onClick={this.onDone}>Done</button>
 					</div>
 				);
@@ -278,6 +294,7 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 		getInitialState: function() {
 			return {
 				valid: true,
+				editedDoc: this.props.doc,
 			};
 		},
 
@@ -292,8 +309,7 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 			cm.on("change", (function(inst, changeObj) { 
 				try {
 					var newDoc = JSON.parse(cm.getValue());
-					this.setState({valid: true});
-					this.props.onChange(this, this.props.doc, newDoc);
+					this.setState({valid: true, editedDoc: newDoc});
 					for(var i = 0; i < inst.lineCount(); i++)
 						inst.removeLineClass(i, "background", "cm-error-line");
 				} catch (e) {
@@ -305,8 +321,20 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 
 		},
 
+		onDone: function() {
+			if (this.state.valid) {
+				var newDoc = this.state.editedDoc;
+				this.props.onDone(this, this.props.doc, newDoc);
+			}
+		},
+
 		render: function() {
-			return <div ref="content" />;
+			return (
+				<div>
+					<div ref="content" />
+					<button type="button" onClick={this.onDone}>Done</button>
+				</div>
+			);
 		}
 	});
  
@@ -515,6 +543,15 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 			this.onDocChange(this, oldDoc, newDoc)
 		},
 
+		onChoicesChange: function(c, oldChildren, newChildren) {
+			// newVal must be a list
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.choices = newChildren;
+
+			this.onDocChange(this, oldDoc, newDoc)
+		},
+
 		onAnswerChange: function(c, oldAnswerDoc, newAnswerDoc) {
 			// newVal must be a doc
 			var oldDoc = this.props.doc;
@@ -528,10 +565,14 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
 			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentChildren items={this.props.doc.hints || []} encoding={this.encoding} onChange={this.onHintsChange}/></Block>
+			
+			if (this.props.doc.type == "choiceQuestion")
+				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} /></Block>
 
 			return (
 				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 					{exposition}
+					{choices}
 					<div className="row">
 						<div className="large-6 columns">
 							<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
@@ -629,9 +670,12 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 			if (this.props.doc) {
 				if (this.state.mode == "render")
 					this.setState({mode: "json"});
-				else if(this.refs.editor.state.valid)
-					this.setState({mode: "render"});
 			}
+		},
+
+		onEditDone: function(c, oldDoc, newDoc) {
+			this.setState({mode: "render"});
+			this.props.onChange(this, oldDoc, newDoc);
 		},
 
 		render: function() {
@@ -653,7 +697,7 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 						<div className="row">
 							<div className="large-12 columns">
 								<Title onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} title={this.props.blockTypeTitle} />
-								<JSONEditor doc={this.props.doc} onChange={this.props.onChange} ref="editor"/>
+								<JSONEditor doc={this.props.doc} onDone={this.onEditDone} ref="editor"/>
 							</div>
 						</div>
 					</div>
@@ -672,7 +716,8 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 		"content": ContentBlock,
 		"concept": ContentBlock,
 		"legacy_latex_question_numeric": ContentBlock,
-		"question": QuestionBlock
+		"question": QuestionBlock,
+		"choiceQuestion": QuestionBlock,
 	};
 
 
@@ -713,6 +758,7 @@ define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
 		this.history.push(oldDoc);
 		this.editor.setProps({doc: newDoc});
 		$(this.editor.getDOMNode()).trigger("docChanged", [oldDoc, newDoc]);
+
 	}
 
 /////////////////////////////////
