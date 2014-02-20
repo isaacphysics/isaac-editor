@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
-define(["react", "jquery"], function(React, $) {
-
+define(["react", "jquery", "codemirrorJS", "showdown"], function(React, $) {
+	
+	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
 
 /////////////////////////////////
@@ -22,6 +23,20 @@ define(["react", "jquery"], function(React, $) {
 /////////////////////////////////
 // Private static component classes
 /////////////////////////////////
+
+	var Title = React.createClass({
+		render: function() {
+			if (this.props.title)
+				return (
+					<div className="title-container" onMouseEnter={this.props.onMouseEnter} onMouseLeave={this.props.onMouseLeave} onClick={this.props.onClick}>
+						<div className="title-content">{this.props.title}</div>
+						<div className="title-triangle"></div>
+					</div>
+				);
+			else
+				return <div className="title-placeholder"/>;
+		}
+	});
 
 	var ContentValue = React.createClass({
 		getInitialState: function() {
@@ -49,21 +64,54 @@ define(["react", "jquery"], function(React, $) {
 			this.setState({editedValue: e.target.value})
 		},
 
+		componentDidUpdate: function(prevProps, prevState) {
+			if (this.state.mode == "edit" && prevState.mode != "edit") {
+				var cm = app.cm = CodeMirror(this.refs.placeholder.getDOMNode(), 
+					{mode: "",
+					 theme: "eclipse",//"solarized light",
+					 lineNumbers: false,
+					 value: this.props.value,
+					 lineWrapping: true});
+
+				cm.on("change", (function(inst, changeObj) { 
+					this.setState({editedValue: inst.getValue()});
+				}).bind(this));
+				console.warn(cm);
+			}
+		},
+
 		render: function() {
 			switch (this.state.mode)
 			{
 			case "render":
+
+				var renderer = <div onClick={this.switchToEdit} className="content-value"/>;
+
+				switch (this.props.encoding) {
+					case "html":
+						renderer.props.dangerouslySetInnerHTML = {__html: this.props.value};
+						break;
+					case "markdown":
+						var converter = new Showdown.converter();
+						var html = converter.makeHtml(this.props.value);
+						renderer.props.dangerouslySetInnerHTML = {__html: html};
+						break;
+					default:
+						renderer.props.children = "<" + this.props.encoding + "> " + this.props.value;
+						break;
+				}
+
 				return (
 					<div className="row">
 						<div className="large-12 columns">
-							<div onClick={this.switchToEdit} className="content-value">{"<" + this.props.encoding + "> " + this.props.value}</div>
+							{renderer}
 						</div>
 					</div>
 				);
 			case "edit":
 				return (
 					<div>
-						<input type="text" value={this.state.editedValue} onChange={this.onValueChange} />
+						<div ref="placeholder">Hello</div>
 						<button type="button" onClick={this.onDone}>Done</button>
 					</div>
 				);
@@ -116,9 +164,28 @@ define(["react", "jquery"], function(React, $) {
 			this.props.onChange(this, oldItems, newItems);
 		},
 
+		opsMouseEnter: function(index) {			
+			if (index >= 0)
+				$(this.refs["insertBefore" + index].getDOMNode()).addClass("op-display");
+			$(this.refs["insertBefore" + (index + 1)].getDOMNode()).addClass("op-display");
+			if (index >= 0)
+				$(this.refs["delete" + index].getDOMNode()).addClass("op-display");
+
+		},
+
+		opsMouseLeave: function(index) {
+
+			if (index >= 0)
+				$(this.refs["insertBefore" + index].getDOMNode()).removeClass("op-display");
+			$(this.refs["insertBefore" + (index + 1)].getDOMNode()).removeClass("op-display");
+			if (index >= 0)
+				$(this.refs["delete" + index].getDOMNode()).removeClass("op-display");
+
+		},
+
 		getItemComponent: function(item,index) {
 
-			return (<div key={this.state.keys[index]} className="ops-wrapper children">
+			return (<div key={this.state.keys[index]} className="ops-wrapper children" onMouseEnter={this.opsMouseEnter.bind(this, index)} onMouseLeave={this.opsMouseLeave.bind(this, index)}>
 						<InsertOp className="above" 
 						          onClick={this.onItemInsert.bind(this, index)} 
 						          onMouseEnter={this.insertMouseEnter.bind(this, index)} 
@@ -130,9 +197,11 @@ define(["react", "jquery"], function(React, $) {
 	           			              onChange={this.onItemChange.bind(this, index)} 
 	           			              ref={"item" + index}/>
 
+
 						<DeleteOp onClick={this.onItemDelete.bind(this, index)} 
 						          onMouseEnter={this.deleteMouseEnter.bind(this,index)} 
-						          onMouseLeave={this.deleteMouseLeave.bind(this,index)}/>
+						          onMouseLeave={this.deleteMouseLeave.bind(this,index)}
+						          ref={"delete" + index} />
 
 	           		</div>);
 		},
@@ -158,7 +227,6 @@ define(["react", "jquery"], function(React, $) {
 		},
 
 		deleteMouseEnter: function(index) {
-
 			$(this.refs["item" + index].getDOMNode()).addClass("highlight-delete")
 		},
 
@@ -166,25 +234,79 @@ define(["react", "jquery"], function(React, $) {
 			$(this.refs["item" + index].getDOMNode()).removeClass("highlight-delete")
 		},
 
+		onMouseEnter: function() {
+			// Make sure final insert op is visible.
+			$(this.refs["insertBefore"+this.props.items.length].getDOMNode()).addClass("op-display");
+		},
+
+		onMouseLeave: function() {
+			$(this.refs["insertBefore"+this.props.items.length].getDOMNode()).removeClass("op-display");
+		},
+
 		render: function() {
 			var children = this.props.items.map(this.getItemComponent, this);
 
-			return (
-				<div className="content-children ops-wrapper">
+			// Add a dummy child if there are no children, allowing a final insert op to be added.
+			if (this.props.items.length == 0) {
+				children = [
+					<div key={Math.random()} className="ops-wrapper children" onMouseEnter={this.opsMouseEnter.bind(this, -1)} onMouseLeave={this.opsMouseLeave.bind(this, -1)} children={[<hr/>]}/>
+				];
+			}
 
+			// Add the final insert op to the last child.
+			children[children.length-1].props.children.push(
+				<InsertOp className="below" 
+						  onClick={this.insertAtEnd} 
+						  disabled={this.props.disableListOps} 
+						  onMouseEnter={this.insertMouseEnter.bind(this, this.props.items.length)} 
+						  onMouseLeave={this.insertMouseLeave.bind(this, this.props.items.length)} 
+						  ref={"insertBefore" + this.props.items.length}/>
+			);
+
+			return (
+				<div className="content-children" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
 					<ReactTransitionGroup transitionName="content-children">
 						{children}
 					</ReactTransitionGroup>
-
-					<InsertOp className="below" 
-					          onClick={this.insertAtEnd} 
-					          disabled={this.props.disableListOps} 
-					          onMouseEnter={this.insertMouseEnter.bind(this, children.length)} 
-					          onMouseLeave={this.insertMouseLeave.bind(this, children.length)} 
-					          ref={"insertBefore" + this.props.items.length}/>
-
 				</div>
 			);
+		}
+	});
+
+	var JSONEditor = React.createClass({
+
+		getInitialState: function() {
+			return {
+				valid: true,
+			};
+		},
+
+		componentDidMount: function() {
+			var cm = app.cm = CodeMirror(this.refs.content.getDOMNode(), 
+				{mode: {name: "javascript", json: true},
+				 theme: "eclipse",//"solarized light",
+				 lineNumbers: false,
+				 value: JSON.stringify(this.props.doc,null,2),
+				 lineWrapping: true});
+
+			cm.on("change", (function(inst, changeObj) { 
+				try {
+					var newDoc = JSON.parse(cm.getValue());
+					this.setState({valid: true});
+					this.props.onChange(this, this.props.doc, newDoc);
+					for(var i = 0; i < inst.lineCount(); i++)
+						inst.removeLineClass(i, "background", "cm-error-line");
+				} catch (e) {
+					console.error(e);
+					inst.addLineClass(changeObj.from.line, "background", "cm-error-line");
+					this.setState({valid: false});
+				}
+			}).bind(this));
+
+		},
+
+		render: function() {
+			return <div ref="content" />;
 		}
 	});
  
@@ -212,20 +334,18 @@ define(["react", "jquery"], function(React, $) {
 			if (this.props.children)
 				var child = <ContentChildren items={this.props.children} encoding={this.props.encoding} onChange={this.onChildChange}/>;
 			else {
-				var self = this;
-
 				function insertBeforeValue() {
 					// Transform to list, add new content object before this one.
 					var newChildren = [
 						generateNewBlock(),
 						{
 							type: "content",
-							encoding: self.props.encoding,
-							value: self.props.value
+							encoding: this.props.encoding,
+							value: this.props.value
 						}
 					];
 
-					self.props.onChange(self, self.props.value, undefined, self.props.children, newChildren);
+					this.props.onChange(this, this.props.value, undefined, this.props.children, newChildren);
 				}
 
 				function insertAfterValue() {
@@ -233,48 +353,58 @@ define(["react", "jquery"], function(React, $) {
 					var newChildren = [
 						{
 							type: "content",
-							encoding: self.props.encoding,
-							value: self.props.value
+							encoding: this.props.encoding,
+							value: this.props.value
 						},
 						generateNewBlock()
 					];
 
-					self.props.onChange(self, self.props.value, undefined, self.props.children, newChildren);
+					this.props.onChange(this, this.props.value, undefined, this.props.children, newChildren);
 				}
 
 				function insertBeforeMouseEnter() {
-					$(self.refs.insertBefore.getDOMNode()).addClass("highlight");
-					$(self.refs.value.getDOMNode()).addClass("highlight").addClass("below-split");
+					$(this.refs.insertBefore.getDOMNode()).addClass("highlight");
+					$(this.refs.value.getDOMNode()).addClass("highlight").addClass("below-split");
 				}
 
 				function insertBeforeMouseLeave() {
-					$(self.refs.insertBefore.getDOMNode()).removeClass("highlight");
-					$(self.refs.value.getDOMNode()).removeClass("highlight").removeClass("below-split");
+					$(this.refs.insertBefore.getDOMNode()).removeClass("highlight");
+					$(this.refs.value.getDOMNode()).removeClass("highlight").removeClass("below-split");
 				}
 
 				function insertAfterMouseEnter() {
-					$(self.refs.insertAfter.getDOMNode()).addClass("highlight");
-					$(self.refs.value.getDOMNode()).addClass("highlight").addClass("above-split");
+					$(this.refs.insertAfter.getDOMNode()).addClass("highlight");
+					$(this.refs.value.getDOMNode()).addClass("highlight").addClass("above-split");
 				}
 
 				function insertAfterMouseLeave() {
-					$(self.refs.insertAfter.getDOMNode()).removeClass("highlight");
-					$(self.refs.value.getDOMNode()).removeClass("highlight").removeClass("above-split");
+					$(this.refs.insertAfter.getDOMNode()).removeClass("highlight");
+					$(this.refs.value.getDOMNode()).removeClass("highlight").removeClass("above-split");
+				}
+
+				function opsMouseEnter() {
+					$(this.refs.insertBefore.getDOMNode()).addClass("op-display");
+					$(this.refs.insertAfter.getDOMNode()).addClass("op-display");
+				}
+
+				function opsMouseLeave() {
+					$(this.refs.insertBefore.getDOMNode()).removeClass("op-display");
+					$(this.refs.insertAfter.getDOMNode()).removeClass("op-display");
 				}
 
 				var child = (
-					<div className="ops-wrapper value">
-						<InsertOp className="above" onClick={insertBeforeValue} 
+					<div className="ops-wrapper value" onMouseEnter={opsMouseEnter.bind(this)} onMouseLeave={opsMouseLeave.bind(this)}>
+						<InsertOp className="above" onClick={insertBeforeValue.bind(this)} 
 						          disabled={this.props.disableListOps} 
 						          ref="insertBefore"
-						          onMouseEnter={insertBeforeMouseEnter}
-						          onMouseLeave={insertBeforeMouseLeave} />
+						          onMouseEnter={insertBeforeMouseEnter.bind(this)}
+						          onMouseLeave={insertBeforeMouseLeave.bind(this)} />
 						<ContentValue value={this.props.value} encoding={this.props.encoding} onChange={this.onValueChange} ref="value"/>
-						<InsertOp className="below" onClick={insertAfterValue} 
+						<InsertOp className="below" onClick={insertAfterValue.bind(this)} 
 						          disabled={this.props.disableListOps} 
 						          ref="insertAfter"
-						          onMouseEnter={insertAfterMouseEnter}
-						          onMouseLeave={insertAfterMouseLeave} />
+						          onMouseEnter={insertAfterMouseEnter.bind(this)}
+						          onMouseLeave={insertAfterMouseLeave.bind(this)} />
 					</div>);		
 			}
 
@@ -320,11 +450,15 @@ define(["react", "jquery"], function(React, $) {
 				var DocClass = typeMap[this.props.doc.type];
 			else
 				var DocClass = UnknownBlock;
-			return this.transferPropsTo(DocClass ? DocClass() : <ContentBlock />);
+			return this.transferPropsTo(DocClass ? DocClass() : <Block blockTypeTitle={"Unknown content type: " + this.props.doc.type} />);
 		},
 	});
 
 	var FigureBlock = React.createClass({
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
 
 		onCaptionChange: function(c, oldVal, newVal, oldChildren, newChildren) {
 			// newVal could be a string or a list.
@@ -334,7 +468,7 @@ define(["react", "jquery"], function(React, $) {
 			newDoc.value = newVal;
 			newDoc.children = newChildren;
 
-			this.props.onChange(this, oldDoc, newDoc);
+			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		render: function() {
@@ -342,7 +476,7 @@ define(["react", "jquery"], function(React, $) {
 			var optionalCaption = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
 
 			return (
-				<Block type="figure" blockTypeTitle="Figure">
+				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-6 columns">
 							<img src={this.props.doc.src} />
@@ -358,6 +492,10 @@ define(["react", "jquery"], function(React, $) {
 
 	var QuestionBlock = React.createClass({
 
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
 		onExpositionChange: function(c, oldVal, newVal, oldChildren, newChildren) {
 			// newVal could be a list or a string
 			var oldDoc = this.props.doc;
@@ -365,7 +503,7 @@ define(["react", "jquery"], function(React, $) {
 			newDoc.value = newVal;
 			newDoc.children = newChildren;
 
-			this.props.onChange(this, oldDoc, newDoc);
+			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		onHintsChange: function(c, oldChildren, newChildren) {
@@ -374,7 +512,7 @@ define(["react", "jquery"], function(React, $) {
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.hints = newChildren;
 
-			this.props.onChange(this, oldDoc, newDoc)
+			this.onDocChange(this, oldDoc, newDoc)
 		},
 
 		onAnswerChange: function(c, oldAnswerDoc, newAnswerDoc) {
@@ -383,7 +521,7 @@ define(["react", "jquery"], function(React, $) {
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.answer = newAnswerDoc;
 
-			this.props.onChange(this, oldDoc, newDoc);
+			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		render: function() {
@@ -392,13 +530,13 @@ define(["react", "jquery"], function(React, $) {
 			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentChildren items={this.props.doc.hints || []} encoding={this.encoding} onChange={this.onHintsChange}/></Block>
 
 			return (
-				<Block type="question" blockTypeTitle="Question">
+				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 					{exposition}
-					<div class="row">
-						<div class="large-6 columns">
+					<div className="row">
+						<div className="large-6 columns">
 							<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
 						</div>
-						<div class="large-6 columns">
+						<div className="large-6 columns">
 							{optionalHints}
 						</div>
 					</div>
@@ -409,6 +547,10 @@ define(["react", "jquery"], function(React, $) {
 
 	var ContentBlock = React.createClass({
 
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
 		onContentChange: function(c, oldVal, newVal, oldChildren, newChildren) {
 			// newVal could be a string or a list.
 			var oldDoc = this.props.doc;
@@ -416,7 +558,7 @@ define(["react", "jquery"], function(React, $) {
 			newDoc.value = newVal;
 			newDoc.children = newChildren;
 
-			this.props.onChange(this, oldDoc, newDoc);
+			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		render: function() {
@@ -425,7 +567,7 @@ define(["react", "jquery"], function(React, $) {
 			}
 
 			return (
-				<Block type="content" blockTypeTitle={this.props.blockTypeTitle}>
+				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
 					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
 				</Block>
 			);
@@ -434,15 +576,19 @@ define(["react", "jquery"], function(React, $) {
 
 	var UnknownBlock = React.createClass({
 
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
 		chooseType: function(e) {
-			var newDoc = $.extend({}, this.props.doc, {type: $(e.target).data("chosenType")});
+			var newDoc = $.extend({}, this.props.doc, generateNewBlock($(e.target).data("chosenType")));
 
 			this.props.onChange(this, this.props.doc, newDoc);
 		},
 
 		render: function() {
 			return (
-				<Block type="unknown" blockTypeTitle="?">
+				<Block type="unknown" blockTypeTitle="?" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="large-8 large-offset-2 columns text-center">
 							Please choose a block type: <br/>
@@ -461,7 +607,14 @@ define(["react", "jquery"], function(React, $) {
 		getDefaultProps: function() {
 			return {
 				blockTypeTitle: "",
+				onChange: (function() { console.warn("Called undefined onChange function of block", this.props.doc); }).bind(this),
 			};
+		},
+
+		getInitialState: function() {
+			return {
+				mode: "render",
+			}
 		},
 
 		onMouseEnter: function() {
@@ -472,17 +625,40 @@ define(["react", "jquery"], function(React, $) {
 			$(this.refs.block.getDOMNode()).removeClass("highlight");
 		},
 
+		onClick: function() {
+			if (this.props.doc) {
+				if (this.state.mode == "render")
+					this.setState({mode: "json"});
+				else if(this.refs.editor.state.valid)
+					this.setState({mode: "render"});
+			}
+		},
+
 		render: function() {
-			return (
-				<div className={"block type-" + this.props.type}  ref="block">
-					<div className="row">
-						<div className="large-12 columns">
-							<h1 onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>{this.props.blockTypeTitle}</h1>
-							{this.props.children}
+			if (this.state.mode == "render") {
+				return (
+					<div className={"block type-" + this.props.type}  ref="block">
+						<div className="row">
+							<div className="large-12 columns">
+								<Title onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} title={this.props.blockTypeTitle} />
+								{this.props.children}
+							</div>
 						</div>
 					</div>
-				</div>
-			);
+				);
+			}
+			else if (this.state.mode == "json") {
+				return (
+					<div className={"block type-" + this.props.type}  ref="block">
+						<div className="row">
+							<div className="large-12 columns">
+								<Title onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} title={this.props.blockTypeTitle} />
+								<JSONEditor doc={this.props.doc} onChange={this.props.onChange} ref="editor"/>
+							</div>
+						</div>
+					</div>
+				);
+			}
 		}
 	});
 
@@ -504,8 +680,26 @@ define(["react", "jquery"], function(React, $) {
 // Private static methods
 /////////////////////////////////
 
-	function generateNewBlock() {
-		return {value: "", encoding:"text"};
+	function generateNewBlock(type, value) {
+		if (!type)
+			return {value: value || "_Enter content here_", encoding:"markdown"};
+
+		switch(type) {
+			case "question":
+				return {
+					encoding: "markdown",
+					value: "_Enter exposition here_",
+					answer: generateNewBlock("content", "_Enter answer here_"),
+					type: "question",
+			    }
+			default:
+				return {
+					type: type,
+					value: value || "_Enter content here_", 
+					encoding:"markdown"
+				}
+
+		}
 	}
 
 /////////////////////////////////

@@ -8,9 +8,19 @@
 
 #content-panel {
 	margin-top: 10px;
+	background-color: #fff;
+	padding: 10px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: 1px solid #d1d1d1;
+	box-shadow: 0 0 4px rgba(0,0,0,0.1);
 }
 
 #file-browser {
+
+	background-color: #fff;
+	border: 1px solid #d1d1d1;
+	box-shadow: 0 0 4px rgba(0,0,0,0.1);
 
 	a.git-type-file:before {
 	    content: "\f009";
@@ -26,6 +36,36 @@
 	    color: #788;
 	}
 
+}
+
+.title-container {
+	height: 20px;
+	margin-bottom: 10px;
+	opacity: 0.7;
+	
+	.title-triangle {
+		border-right: 20px solid transparent;
+		border-top: 20px solid #ebebeb;
+		display: inline-block;
+		height: 0px;
+	}
+	
+	.title-content {
+		background-color: #ebebeb;
+		display: inline-block;
+		height: 20px;
+		font-size: 11px;
+		vertical-align: top;
+		padding-top: 4px;
+		padding-left: 4px;
+		min-width: 50px;
+		color: #4d4d4d;
+	}
+}
+
+.title-placeholder {
+	height: 0px;
+	background-color: red;
 }
 
 .CodeMirror {
@@ -71,9 +111,6 @@
 	-webkit-transform-origin: 100%  0%;
 }
 
-.block {
-	//border-top: 1px dashed #bbb;
-}
 
 .block h1 {
 	color: #ccc;
@@ -87,23 +124,15 @@ $transformDelay: 0.2s;
 	position: absolute;
 	color: #000;
 	opacity: 0.2;
-	transition: all $transformDelay;
-	width: 100%;
+	transition: color,opacity,background $transformDelay;
+	width: 20px;
+	left: 50%;
+	margin-left: -10px;
 	display:none;
 }
 
 .op-insert i {
 	cursor: pointer;
-}
-
-.ops-wrapper:hover>.op-delete {
-	display: block;
-}
-.ops-wrapper:hover>span>.ops-wrapper>.op-insert {
-	display: block;
-}
-.ops-wrapper:hover>.op-insert {
-	display: block;
 }
 
 .op-insert.below {
@@ -119,15 +148,21 @@ $transformDelay: 0.2s;
 }
 
 .ops-wrapper.children .block, .ops-wrapper.value .content-value{
-	padding-top: 10px;
 	padding-bottom: 10px;
+}
+
+.ops-wrapper.value .content-value {
+	padding-top: 10px;
 }
 
 .op-insert.highlight {
 	background: radial-gradient(farthest-side, #bfc, transparent);
+	width: 100%;
+	left: 0;
+	margin-left: 0;
 	color: #3a3;
 	opacity: 1;
-	transition: all $transformDelay;
+	transition: color,opacity,background $transformDelay;
 }
 
 .op-delete {
@@ -144,8 +179,13 @@ $transformDelay: 0.2s;
 	display:none;
 }
 
+.op-display.op-insert, .op-display.op-delete {
+	display: block;
+}
+
 .highlight-delete {
 	//background-color: #f87;
+	border: 1px dashed #000;
 	opacity: 0.2;
 	transition: all $transformDelay;
 }
@@ -171,5 +211,8 @@ $transformDelay: 0.2s;
   opacity: 0;
 }
 
+.cm-error-line {
+	background-color: red;
+}
 
 

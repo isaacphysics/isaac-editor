@@ -433,7 +433,7 @@ function loadTexRaw(file) {
 
 function loadJsonEditor(file) {
 
-    //try {
+    try {
         // Try to load the file as a JSON object.
         var obj = JSON.parse(file.originalContent);
 
@@ -449,10 +449,11 @@ function loadJsonEditor(file) {
             updateSaveButtons();
         });
     
-    //} catch (e) {
-    //    // Could not parse JSON. Load as a raw file instead.
-    //    loadJsonRaw(file);
-    //} 
+    } catch (e) {
+        console.warn("Loading invalid JSON file, probably.", e);
+        // Could not parse JSON. Load as a raw file instead.
+        loadJsonRaw(file);
+    } 
 }
 
 function closeFile() {
