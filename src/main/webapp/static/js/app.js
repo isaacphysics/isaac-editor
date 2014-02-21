@@ -22,7 +22,7 @@ require.config({
     shim: {
         "codemirror/mode/stex/stex": ["codemirror/codemirror"],
         "codemirror/mode/javascript/javascript": ["codemirror/codemirror"],
-        "foundation": ['jquery'] 
+        "foundation": ['jquery'],
     }
 });
 

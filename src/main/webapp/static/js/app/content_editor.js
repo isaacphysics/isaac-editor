@@ -1,16 +1,9 @@
 /** @jsx React.DOM */
-define(["react", "jquery", "codemirrorJS", "showdown", "mathjax"], function(React, $) {
+define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], function(React, $) {
 	
 	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
 
-	MathJax.Hub.Config({
-	    tex2jax: {
-	      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-	      displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-	      processEscapes: true
-	    },
-	  });
 
 /////////////////////////////////
 // Constructor
@@ -88,6 +81,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "mathjax"], function(Reac
 					this.setState({editedValue: inst.getValue()});
 				}).bind(this));
 			}
+			MathJax.resetLabels();
 			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
 		},
