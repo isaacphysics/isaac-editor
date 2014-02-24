@@ -1,4 +1,4 @@
-define(["./github_application", "jquery", "rsvp"], function(gh_app, $) {
+define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $, B64) {
 
     // Create GitHub 'class'
     function GitHub(user, token)
@@ -157,7 +157,7 @@ define(["./github_application", "jquery", "rsvp"], function(gh_app, $) {
                                  data: JSON.stringify(
                                  {
                                     message: message,
-                                    content: btoa(newContent), // base-64 encode
+                                    content: B64.btoa(newContent), // base-64 encode
                                     sha: originalFile.sha,
                                     branch: this.branch
                                  })

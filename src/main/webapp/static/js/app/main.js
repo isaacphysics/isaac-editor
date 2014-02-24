@@ -1,12 +1,12 @@
-define(["require", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", "app/github", 'jsx!app/content_editor'], function(require) {
+define(["require", "base64", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", "app/github", 'jsx!app/content_editor'], function(require, B64) {
 
 var gitHub = app.gitHub = null;
-var gitPath = app.gitPath = ["src", "main", "resources", "concepts", "maths"];//[];
+var gitPath = app.gitPath = [];//["src", "main", "resources", "concepts", "maths"];//[];
 var gitFile = app.gitFile = "";
 var file = app.file = null;
 
 var repoOwner = app.repoOwner = "daviesian";
-var repoName = app.repoName = "rutherford-content";
+var repoName = app.repoName = "rutherford-content-converted";
 
 var GitHub = require("app/github");
 var ContentEditor = require("jsx!app/content_editor");
@@ -353,7 +353,7 @@ function openFile(path) {
 		// We succeeded in closing the file
 		gitHub.getFile(repoOwner, repoName, path).then(function(f) {
 			
-			f.originalContent = atob(f.content.replace(/\s/g, ''));
+			f.originalContent = B64.atob(f.content.replace(/\s/g, ''));
             f.editedContent = f.originalContent;
 			
 			if (path.endsWith(".json")) {

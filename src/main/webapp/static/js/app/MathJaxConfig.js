@@ -15,7 +15,7 @@ define(["mathjax"], function() {
 		tex2jax: {
 		inlineMath: [ ['$','$'], ["\\(","\\)"] ],
 		displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
-		processEscapes: true
+		processEscapes: true,
 		},
 		TeX: {
 			Macros: {
