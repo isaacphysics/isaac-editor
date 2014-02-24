@@ -24,6 +24,7 @@ define(["mathjax"], function() {
 				"valuedef": ["{#1}={\\quantity{#2}{#3}}",3],
 				"vtr": ["{\\underline{\\boldsymbol{#1}}}",1],
 				"d": "\\operatorname{d}",
+				"vari": ["#1",1],
 			}
 		},
 	});
