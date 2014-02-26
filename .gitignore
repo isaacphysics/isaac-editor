@@ -5,3 +5,4 @@ target/
 .externalToolBuilders/SASS Builder.launch
 .project
 .lein-repl-history
+src/main/webapp/json/
