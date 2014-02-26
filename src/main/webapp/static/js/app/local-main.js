@@ -1,5 +1,6 @@
 define(["require", "base64", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", 'jsx!app/content_editor'], function(require, B64) {
 
+var folder = "DUMMY";
 var file = app.file = null;
 
 var ContentEditor = require("jsx!app/content_editor");
@@ -21,18 +22,16 @@ $(function() {
     $(document).foundation();
     
     $("#content-panel").height($(window).height() - $("#content-panel").offset().top - 120);
-    
-    updateFileBrowser();
 });
 
 
 function updateFileBrowser(){
+    $("#local-files").html("");
 
-    $.get("json/").then(function(r) {
-        $("#local-files").html("");
+    $.get(folder + "/").then(function(r) {
 
         var lis = $(r).find("a").each(function() {
-            var a = $("<a/>").html($(this).html()).addClass("git-type-file").addClass("foundicon-idea").data("git-path", "json/" + $(this).attr("href"));
+            var a = $("<a/>").html($(this).html()).addClass("git-type-file").addClass("foundicon-idea").data("git-path", folder+"/" + $(this).attr("href"));
             $("#local-files").append($("<li/>").append(a));
         });
          
@@ -68,6 +67,13 @@ function openFile(path) {
         console.warn("Aborting file load - previous file not closed");
     });
 }
+
+$("body").on("click", ".choose-json-folder", function(e) {
+    $(".choose-json-folder").removeClass("success");
+    $(e.target).addClass("success")
+    folder = $(e.target).data("json-folder");
+    updateFileBrowser()
+});
 
 $("body").on("click", ".git-type-file", function(e) {
     

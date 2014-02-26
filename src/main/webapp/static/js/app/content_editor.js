@@ -710,6 +710,9 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		"content": ContentBlock,
 		"concept": ContentBlock,
 		"legacy_latex_question_numeric": ContentBlock,
+		"legacy_latex_question_symbolic": ContentBlock,
+		"legacy_latex_question_scq": ContentBlock,
+		"legacy_latex_question_mcq": ContentBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
 	};
