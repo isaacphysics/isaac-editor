@@ -18,10 +18,10 @@ String.prototype.startsWith = function(str) {
 };
 
 $(function() {
-	$(document).foundation();
-	
-	$("#content-panel").height($(window).height() - $("#content-panel").offset().top - 120);
-	
+    $(document).foundation();
+    
+    $("#content-panel").height($(window).height() - $("#content-panel").offset().top - 120);
+    
     updateFileBrowser();
 });
 
@@ -41,11 +41,14 @@ function updateFileBrowser(){
 
 function openFile(path) {
     console.log("Loading", path);
-	
-	closeFile().then(function(){
+    
+    closeFile().then(function(){
 
         $.get(path).then(function(f) {
 
+            if (typeof(f) != "string")
+                f = JSON.stringify(f);
+                
             file = {
                 originalContent: f,
                 editedContent: f,
@@ -59,51 +62,51 @@ function openFile(path) {
                 loadFileRaw(file);
             }
         
-			updateFileBrowser();
+            updateFileBrowser();
         });
-	}).catch(function() {
+    }).catch(function() {
         console.warn("Aborting file load - previous file not closed");
     });
 }
 
 $("body").on("click", ".git-type-file", function(e) {
-	
-	var path = $(e.target).data("git-path");
-	
-	if (file != null && path == file.path)
-		return;
-	
-	openFile(path);
-	
+    
+    var path = $(e.target).data("git-path");
+    
+    if (file != null && path == file.path)
+        return;
+    
+    openFile(path);
+    
 });
 
 function loadFileRaw(file) {
-	$("#content-panel").empty();
-	
-	var cm = app.cm = CodeMirror($("#content-panel")[0], 
-			{mode: "",
-			 theme: "eclipse",//"solarized light",
-			 lineNumbers: false,
-			 value: file.originalContent,
-			 lineWrapping: true});
-	
-	
-	cm.on("change", function(inst, changeObj) { 
-		
-		file.editedContent = cm.getValue();
-	});
-	
-	return cm;
+    $("#content-panel").empty();
+    
+    var cm = app.cm = CodeMirror($("#content-panel")[0], 
+            {mode: "",
+             theme: "eclipse",//"solarized light",
+             lineNumbers: false,
+             value: file.originalContent,
+             lineWrapping: true});
+    
+    
+    cm.on("change", function(inst, changeObj) { 
+        
+        file.editedContent = cm.getValue();
+    });
+    
+    return cm;
 }
 
 function loadJsonRaw(file) {
-	var cm = loadFileRaw(file);
-	cm.setOption("mode", {name: "javascript", json: true});
+    var cm = loadFileRaw(file);
+    cm.setOption("mode", {name: "javascript", json: true});
 }
 
 function loadTexRaw(file) {
-	var cm = loadFileRaw(file);
-	cm.setOption("mode", "stex");
+    var cm = loadFileRaw(file);
+    cm.setOption("mode", "stex");
 }
 
 function loadJsonEditor(file) {
@@ -124,7 +127,7 @@ function loadJsonEditor(file) {
         });
     
     } catch (e) {
-        console.warn("Loading invalid JSON file, probably.", e);
+        console.warn("Loading invalid JSON file, probably.", e, file);
         // Could not parse JSON. Load as a raw file instead.
         loadJsonRaw(file);
     } 
