@@ -500,8 +500,8 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 			return (
 				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
-						<div className="small-6 columns">
-							<img src={this.props.doc.src} />
+						<div className="small-6 columns text-center">
+							<img width="250px" height="250px" src="static/images/not-found.png" />
 						</div>
 						<div className="small-6 columns">
 							{optionalCaption}
@@ -563,6 +563,8 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 			if (this.props.doc.type == "choiceQuestion")
 				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} /></Block>
 
+			if (!this.props.doc.answer)
+				console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
 			return (
 				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 					{exposition}
@@ -713,6 +715,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		"legacy_latex_question_symbolic": ContentBlock,
 		"legacy_latex_question_scq": ContentBlock,
 		"legacy_latex_question_mcq": ContentBlock,
+		"choice": ContentBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
 	};
