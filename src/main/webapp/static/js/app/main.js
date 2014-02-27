@@ -367,7 +367,7 @@ function openFile(path) {
 			file = f;
 			updateSaveButtons();
 			
-			$(".git-file-name").html(file.name);
+			$(".git-file-name").html(file.name).attr("href", file.html_url).attr("target", "blank");
 			
 			gitFile = f.name;
 			updateFileBrowser();
