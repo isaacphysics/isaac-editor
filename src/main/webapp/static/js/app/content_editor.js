@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], function(React, $) {
+define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfig"], function(React, $) {
 	
 	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
@@ -20,6 +20,17 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		React.renderComponent(this.editor, container);
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	}
+
+/////////////////////////////////
+// Public static fields
+/////////////////////////////////
+
+	ContentEditor.fileLoader = function(path) {
+		return new RSVP.Promise(function(resolve, reject) {
+			console.error("No file loader provided for file", path);
+			reject();
+		});
+	};
 
 /////////////////////////////////
 // Private static component classes
@@ -483,8 +494,56 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		},
 
 		onCaptionChange: function(c, oldVal, newVal, oldChildren, newChildren) {
-			// newVal could be a string or a list.
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, this.props.doc);
+			newDoc.value = newVal;
+			newDoc.children = newChildren;
 
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		loadImg: function() {
+			ContentEditor.fileLoader(this.props.doc.src).then((function(dataUrl){
+				$(this.refs.img.getDOMNode()).attr("src", dataUrl);
+			}).bind(this)).catch((function() {
+				console.error("Failed to load image", this.props.doc.src);
+			}).bind(this));
+		},
+
+		componentDidMount: function() {
+			this.loadImg();
+		},
+
+		componentDidUpdate: function() {
+			this.loadImg();
+		},
+
+		render: function() {
+
+			var optionalCaption = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
+
+			return (
+				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row">
+						<div className="small-6 columns text-center">
+							<img width="250px" height="250px" src="static/images/not-found.png" ref="img" />
+						</div>
+						<div className="small-6 columns">
+							{optionalCaption}
+						</div>					
+					</div>
+				</Block>
+			);
+		}
+	});
+
+	var VideoBlock = React.createClass({
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		onCaptionChange: function(c, oldVal, newVal, oldChildren, newChildren) {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, this.props.doc);
 			newDoc.value = newVal;
@@ -498,7 +557,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 			var optionalCaption = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
 
 			return (
-				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
+				<Block type="video" blockTypeTitle="Video" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-6 columns text-center">
 							<img width="250px" height="250px" src="static/images/not-found.png" />
@@ -509,7 +568,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 					</div>
 				</Block>
 			);
-		}
+		},
 	});
 
 	var QuestionBlock = React.createClass({
@@ -631,7 +690,8 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 							Please choose a block type: <br/>
 							<a onClick={this.chooseType} data-chosen-type="content">content</a> | 
 							<a onClick={this.chooseType} data-chosen-type="question">question</a> | 
-							<a onClick={this.chooseType} data-chosen-type="figure">figure</a>
+							<a onClick={this.chooseType} data-chosen-type="figure">figure</a> |
+							<a onClick={this.chooseType} data-chosen-type="video">video</a>
 						</div>
 					</div>
 				</Block>
@@ -716,6 +776,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		"legacy_latex_question_scq": ContentBlock,
 		"legacy_latex_question_mcq": ContentBlock,
 		"choice": ContentBlock,
+		"video": VideoBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
 	};
@@ -736,14 +797,19 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 					value: "_Enter exposition here_",
 					answer: generateNewBlock("content", "_Enter answer here_"),
 					type: "question",
-			    }
+			    };
+			case "video":
+				return {
+					encoding: "markdown",
+					value: "_Add video caption here_",
+					type: "video",
+				};
 			default:
 				return {
 					type: type,
 					value: value || "_Enter content here_", 
 					encoding:"markdown"
-				}
-
+				};
 		}
 	}
 
@@ -760,6 +826,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		$(this.editor.getDOMNode()).trigger("docChanged", [oldDoc, newDoc]);
 
 	}
+
 
 /////////////////////////////////
 // Public instance methods

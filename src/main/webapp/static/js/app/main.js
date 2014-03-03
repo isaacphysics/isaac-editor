@@ -1,7 +1,7 @@
 define(["require", "base64", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", "app/github", 'jsx!app/content_editor'], function(require, B64) {
 
 var gitHub = app.gitHub = null;
-var gitPath = app.gitPath = [];//["src", "main", "resources", "concepts", "maths"];//[];
+var gitPath = app.gitPath = ["src", "main", "resources", "concepts", "physics"];//[];
 var gitFile = app.gitFile = "";
 var file = app.file = null;
 
@@ -10,6 +10,22 @@ var repoName = app.repoName = "rutherford-content-converted";
 
 var GitHub = require("app/github");
 var ContentEditor = require("jsx!app/content_editor");
+
+ContentEditor.fileLoader = function(relativePath) {
+    return new RSVP.Promise(function(resolve, reject) {
+
+        //var fileDir = currentFilePath.substr(0,currentFilePath.lastIndexOf("/"));
+        var absPath = gitPath.join("/") + "/" + relativePath;
+
+        gitHub.getFile(repoOwner, repoName, absPath).then(function(f) {
+            var dataUrl = "data:image/svg+xml;base64," + f.content.replace(/\s/g, '');
+            console.log("Retrieved", f.path, "from git:", dataUrl);
+            resolve(dataUrl);
+        }).catch(function() {
+            console.error("Failed to retrieve", absPath);
+        });
+    });
+}
 
 RSVP.on('error', function(reason) {
   console.error(reason);
@@ -398,7 +414,6 @@ $("body").on("click", ".git-type-file", function(e) {
 		return;
 	
 	openFile(path);
-	
 });
 
 function loadFileRaw(file) {
