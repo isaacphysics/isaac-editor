@@ -1,0 +1,114 @@
+{
+	"title": "Content Schema",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": ["string", "null"]
+		},
+		"title": {
+			"type": ["string", "null"]
+		},
+		"author": {
+			"type": ["string", "null"]
+		},
+		"encoding": {
+			"enum": ["latex", "html", "markdown"]
+		},
+		"relatedContent": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"attribution": {
+			"type": ["string", "null"]
+		},
+		"src": { 
+			"type": ["string", "null"] 
+		}
+	},
+	"allOf": [
+		{
+			"oneOf": [
+				{
+					"properties": {
+						"children": {
+							"type": "array",
+							"items": {
+								"$ref": "#"
+							}
+						}
+					}
+				},
+				{
+					"properties": {
+						"value": {
+							"type": "string"
+						}
+					}
+				}
+			]
+		},
+		{
+			"oneOf": [ 
+				{"allOf": [{"properties": {"type": {"enum": [
+					"content", 
+					"concept",
+					"legacy_latex_question_scq",
+					"legacy_latex_question_numeric"
+				] } } },        { "$ref": "#/contentTypes/content"} ] },
+				{"allOf": [{"properties": {"type": {"enum": ["figure"] } } },         { "$ref": "#/contentTypes/figure"} ] },
+				{"allOf": [{"properties": {"type": {"enum": ["question"] } } },       { "$ref": "#/contentTypes/question"} ] },
+				{"allOf": [{"properties": {"type": {"enum": ["choiceQuestion"] } } }, { "$ref": "#/contentTypes/choiceQuestion"} ] },
+				{"allOf": [{"properties": {"type": {"enum": ["choice"] } } },         { "$ref": "#/contentTypes/choice"} ] }
+			]
+		}
+	],
+	"required": ["type"],
+
+	"contentTypes": {
+
+		"content": {
+
+		},
+
+		"figure": {
+			"properties": {
+			}
+		},
+
+		"question": {
+			"properties": {
+				"answer": { "$ref": "#" },
+				"hints": {
+					"type": "array",
+					"items": { "$ref": "#" }
+				}
+			}
+		},
+
+		"choiceQuestion": {
+			"allOf": [
+				{ "$ref": "#/contentTypes/question" },
+				{
+					"properties": {
+						"choices": {
+							"type": "array",
+							"items": {
+								"allOf": [
+									{"properties": {"type": {"enum": ["choice"] } } }, 
+									{ "$ref": "#" }
+								]
+							}
+						}
+					}
+				}
+			]
+		},
+
+		"choice": {
+			"properties": {
+				"correct": { "type": "boolean" },
+				"explanation": { "type": "string"}
+			}
+		}
+	}
+}

@@ -1,7 +1,7 @@
-define(["require", "base64", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", "app/github", 'jsx!app/content_editor'], function(require, B64) {
+define(["require", "base64", "rsvp", "jquery", "foundation", "codemirrorJS", "codemirrorTex", "app/github", 'jsx!app/content_editor', "tv4"], function(require, B64) {
 
 var gitHub = app.gitHub = null;
-var gitPath = app.gitPath = ["src", "main", "resources", "concepts", "physics"];//[];
+var gitPath = app.gitPath = (localStorage.gitPath || "").split("/");
 var gitFile = app.gitFile = "";
 var file = app.file = null;
 
@@ -10,6 +10,21 @@ var repoName = app.repoName = "rutherford-content-converted";
 
 var GitHub = require("app/github");
 var ContentEditor = require("jsx!app/content_editor");
+
+var schema = {};
+
+var initialBranch = "master";
+var initialFile = null;
+
+if(document.location.hash) {
+    var hashParts = document.location.hash.substr(1).split(":")
+    initialBranch = hashParts[0];
+    initialFile = hashParts[1];
+}
+
+$.get("/static/content_schema.json").then(function(d){
+    schema = JSON.parse(d);
+});
 
 ContentEditor.fileLoader = function(relativePath) {
     return new RSVP.Promise(function(resolve, reject) {
@@ -151,6 +166,11 @@ $(function() {
         // We already have a token stored in the cookie, login as that user.
         GitHub.login(getCookie("segue-token")).then(function(g) {
             gitHub = g;
+            gitHub.branch = initialBranch;
+
+            if(initialFile)
+                openFile(initialFile);
+
             updateFileBrowser();
             displayGithubStatus();
         	updateBranchList();
@@ -189,6 +209,11 @@ $("body").on("click", ".logout-button", function(e) {
 $("body").on("click", ".save:not(.disabled)", function(e) {
 	console.log("Save", file);
 	saveFile();
+});
+
+$(window).bind('beforeunload', function(){
+    if (fileIsEdited())
+        return 'This file is unsaved. Are you sure you want to leave?';
 });
 
 function cacheSvgsAsPngs(repoPath) {
@@ -317,7 +342,7 @@ function displayGithubStatus(){
 
 function updateFileBrowser(){
 	if (gitHub == null) {
-		console.error("Cannot update file browser.");
+		console.error("Cannot update file browser - no gitHub instance available.");
 		return;
 	}
 	
@@ -343,6 +368,7 @@ function updateFileBrowser(){
 			pathNav.append(a);
 		}
 		
+        localStorage.gitPath = gitPath.join("/");
 		
 		
 		var browser = $("#git-files").html("");
@@ -357,7 +383,11 @@ function updateFileBrowser(){
 			browser.append(li);
 		}
 	}).catch(function(e) { 
-		console.error("Could not list files:", e);
+		console.error("Could not list files. Let's assume it's because we requested an invalid path or branch. Resetting.");
+        gitPath = [];
+        gitHub.branch = "master";
+        document.location.hash = "";
+        updateFileBrowser();
 	});
 }
 
@@ -380,6 +410,7 @@ function openFile(path) {
 				loadFileRaw(f);
 			}
 			
+            document.location.hash = gitHub.branch + ":" + path;
 			file = f;
 			updateSaveButtons();
 			
@@ -451,6 +482,8 @@ function loadJsonEditor(file) {
     try {
         // Try to load the file as a JSON object.
         var obj = JSON.parse(file.originalContent);
+
+        console.log("VALIDATION", tv4.validate(obj, schema), tv4.error);
 
         $("#content-panel").empty();
         var editor = app.editor = new ContentEditor($("#content-panel")[0], obj);
