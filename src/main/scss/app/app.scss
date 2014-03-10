@@ -214,4 +214,17 @@ $transformDelay: 0.2s;
 	background-color: red;
 }
 
+.create-file {
+	float: right;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-left: 3px;
+	padding-bottom: 3px;
+	border-left: 1px dashed #aaa;
+	border-bottom: 1px dashed #aaa;
+}
+
+.create-file:hover:after {
+	content: " Create new file...";
+}
 

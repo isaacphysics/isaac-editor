@@ -40,7 +40,7 @@
               </li>
 	
 		      <li class="has-dropdown">
-		        <a href="#">Branch: <span class="current-branch">master</span></a>
+		        <a href="javascript:void(0)">Branch: <span class="current-branch">master</span></a>
 		        <ul id="branch-list" class="dropdown">
 		        </ul>
 		      </li>
@@ -53,7 +53,7 @@
 	
 	    <ul class="left">
         <span class="require-login">
-          <li class="name"><h1><a class="git-file-name"></a></h1></li>
+          <li class="name"><h1><a class="git-file-name" href="#"></a></h1></li>
         </span>
 	    </ul>
   	  </section>
@@ -72,7 +72,7 @@
  
    	<div class="small-2 columns">
   		<div id="file-browser">
-  			
+  			<a class="create-file" href="#"/> <i class="foundicon-plus"></i></a>
   			<ul id="git-files" class="side-nav"></ul>
   			<!-- <div id="git-files" class="callout panel">Files</div>-->
   			
@@ -105,6 +105,16 @@
   </div>
 </div>
   
+<div id="modal-file-details" class="reveal-modal small" data-reveal>
+  <h2 id="file-name"></h2>
+  <p class="lead"></p>
+  <a class="close-reveal-modal">&#215;</a>
+  <div class="right">
+    <a class="button success radius file-view-github" target="blank">View on GitHub</a>
+    <a class="button alert radius file-delete">Delete</a>
+    <a class="button radius file-modal-close" >Close</a>
+  </div>
+</div>
   
   
     <div class="row require-logout">

@@ -44,3 +44,7 @@ define(["mathjax"], function() {
 	}
 
 });
+
+// Here is a very useful page:
+
+// http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference

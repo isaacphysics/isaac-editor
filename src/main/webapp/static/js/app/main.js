@@ -350,14 +350,14 @@ function updateFileBrowser(){
 		
 		var pathNav = $("#git-path").html("");
 		
-		var a = $("<a/>").attr("href","#").html("ROOT").addClass("git-type-dir");
+		var a = $("<a/>").attr("href","javascript:void(0)").html("ROOT").addClass("git-type-dir");
 		a.data("git-path", "");
 		if (gitPath.length == 0)
 			a.addClass("current disabled");
 		pathNav.append(a);
 		
 		for(var p = 0; p < gitPath.length; p++) {
-			var a = $("<a/>").attr("href","#").html(gitPath[p]).addClass("git-type-dir");
+			var a = $("<a/>").attr("href","javascript:void(0)").html(gitPath[p]).addClass("git-type-dir");
 			var fullPath = gitPath.slice(0,p+1).join("/");
 
 			a.data("git-path", fullPath);
@@ -414,7 +414,7 @@ function openFile(path) {
 			file = f;
 			updateSaveButtons();
 			
-			$(".git-file-name").html(file.name).attr("href", file.html_url).attr("target", "blank");
+			$(".git-file-name").show().html(file.name);
 			
 			gitFile = f.name;
 			updateFileBrowser();
@@ -446,6 +446,67 @@ $("body").on("click", ".git-type-file", function(e) {
 	
 	openFile(path);
 });
+
+$("body").on("click", ".create-file", function(e) {
+    e.preventDefault();
+
+    var newName = window.prompt("Please type a name for the new file. If no extension is provided, \".json\" will be assumed", "untitled");
+
+    if (newName) {
+
+        if (newName.indexOf(".") == -1)
+            newName += ".json";
+
+        var newPath = gitPath.join("/") + "/" + newName;
+
+        console.log("Creating", newPath);
+
+        gitHub.createFile(repoOwner, repoName, newPath).then(function(f) {
+            openFile(newPath);
+            updateFileBrowser();
+
+        }).catch(function(e) {
+            console.error("Could not create file. Perhaps it already exists.", e);
+        });
+    }
+
+    return false;
+})
+
+$("body").on("click", ".git-file-name", function(e) {
+    e.preventDefault();
+
+    var m = $("#modal-file-details");
+    m.find("#file-name").html(file.name);
+    m.foundation("reveal", "open");
+
+    $(".file-view-github").attr("href", file.html_url);
+
+    return false;
+});
+
+$("#modal-file-details").on("click", ".file-delete", function(e) {
+
+    if (confirm("Do you really want to delete this file?")) {
+        console.log("Deleting", file.path);
+
+        gitHub.deleteFile(repoOwner, repoName, file.path, file.sha).then(function(f){
+            $("#content-panel").empty();
+            file = null;
+            $(".git-file-name").hide().empty();
+            document.location.hash = gitHub.branch + ":";
+            updateFileBrowser();            
+        });
+
+
+        $("#modal-file-details").foundation("reveal", "close");
+    }
+});
+
+$("#modal-file-details").on("click", ".file-modal-close", function(e) {
+    $("#modal-file-details").foundation("reveal", "close");
+});
+
 
 function loadFileRaw(file) {
 	$("#content-panel").empty();
@@ -525,6 +586,7 @@ function closeFile() {
                 saveFile().then(function() {
                     $("#content-panel").empty();
                     file = null;
+                    $(".git-file-name").hide().empty();
                     resolve();
                 });
 
@@ -548,6 +610,7 @@ function closeFile() {
         {
             $("#content-panel").empty();
             file = null;
+            $(".git-file-name").hide().empty();
             resolve();
         }
     });
@@ -602,9 +665,10 @@ function updateBranchList() {
 		for(var b in branches)
 		{
 			b = branches[b];
-			var li = $("<li/>").append($("<a href=\"#\"/>").html(b.name).data("git-branch-name", b.name).click(chooseBranch));
+			var li = $("<li/>").append($("<a href=\"javascript:void(0)\"/>").html(b.name).data("git-branch-name", b.name).click(chooseBranch));
 			$("#branch-list").append(li);
 		}
+        $(".current-branch").html(gitHub.branch);
 		
 	}).catch(function(e) {
 		console.error("Error listing branches:", e);
@@ -622,7 +686,9 @@ function chooseBranch(e) {
 		
 		if (currentFile != null) {
 			openFile(currentFile.path);
-		}
+		} else {
+            document.location.hash = branch + ":";
+        }
 	});
 }
 

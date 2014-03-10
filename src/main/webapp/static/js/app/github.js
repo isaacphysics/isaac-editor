@@ -18,7 +18,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
     function wrapAjax(a) {
         return new RSVP.Promise(function(resolve, reject) {
             a.success(function(e) { resolve(e); })
-             .error(function(e) { reject(e); });
+             .error(function(e) { reject(e.responseText); });
         });
     }
 
@@ -83,6 +83,27 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
         if (GitHub.enableLogging)
             p.then(function(f) {
                 console.log("GITHUB:","Successfully created \"" + path + "\" in repo \"" + repoOwner + "/" + repoName + "\".");
+            });
+        
+        return p;
+    };
+
+    GitHub.prototype.deleteFile = function(repoOwner, repoName, path, sha)
+    {
+        var p = wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
+                                {
+                                    type: "DELETE",
+                                    headers: {"Authorization": "token " + this.token},
+                                    data:
+                                    JSON.stringify({
+                                        message: "Deleting " + path,
+                                        branch: this.branch,
+                                        sha: sha,
+                                })}));
+        
+        if (GitHub.enableLogging)
+            p.then(function(f) {
+                console.log("GITHUB:","Successfully deleted \"" + path + "\" from repo \"" + repoOwner + "/" + repoName + "\".");
             });
         
         return p;
