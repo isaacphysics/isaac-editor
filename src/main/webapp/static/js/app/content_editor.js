@@ -775,6 +775,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"legacy_latex_question_symbolic": ContentBlock,
 		"legacy_latex_question_scq": ContentBlock,
 		"legacy_latex_question_mcq": ContentBlock,
+		"page": ContentBlock,
 		"choice": ContentBlock,
 		"video": VideoBlock,
 		"question": QuestionBlock,

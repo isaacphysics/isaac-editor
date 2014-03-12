@@ -67,8 +67,10 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
         return p;
     };
 
-    GitHub.prototype.createFile = function(repoOwner, repoName, path)
+    GitHub.prototype.createFile = function(repoOwner, repoName, path, initialContent)
     {
+        if (initialContent == null)
+            initialContent = " ";
         var p = wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
                                 {
                                     type: "PUT",
@@ -77,7 +79,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
                                     JSON.stringify({
                                         message: "Creating " + path,
                                         branch: this.branch,
-                                        content: btoa(" "),
+                                        content: btoa(initialContent),
                                 })}));
                                 
         if (GitHub.enableLogging)

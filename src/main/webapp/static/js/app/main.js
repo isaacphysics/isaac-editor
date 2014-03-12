@@ -461,7 +461,15 @@ $("body").on("click", ".create-file", function(e) {
 
         console.log("Creating", newPath);
 
-        gitHub.createFile(repoOwner, repoName, newPath).then(function(f) {
+        if (newName.endsWith(".json")) {
+            var stubPage = {
+                type: "page",
+                encoding: "markdown",
+                value: "# New Page\n\nAdd page content here"
+            }
+        }
+
+        gitHub.createFile(repoOwner, repoName, newPath, JSON.stringify(stubPage, null, 2)).then(function(f) {
             openFile(newPath);
             updateFileBrowser();
 
