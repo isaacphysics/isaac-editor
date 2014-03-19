@@ -5,8 +5,8 @@ var gitPath = app.gitPath = (localStorage.gitPath || "").split("/");
 var gitFile = app.gitFile = "";
 var file = app.file = null;
 
-var repoOwner = app.repoOwner = "daviesian";
-var repoName = app.repoName = "rutherford-content-converted";
+var repoOwner = app.repoOwner = "ucam-cl-dtg";
+var repoName = app.repoName = "rutherford-content";
 
 var GitHub = require("app/github");
 var ContentEditor = require("jsx!app/content_editor");

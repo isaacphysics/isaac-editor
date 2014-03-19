@@ -780,6 +780,9 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"video": VideoBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
+		"isaacMultiChoiceQuestion": QuestionBlock, 
+		"isaacNumericQuestion": QuestionBlock, 
+		"isaacSymbolicQuestion": QuestionBlock
 	};
 
 
