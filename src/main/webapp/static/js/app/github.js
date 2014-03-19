@@ -117,6 +117,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
                                {
                                    data: {"access_token": this.token,
                                           "ref": this.branch},
+                                   dataType: "json",
                                    type: "GET",
                                    cache: false
                                }));
@@ -146,6 +147,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
             return wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/git/trees/" + f.sha + "?recursive=1",
                                    {
                                        data: {"access_token": gh.token},
+                                       dataType: "json",
                                        type: "GET",
                                        cache: true
                                    }));
@@ -200,6 +202,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
                                {
                                    data: {"access_token": this.token},
                                    type: "GET",
+                                   dataType: "json",
                                    //cache: false
                                }));
     };
