@@ -25,6 +25,7 @@ define(["mathjax"], function() {
 				"vtr": ["{\\underline{\\boldsymbol{#1}}}",1],
 				"d": "\\operatorname{d}",
 				"vari": ["#1",1],
+				"s": ["_{\\sf{#1}}", 1],
 			}
 		},
 	});
