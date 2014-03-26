@@ -56,9 +56,12 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		},
 
 		switchToEdit: function(e) {
+
+			var hasDefault = (/^_Enter .* Here_$/i).test(this.props.value);
+
 			this.setState({
 				mode: "edit", 
-				editedValue: this.props.value
+				editedValue: hasDefault ? "" : this.props.value
 			});
 		},
 
@@ -85,7 +88,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 					{mode: "",
 					 theme: "eclipse",//"solarized light",
 					 lineNumbers: false,
-					 value: this.props.value,
+					 value: this.state.editedValue,
 					 lineWrapping: true});
 
 				cm.on("change", (function(inst, changeObj) { 
@@ -780,6 +783,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"video": VideoBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
+		"isaacQuestion": QuestionBlock, 
 		"isaacMultiChoiceQuestion": QuestionBlock, 
 		"isaacNumericQuestion": QuestionBlock, 
 		"isaacSymbolicQuestion": QuestionBlock
