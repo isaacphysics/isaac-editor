@@ -4,7 +4,6 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
 
-
 /////////////////////////////////
 // Constructor
 /////////////////////////////////
@@ -689,12 +688,24 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		correct_toggle: function(e) {
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+
+			newDoc.correct = !oldDoc.correct;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
 		render: function() {
 			return (
 				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-1 column text-right">
-							{this.props.doc.correct ? <i className="general foundicon-checkmark" /> : <i className="general foundicon-remove" />}
+							{this.props.doc.correct ? 
+								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> : 
+								<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
 						</div>
 						<div className="small-11 columns" >
 							<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
@@ -806,10 +817,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"figure": FigureBlock,
 		"content": ContentBlock,
 		"concept": ContentBlock,
-		"legacy_latex_question_numeric": ContentBlock,
-		"legacy_latex_question_symbolic": ContentBlock,
-		"legacy_latex_question_scq": ContentBlock,
-		"legacy_latex_question_mcq": ContentBlock,
+		"isaacQuestionPage": ContentBlock,
 		"page": ContentBlock,
 		"choice": ChoiceBlock,
 		"video": VideoBlock,
