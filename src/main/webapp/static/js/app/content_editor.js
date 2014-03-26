@@ -673,6 +673,38 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		}
 	});
 
+	var ChoiceBlock = React.createClass({
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		onContentChange: function(c, oldVal, newVal, oldChildren, newChildren) {
+			// newVal could be a string or a list.
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.value = newVal;
+			newDoc.children = newChildren;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		render: function() {
+			return (
+				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row">
+						<div className="small-1 column text-right">
+							{this.props.doc.correct ? <i className="general foundicon-checkmark" /> : <i className="general foundicon-remove" />}
+						</div>
+						<div className="small-11 columns" >
+							<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+						</div>
+					</div>
+				</Block>
+			);
+		}
+	});
+
 	var UnknownBlock = React.createClass({
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -779,7 +811,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"legacy_latex_question_scq": ContentBlock,
 		"legacy_latex_question_mcq": ContentBlock,
 		"page": ContentBlock,
-		"choice": ContentBlock,
+		"choice": ChoiceBlock,
 		"video": VideoBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
