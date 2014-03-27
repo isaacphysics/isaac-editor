@@ -31,6 +31,14 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		});
 	};
 
+	ContentEditor.figureUploader = function(fileToUpload, originalName) {
+		return new RSVP.Promise(function(resolve, reject) {
+			console.error("No file uploader provided")
+			// A real figureUploader would return the path to the uploaded image that can then be loaded with fileLoader
+			return reject();
+		});
+	}
+
 /////////////////////////////////
 // Private static component classes
 /////////////////////////////////
@@ -512,12 +520,57 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			}).bind(this));
 		},
 
+		onSrcChange: function(newSrc) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, this.props.doc);
+			newDoc.src = newSrc;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		selectFile: function(file) {
+			var reader = new FileReader();
+			var self = this;
+			reader.onload = function(e) {
+				console.log("Loaded", file);
+				ContentEditor.figureUploader(reader.result, file.name).then(function(relativePath) {
+					console.log("Newly created relative file path:", relativePath);
+
+					self.onSrcChange(relativePath);
+				});
+			};
+
+			reader.readAsBinaryString(file)
+
+		},
+
 		componentDidMount: function() {
 			this.loadImg();
 		},
 
 		componentDidUpdate: function() {
 			this.loadImg();
+		},
+
+		img_Click: function() {
+			this.refs.fileInput.getDOMNode().click();
+		},
+
+		img_DragOver: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "copy";
+			console.log("DRAG");
+		},
+
+		img_Drop: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+
+			if (e.nativeEvent.dataTransfer.files.length != 1)
+				return;
+
+			this.selectFile(e.nativeEvent.dataTransfer.files[0]);
 		},
 
 		render: function() {
@@ -528,7 +581,8 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-6 columns text-center">
-							<img width="250px" height="250px" src="static/images/not-found.png" ref="img" />
+							<img width="250px" height="250px" src="static/images/not-found.png" ref="img" onClick={this.img_Click} accept="image/svg+xml,image/png" onDragOver={this.img_DragOver} onDrop={this.img_Drop} /> 
+							<input type="file" ref="fileInput" style={{position: "absolute", left: -1000, top: -1000, visibility:"hidden"}}/>
 						</div>
 						<div className="small-6 columns">
 							{optionalCaption}

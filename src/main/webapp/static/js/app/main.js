@@ -33,14 +33,54 @@ ContentEditor.fileLoader = function(relativePath) {
         var absPath = gitPath.join("/") + "/" + relativePath;
 
         gitHub.getFile(repoOwner, repoName, absPath).then(function(f) {
-            var dataUrl = "data:image/svg+xml;base64," + f.content.replace(/\s/g, '');
-            console.log("Retrieved", f.path, "from git:", dataUrl);
+            if(f.name.endsWith(".png"))
+                var type = "image/png";
+            else if (f.name.endsWith(".svg"))
+                var type = "image/svg+xml";
+
+            var dataUrl = "data:" + type + ";base64," + f.content.replace(/\s/g, '');
+            console.log("Retrieved", f.path, "from git:", dataUrl, f);
             return resolve(dataUrl);
         }).catch(function() {
             console.error("Failed to retrieve", absPath);
         });
     });
-}
+};
+
+ContentEditor.figureUploader = function(fileContentToUpload, originalName) {
+    var fileFolder = file.path.substr(0,file.path.lastIndexOf("/"));
+    var folder = fileFolder + "/figures";
+
+    return new RSVP.Promise(function(resolve, reject) {
+        gitHub.listFiles(repoOwner, repoName, folder).then(function(figures) {
+            return resolve(figures);
+        }).catch(function() {
+            return resolve([]);
+        });
+    }).then(function(figures) {
+        var figurePaths = figures.map(function(f) {return f.path});
+        var i = 0;
+
+        do {
+            var proposedName = originalName.substr(0,originalName.lastIndexOf(".")) + ( i ? "_" + (i+1) : "") + originalName.substr(originalName.lastIndexOf("."));
+            var proposedPath = folder + "/" + proposedName;
+            i++;
+        } while(figurePaths.indexOf(proposedPath) > -1)
+
+        console.log("Proposed Path:", proposedPath);
+
+        return gitHub.createFile(repoOwner, repoName, proposedPath, fileContentToUpload).then(function(f) {
+            var absPath = f.content.path;
+            var srcPath = fileFolder;
+
+            // TODO: Should probably do a proper absolute-to-relative path conversion here. But we know it went in the "figures" subdirectory, so just fake it.
+
+            var relativePath = "figures/" + f.content.name;
+
+            return relativePath;
+        });
+    });
+};
 
 RSVP.on('error', function(reason) {
   console.error(reason);
