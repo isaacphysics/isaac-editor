@@ -31,6 +31,7 @@
 	    
 	      <span class="require-login">
 		      
+          <li class="name"><h1><a class="git-repo-name" href="#"></a></h1></li>
 		      <li>
 		      <a href="#" class="save button secondary disabled radius">Saved</a>
 		      </li>
@@ -129,32 +130,16 @@
   </div>
 </div>
   
-<div id="modal-choose-repo" class="reveal-modal small" data-reveal>
+<div id="modal-choose-repo" class="reveal-modal small" data-reveal data-options="close_on_background_click:false;">
   <h2>Choose Content Repository</h2>
   <p class="lead">Which content repository would you like to edit?</p>
-  <a class="close-reveal-modal">&#215;</a>
 
-  <div class="row">
+  <div class="row" id="repo-row-template">
     <div class="small-12 columns">
-      <a href="#">Repo 1</a>
+      <a class="button repo-name" href="#">ucam-cl-dtg/rutherford-content</a> <span class="repo-description">A repository</span>
     </div>
   </div>
-  <div class="row">
-    <div class="small-10 small-offset-2 columns">
-      A repository
-    </div>
-  </div>
-  <hr/>
-  <div class="row">
-    <div class="small-12 columns">
-      <a href="#">Repo 2</a>
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-10 small-offset-2 columns">
-      Another repository
-    </div>
-  </div>
+
 
 
 </div>
