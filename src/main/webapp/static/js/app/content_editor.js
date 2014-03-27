@@ -818,6 +818,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"content": ContentBlock,
 		"concept": ContentBlock,
 		"isaacQuestionPage": ContentBlock,
+		"isaacConceptPage": ContentBlock,
 		"page": ContentBlock,
 		"choice": ChoiceBlock,
 		"video": VideoBlock,
