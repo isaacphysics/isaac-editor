@@ -35,7 +35,7 @@ ContentEditor.fileLoader = function(relativePath) {
         gitHub.getFile(repoOwner, repoName, absPath).then(function(f) {
             var dataUrl = "data:image/svg+xml;base64," + f.content.replace(/\s/g, '');
             console.log("Retrieved", f.path, "from git:", dataUrl);
-            resolve(dataUrl);
+            return resolve(dataUrl);
         }).catch(function() {
             console.error("Failed to retrieve", absPath);
         });
@@ -606,9 +606,43 @@ $("#modal-file-details").on("click", ".file-delete", function(e) {
     }
 });
 
-$("#modal-file-details").on("click", ".file-modal-close", function(e) {
+$("#modal-file-details").on("click", ".file-rename", function(e) {
+    if (fileIsEdited()) {
+        if (!window.confirm("This will save the current contents of this file. Are you sure you want to continue?"))
+            return;
+    }
+
+    saveFile().then(function() {
+
+        var newName = window.prompt("Please type a new name for the file. If no extension is provided, \".json\" will be assumed", file.name);
+
+        if (newName) {
+
+            if (newName.indexOf(".") == -1)
+                newName += ".json";
+
+            var newPath = gitPath.join("/") + "/" + newName;
+            var oldPath = file.path;
+
+            console.log("Creating", newPath);
+
+            gitHub.createFile(repoOwner, repoName, newPath, file.editedContent).then(function(f) {
+
+                gitHub.deleteFile(repoOwner, repoName, oldPath, file.sha).then(function() {
+                    openFile(newPath);
+                    updateFileBrowser();                    
+                }).catch(function(e) {
+                    console.error("Could not delete old file.", e);
+                })
+            }).catch(function(e) {
+                console.error("Could not create file. Perhaps it already exists.", e);
+            });
+        }  
+    });
+
     $("#modal-file-details").foundation("reveal", "close");
 });
+
 
 
 function loadFileRaw(file) {
@@ -798,7 +832,10 @@ function chooseBranch(e) {
 function saveFile() {
     return new RSVP.Promise(function(resolve, reject) {
         if (file == null)
-            resolve();
+            return resolve();
+
+        if (!fileIsEdited())
+            return resolve();
             
         gitHub.commitChange(file, file.editedContent, "Edited " + file.name).then(function(f) {
             console.log("File saved:", f);
@@ -810,11 +847,11 @@ function saveFile() {
             file.originalContent = file.editedContent;
 
             updateSaveButtons();
-            resolve();
+            return resolve();
             
         }).catch(function(e) {
             console.error("Could not save file:", e);
-            reject();
+            return reject();
         });
     });
 }

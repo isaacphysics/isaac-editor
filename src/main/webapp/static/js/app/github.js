@@ -17,8 +17,8 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
     
     function wrapAjax(a) {
         return new RSVP.Promise(function(resolve, reject) {
-            a.success(function(e) { resolve(e); })
-             .error(function(e) { reject(e.responseText); });
+            a.success(function(e) { return resolve(e); })
+             .error(function(e) { return reject(e.responseText); });
         });
     }
 
