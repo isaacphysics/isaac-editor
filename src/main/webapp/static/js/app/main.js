@@ -130,7 +130,10 @@ $(function() {
 	
     // Document ready
 
-    if (typeof GitHub.application.tealight_auth_server === "undefined")
+    var tealightServer = GitHub.application.tealight_auth_server;
+    var tealightApp = GitHub.application.hosts[document.location.host];
+
+    if (!tealightServer)
     {
         modalError("Server not configured", "The tealight authentication server has not been configured for this deployment of tealight. Please follow the instructions in <code><a href=\"js/github_application.TEMPLATE.js\">js/github_application.TEMPLATE.js</a></code> and then refresh this page.", true);
         return;
@@ -140,7 +143,7 @@ $(function() {
     {
         // This is a callback from Github auth page.
 
-        $.ajax(GitHub.application.tealight_auth_server + "?tealight_auth_code=" + GitHub.application.tealight_auth_code + "&client_id=" + GitHub.application.github_client_id + "&github_code=" + urlParams["code"],
+        $.ajax(GitHub.application.tealight_auth_server + "?tealight_auth_code=" + tealightApp.tealight_auth_code + "&client_id=" + tealightApp.github_client_id + "&github_code=" + urlParams["code"],
                {type: "GET",
                 dataType: "json"})
             .success(function(r)
@@ -195,7 +198,7 @@ $(function() {
 
 $("body").on("click", ".login-button", function(e) {
     $(".login-button").html("loading");
-    document.location.href="https://gitHub.com/login/oauth/authorize?scope=repo&client_id=" + GitHub.application.github_client_id;
+    document.location.href="https://gitHub.com/login/oauth/authorize?scope=repo&client_id=" + GitHub.application.hosts[document.location.host].github_client_id + "&redirect_uri=" + encodeURIComponent(document.location.protocol + "//" + document.location.host + document.location.pathname);
 });
 
 $("body").on("click", ".logout-button", function(e) {

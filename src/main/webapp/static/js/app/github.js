@@ -40,7 +40,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
         });
     };
 
-    GitHub.application = gh_app;
+    GitHub.application = gh_app || {hosts: {}};
 
     /////////////////////////////////
     // Public instance methods
