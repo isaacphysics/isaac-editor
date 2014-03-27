@@ -119,6 +119,7 @@ function svg2png(url) {
 
 function clearSegueCookies() {
     document.cookie = 'segue-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = 'scooter-repo=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 $(function() {
@@ -171,12 +172,82 @@ $(function() {
             gitHub = g;
             gitHub.branch = initialBranch;
 
-            if(initialFile)
-                openFile(initialFile);
+            function initEverything() {
 
-            updateFileBrowser();
-            displayGithubStatus();
-        	updateBranchList();
+                repoOwner = getCookie("scooter-repo").split("/")[0];
+                repoName = getCookie("scooter-repo").split("/")[1];
+
+                $(".git-repo-name").html(repoOwner + "/" + repoName);
+
+                if(initialFile)
+                    openFile(initialFile);
+
+                updateFileBrowser();
+                displayGithubStatus();
+                updateBranchList();                
+            }
+
+            if (getCookie("scooter-repo")) {
+                initEverything();
+            } else {
+                // We haven't chosen a repo before. Choose now, then init everything as usual.
+
+                var repoTemplate = $("#modal-choose-repo #repo-row-template").remove();
+
+                gitHub.getRepo(repoOwner, repoName).then(function(srcRepo) {
+
+                    var repoRow = repoTemplate.clone();
+                    repoRow.find(".repo-name").html(repoOwner + "/" + repoName);
+                    repoRow.find(".repo-description").html(srcRepo.description);
+                    repoRow.on("click", "a", function() {
+                        document.cookie = "scooter-repo=" + repoOwner + "/" + repoName;
+                        console.log("Using repo", repoOwner + "/" + repoName);
+                        $("#modal-choose-repo").foundation("reveal", "close");
+                        initEverything();
+                    });
+                    $("#modal-choose-repo").append(repoRow);
+
+                    gitHub.getForks(repoOwner, repoName).then(function(fs) {
+
+                        gitHub.getMyRepos().then(function(rs) {
+                            var forkIds = fs.map(function(f) {return f.id});
+
+                            var foundFork = false;
+                            for(var r in rs) {
+                                r = rs[r]
+
+                                if (forkIds.indexOf(r.id) > -1) {
+                                    foundFork = true;
+
+                                    var repoRow = repoTemplate.clone();
+                                    repoRow.find(".repo-name").html(r.full_name);
+                                    repoRow.find(".repo-description").html(r.description);
+
+                                    repoRow.on("click", "a", (function(fullName) { return function() {
+                                        document.cookie = "scooter-repo=" + fullName;
+                                        console.log("Using repo", fullName);
+                                        $("#modal-choose-repo").foundation("reveal", "close");
+                                        initEverything();
+                                    }})(r.full_name));
+
+                                    $("#modal-choose-repo").append(repoRow);
+                                }
+                            }
+
+                            if (foundFork)
+                                $("#modal-choose-repo").foundation("reveal", "open");
+                            else {
+                                document.cookie = "scooter-repo=" + repoOwner + "/" + repoName;
+                                initEverything();
+                            }
+                       });
+
+                    });
+                });
+
+
+            }
+
         }).catch(function(e) {
             clearSegueCookies();
             modalError("Login failed", "Github returned the following error message during login: <p><code>" + e.responseJSON.message + "</code>. <p>Your access token may have expired, in which case refreshing this page should fix the problem.");
@@ -194,6 +265,13 @@ $(function() {
     }
 
 	updateSaveButtons();
+});
+
+$("body").on("click", ".git-repo-name", function() {
+    if(window.confirm("Would you like to choose a new source repository on next refresh? If you don't know what this means, click cancel.")) {
+        document.cookie = 'scooter-repo=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        alert("Cookies cleared. You will be prompted to pick a new repository on refresh.");
+    }
 });
 
 $("body").on("click", ".login-button", function(e) {

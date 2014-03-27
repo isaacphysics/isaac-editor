@@ -31,6 +31,7 @@
 	    
 	      <span class="require-login">
 		      
+          <li class="name"><h1><a class="git-repo-name" href="#"></a></h1></li>
 		      <li>
 		      <a href="#" class="save button secondary disabled radius">Saved</a>
 		      </li>
@@ -120,15 +121,28 @@
   <h2>Choose new file type</h2>
   <a class="close-reveal-modal">&#215;</a>
   <div class="text-center">
-      <li class="button success radius choose-content-type" data-content-type="isaacQuestionPage">Question Page</li>
-      <li class="button success radius choose-content-type" data-content-type="isaacConceptPage">Concept Page</li>
-      <li class="button radius choose-content-type" data-content-type="page">Other Content Type</li>
+      <a class="button success radius choose-content-type" data-content-type="isaacQuestionPage">Question Page</a><br/>
+      <a class="button success radius choose-content-type" data-content-type="isaacConceptPage">Concept Page</a><br/>
+      <a class="button radius choose-content-type" data-content-type="page">Other Content Type</a><br/>
   </div>
   <div class="right">
     <a class="button alert radius cancel-create-file">Cancel</a>
   </div>
 </div>
   
+<div id="modal-choose-repo" class="reveal-modal small" data-reveal data-options="close_on_background_click:false;">
+  <h2>Choose Content Repository</h2>
+  <p class="lead">Which content repository would you like to edit?</p>
+
+  <div class="row" id="repo-row-template">
+    <div class="small-12 columns">
+      <a class="button repo-name" href="#">ucam-cl-dtg/rutherford-content</a> <span class="repo-description">A repository</span>
+    </div>
+  </div>
+
+
+
+</div>
   
     <div class="row require-logout">
       <div class="large-8 columns small-centered">

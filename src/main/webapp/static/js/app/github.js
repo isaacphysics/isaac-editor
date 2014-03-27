@@ -207,6 +207,33 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
                                }));
     };
 
+    GitHub.prototype.getRepo = function(repoOwner, repoName) {
+        return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName,
+                               {
+                                    data: {"access_token": this.token},
+                                    type: "GET",
+                                    dataType: "json",
+                               }));
+    }
+
+    GitHub.prototype.getForks = function(repoOwner, repoName) {
+        return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/forks",
+                               {
+                                    data: {"access_token": this.token},
+                                    type: "GET",
+                                    dataType: "json",
+                               }));
+    }
+
+    GitHub.prototype.getMyRepos = function() {
+        return wrapAjax($.ajax("https://api.github.com/user/repos",
+                               {
+                                    data: {"access_token": this.token},
+                                    type: "GET",
+                                    dataType: "json",
+                               }));
+    }
+
     return GitHub;
 });
 
