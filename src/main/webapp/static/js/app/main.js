@@ -171,12 +171,25 @@ $(function() {
             gitHub = g;
             gitHub.branch = initialBranch;
 
-            if(initialFile)
-                openFile(initialFile);
+            function initEverything() {
+                if(initialFile)
+                    openFile(initialFile);
 
-            updateFileBrowser();
-            displayGithubStatus();
-        	updateBranchList();
+                updateFileBrowser();
+                displayGithubStatus();
+                updateBranchList();                
+            }
+
+            if (getCookie("scooter-repo")) {
+                initEverything();
+            } else {
+                // We haven't chosen a repo before. Choose now, then init everything as usual.
+
+                $("#modal-choose-repo").foundation("reveal", "open");
+                
+
+            }
+
         }).catch(function(e) {
             clearSegueCookies();
             modalError("Login failed", "Github returned the following error message during login: <p><code>" + e.responseJSON.message + "</code>. <p>Your access token may have expired, in which case refreshing this page should fix the problem.");
