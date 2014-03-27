@@ -453,7 +453,14 @@ $("body").on("click", ".git-type-file", function(e) {
 $("body").on("click", ".create-file", function(e) {
     e.preventDefault();
 
-    var newName = window.prompt("Please type a name for the new file. If no extension is provided, \".json\" will be assumed", "untitled");
+    var m = $("#modal-create-file");
+    m.foundation("reveal", "open");
+
+    return false;
+})
+
+function createFile(type) {
+    var newName = window.prompt("Please type a name for the new file. If no extension is provided, \".json\" will be assumed", "untitled_" + type);
 
     if (newName) {
 
@@ -466,7 +473,7 @@ $("body").on("click", ".create-file", function(e) {
 
         if (newName.endsWith(".json")) {
             var stubPage = {
-                type: "page",
+                type: type,
                 encoding: "markdown",
                 value: "# New Page\n\nAdd page content here"
             }
@@ -479,9 +486,16 @@ $("body").on("click", ".create-file", function(e) {
         }).catch(function(e) {
             console.error("Could not create file. Perhaps it already exists.", e);
         });
-    }
+    }  
+}
 
-    return false;
+$("#modal-create-file").on("click", ".choose-content-type", function(e) {
+    createFile($(e.target).data("contentType"));
+    $("#modal-create-file").foundation("reveal", "close");
+});
+
+$("#modal-create-file").on("click", ".cancel-create-file", function(e) {
+    $("#modal-create-file").foundation("reveal", "close");
 })
 
 $("body").on("click", ".git-file-name", function(e) {

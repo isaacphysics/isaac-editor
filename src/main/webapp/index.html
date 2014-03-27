@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation</title>
+    <title>Isaac Content Editor</title>
     <link rel="stylesheet" href="static/css/codemirror/codemirror.css" />
     <link rel="stylesheet" href="static/css/codemirror/theme/solarized.css" />
     <link rel="stylesheet" href="static/css/codemirror/theme/eclipse.css" />
@@ -20,7 +20,7 @@
   	<nav class="top-bar" data-topbar>
 	  <ul class="title-area">
 	    <li class="name">
-	      <h1><a href="#"><i class="general foundicon-edit"></i> Segue Content Editor</a></h1>
+	      <h1><a href="#"><i class="general foundicon-edit"></i> Isaac Content Editor</a></h1>
 	    </li>
 	    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
 	  </ul>
@@ -113,6 +113,19 @@
     <a class="button success radius file-view-github" target="blank">View on GitHub</a>
     <a class="button alert radius file-delete">Delete</a>
     <a class="button radius file-modal-close" >Close</a>
+  </div>
+</div>
+
+<div id="modal-create-file" class="reveal-modal small" data-reveal>
+  <h2>Choose new file type</h2>
+  <a class="close-reveal-modal">&#215;</a>
+  <div class="text-center">
+      <li class="button success radius choose-content-type" data-content-type="isaacQuestionPage">Question Page</li>
+      <li class="button success radius choose-content-type" data-content-type="isaacConceptPage">Concept Page</li>
+      <li class="button radius choose-content-type" data-content-type="page">Other Content Type</li>
+  </div>
+  <div class="right">
+    <a class="button alert radius cancel-create-file">Cancel</a>
   </div>
 </div>
   
