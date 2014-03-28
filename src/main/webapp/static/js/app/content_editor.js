@@ -685,7 +685,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
 			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentChildren items={this.props.doc.hints || []} encoding={this.encoding} onChange={this.onHintsChange}/></Block>
 			
-			if (this.props.doc.type == "choiceQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion")
+			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion")
 				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} /></Block>
 
 			if (!this.props.doc.answer)
@@ -799,7 +799,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 						<div className="large-8 large-offset-2 columns text-center">
 							Please choose a block type: <br/>
 							<a onClick={this.chooseType} data-chosen-type="content">content</a> | 
-							<a onClick={this.chooseType} data-chosen-type="question">question</a> | 
+							<a onClick={this.chooseType} data-chosen-type="isaacQuestion">question</a> | 
 							<a onClick={this.chooseType} data-chosen-type="figure">figure</a> |
 							<a onClick={this.chooseType} data-chosen-type="video">video</a>
 						</div>
@@ -904,18 +904,19 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			return {value: value || "_Enter content here_", encoding:"markdown"};
 
 		switch(type) {
-			case "question":
+			case "isaacQuestion":
 				return {
 					encoding: "markdown",
 					value: "_Enter exposition here_",
+					choices: [],
 					answer: generateNewBlock("content", "_Enter answer here_"),
-					type: "question",
+					type: type,
 			    };
 			case "video":
 				return {
 					encoding: "markdown",
 					value: "_Add video caption here_",
-					type: "video",
+					type: type,
 				};
 			default:
 				return {
