@@ -26,7 +26,8 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
     {
         return wrapAjax($.ajax("https://api.github.com/user",
                                {data: {"access_token": token},
-                                type: "GET"}));
+                                type: "GET",
+                                dataType: "json"}));
     }
     
     /////////////////////////////////
@@ -49,7 +50,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
     GitHub.prototype.getRepo = function(user, repoName)
     {
         return wrapAjax($.ajax("https://api.github.com/repos/" + user + "/" + repoName,
-                               {data: {"access_token": this.token}}));
+                               {data: {"access_token": this.token}, dataType: "json"}));
     };
 
     GitHub.prototype.forkRepo = function(repoOwner, repoName)
@@ -57,6 +58,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
         var p = wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/forks",
                                { headers: {"Authorization": "token " + this.token},
                                  type: "POST",
+                                 dataType: "json",
                                }));
                                
         if (GitHub.enableLogging)
@@ -75,6 +77,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
                                 {
                                     type: "PUT",
                                     headers: {"Authorization": "token " + this.token},
+                                    dataType: "json",
                                     data:
                                     JSON.stringify({
                                         message: "Creating " + path,
@@ -96,6 +99,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
                                 {
                                     type: "DELETE",
                                     headers: {"Authorization": "token " + this.token},
+                                    dataType: "json",
                                     data:
                                     JSON.stringify({
                                         message: "Deleting " + path,
@@ -179,6 +183,7 @@ define(["./github_application", "jquery", "base64", "rsvp"], function(gh_app, $,
         var p = wrapAjax($.ajax(originalFile.url,
                                 {type: "PUT",
                                  headers: {"Authorization": "token " + this.token},
+                                 dataType: "json",
                                  data: JSON.stringify(
                                  {
                                     message: message,
