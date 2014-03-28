@@ -1,0 +1,1024 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"img_D",
+				"img_DragOver"
+			],
+			[
+				"COntent",
+				"ContentEditor"
+			],
+			[
+				"save",
+				"saveFile"
+			],
+			[
+				"init",
+				"initEverything"
+			],
+			[
+				"Github",
+				"gitHub"
+			],
+			[
+				"COnten",
+				"ContentBlock"
+			],
+			[
+				"pars",
+				"parserSymbols"
+			],
+			[
+				"potenti",
+				"potential-radicands"
+			],
+			[
+				"poten",
+				"potential-radicands"
+			],
+			[
+				"result-se",
+				"result-sets-list"
+			],
+			[
+				"touchD",
+				"touchDragKey"
+			],
+			[
+				"unused",
+				"unusedSymbols"
+			],
+			[
+				"sy",
+				"symbols_Change"
+			],
+			[
+				"lass",
+				"lassoHandler"
+			],
+			[
+				"symbol",
+				"symbol-menu"
+			],
+			[
+				"ri",
+				"rightMenuSymbolSpecs"
+			],
+			[
+				"left",
+				"leftMenuSymbolSpecs"
+			],
+			[
+				"back",
+				"backgroundHandler"
+			],
+			[
+				"smspec",
+				"symbolSpecs"
+			],
+			[
+				"sym",
+				"symbolHandlers"
+			],
+			[
+				"INter",
+				"InteractionHandler"
+			],
+			[
+				"compont",
+				"componentWillUnmount"
+			],
+			[
+				"dr",
+				"draggingButtonIndex"
+			],
+			[
+				"or",
+				"orientation"
+			],
+			[
+				"grab",
+				"grabScroll"
+			],
+			[
+				"ore",
+				"orientation"
+			],
+			[
+				"overflowA",
+				"overflowAvailable"
+			],
+			[
+				"list",
+				"listLength"
+			],
+			[
+				"ori",
+				"orientation"
+			],
+			[
+				"drag",
+				"draggingButtonIndex"
+			],
+			[
+				"lassoO",
+				"lassoOriginX"
+			],
+			[
+				"oppos",
+				"oppositeY"
+			],
+			[
+				"oppo",
+				"oppositeX"
+			],
+			[
+				"lasso",
+				"lassoOppositeX"
+			],
+			[
+				"lassoOp",
+				"lassoOppositeX"
+			],
+			[
+				"lassoOr",
+				"lassoOriginY"
+			],
+			[
+				"res",
+				"resizeSymbol"
+			],
+			[
+				"resize",
+				"resizeSnapshots"
+			],
+			[
+				"resizes",
+				"startResizeSymbolSnapshot"
+			],
+			[
+				"newT",
+				"newTotalDy"
+			],
+			[
+				"totalDx",
+				"newTotalDx"
+			],
+			[
+				"resizeHa",
+				"resizeHandler"
+			],
+			[
+				"removeH",
+				"removeHandlers"
+			],
+			[
+				"dele",
+				"deleteHandle"
+			],
+			[
+				"moveH",
+				"moveHandler"
+			],
+			[
+				"IN",
+				"InteractionHandler"
+			],
+			[
+				"Selec",
+				"SelectionBox"
+			],
+			[
+				"compon",
+				"componentWillUnmount"
+			],
+			[
+				"canvas",
+				"canvas_Drag"
+			],
+			[
+				"newTot",
+				"newTotalDx"
+			],
+			[
+				"for",
+				"forceUpdate"
+			],
+			[
+				"last",
+				"lastDx"
+			],
+			[
+				"deselect",
+				"deselectSymbols"
+			],
+			[
+				"resizeH",
+				"resizeHandleGrabX"
+			],
+			[
+				"remove",
+				"removeHandlers"
+			],
+			[
+				"deleteHa",
+				"deleteHandler"
+			],
+			[
+				"att",
+				"attachHandlers"
+			],
+			[
+				"Inter",
+				"InteractionHandler"
+			],
+			[
+				"grabP",
+				"grabPageY"
+			],
+			[
+				"window_T",
+				"window_TouchEnd"
+			],
+			[
+				"window_M",
+				"window_MouseUp"
+			],
+			[
+				"window",
+				"window_MouseMove"
+			],
+			[
+				"allow",
+				"allowDeleteHandle"
+			],
+			[
+				"symbdele",
+				"symbol_Delete"
+			],
+			[
+				"delete",
+				"deleteHandle_Release"
+			],
+			[
+				"deleteH",
+				"deleteHandle_Press"
+			],
+			[
+				"allo",
+				"allowResizeHandle"
+			],
+			[
+				"move",
+				"moveGrabY"
+			],
+			[
+				"movegab",
+				"moveGrabX"
+			],
+			[
+				"Res",
+				"ResizableContainer"
+			],
+			[
+				"resi",
+				"resizeHandle_MouseDown"
+			],
+			[
+				"Resiz",
+				"Resizable"
+			],
+			[
+				"window_touc",
+				"window_TouchEnd"
+			],
+			[
+				"wind",
+				"window_TouchMove"
+			],
+			[
+				"window_m",
+				"window_MouseUp"
+			],
+			[
+				"window_Tou",
+				"window_TouchEnd"
+			],
+			[
+				"add",
+				"addEventListener"
+			],
+			[
+				"window_Dr",
+				"window_DragMove"
+			],
+			[
+				"symbol-",
+				"symbol-button"
+			],
+			[
+				"spec",
+				"specialized"
+			],
+			[
+				"del",
+				"deletedDroppedSymbol"
+			],
+			[
+				"gra",
+				"grabbedSymbolKey"
+			],
+			[
+				"righ",
+				"rightMenuSymbols"
+			],
+			[
+				"window_Mouse",
+				"window_MouseMove"
+			],
+			[
+				"inpu",
+				"input_cancel"
+			],
+			[
+				"pre",
+				"preventDefault"
+			],
+			[
+				"window_D",
+				"window_DragMove"
+			],
+			[
+				"window_Mou",
+				"window_MouseMove"
+			],
+			[
+				"symbolg",
+				"symbolGrabY"
+			],
+			[
+				"nextS",
+				"nextSymbolKey"
+			],
+			[
+				"handl",
+				"handleSpawnSymbol"
+			],
+			[
+				"Sym",
+				"SymbolMenu"
+			],
+			[
+				"symbol_onM",
+				"symbol_onMouseDown"
+			],
+			[
+				"fons",
+				"fontSize"
+			],
+			[
+				"symbol_on",
+				"symbol_onMouseDown"
+			],
+			[
+				"abs",
+				"absorbEvent"
+			],
+			[
+				"dragg",
+				"draggingSymbols"
+			],
+			[
+				"se",
+				"selectedSymbols"
+			],
+			[
+				"componentWil",
+				"componentWillUpdate"
+			],
+			[
+				"can",
+				"canvas_onClick"
+			],
+			[
+				"select",
+				"selectionBox"
+			],
+			[
+				"Se",
+				"SelectionBox"
+			],
+			[
+				"hand",
+				"handleMouseUp"
+			],
+			[
+				"handleMou",
+				"handleMouseMove"
+			],
+			[
+				"dragStartS",
+				"dragStartSymbolY"
+			],
+			[
+				"dragS",
+				"dragStartMouseY"
+			],
+			[
+				"dragSt",
+				"dragStartMouseX"
+			],
+			[
+				"dragging",
+				"draggingSymbol"
+			],
+			[
+				"canvas_onM",
+				"canvas_onMouseDown"
+			],
+			[
+				"fontS",
+				"fontStyleNormal"
+			],
+			[
+				"fontF",
+				"fontFamilyNormal"
+			],
+			[
+				"font-",
+				"font-family"
+			],
+			[
+				"MathJax",
+				"MathJax_Main"
+			],
+			[
+				"proto",
+				"prototype"
+			],
+			[
+				"local",
+				"localStorage"
+			],
+			[
+				"current",
+				"currentFilePath"
+			],
+			[
+				"file",
+				"fileLoader"
+			],
+			[
+				"Content",
+				"ContentBlock"
+			],
+			[
+				"base64",
+				"base64EncArr"
+			],
+			[
+				"UTF",
+				"UTF8ArrToStr"
+			],
+			[
+				"base",
+				"base64DecToArr"
+			],
+			[
+				"componentD",
+				"componentDidMount"
+			],
+			[
+				"Que",
+				"QuestionBlock"
+			],
+			[
+				"onMouse",
+				"onMouseEnter"
+			],
+			[
+				"onMouseL",
+				"onMouseLeave"
+			],
+			[
+				"opsMou",
+				"opsMouseLeave"
+			],
+			[
+				"code",
+				"codemirror"
+			],
+			[
+				"deleteM",
+				"deleteMouseEnter"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/main/webapp/index.html",
+			"settings":
+			{
+				"buffer_size": 5375,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/webapp/static/js/app/content_editor.js",
+			"settings":
+			{
+				"buffer_size": 28642,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/webapp/static/js/app/main.js",
+			"settings":
+			{
+				"buffer_size": 28447,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/main/webapp/static/js/app/github.js",
+			"settings":
+			{
+				"buffer_size": 9256,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 59.0,
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: li",
+				"Package Control: List Packages"
+			],
+			[
+				"package:",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 469.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/dev/rutherford/scooter/sublime.sublime-project",
+		"/C/dev/rutherford/scooter/src/main/webapp/static/js/app/main.js",
+		"/C/dev/rutherford/scooter/src/main/webapp/static/js/app/content_editor.js",
+		"/W/rutherford/equality/src-cljs/equality/parser.cljs",
+		"/W/rutherford/equality/src-cljs/equality/printing.cljs",
+		"/C/dev/rutherford/scooter/src/main/webapp/static/js/app/github_application.js",
+		"/W/rutherford/scooter/src/main/webapp/static/js/app/content_editor.js",
+		"/W/rutherford/scooter/src/main/webapp/index.html",
+		"/W/rutherford/scooter/src/main/webapp/static/js/app/main.js",
+		"/W/rutherford/equality/resources/public/css/app.css",
+		"/W/rutherford/equality/resources/public/js/equality.js",
+		"/W/rutherford/equality/src-cljs/equality/geometry.cljs",
+		"/W/rutherford/equality/resources/public/js/EquationCanvas.js",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/paredit/Default.sublime-keymap",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/User/Default (Windows).sublime-keymap",
+		"/W/rutherford/equality/resources/public/js/app.js",
+		"/W/rutherford/scooter/src/main/webapp/static/js/app/MathJaxConfig.js",
+		"/W/rutherford/equality/resources/public/js/main.js",
+		"/W/rutherford/equality/resources/public/index.html",
+		"/W/rutherford/equality/resources/public/js/parser.js",
+		"/C/dev/misc/tealight-server/resources/public/js/skulpt-modules/tealight/util.js",
+		"/W/.htaccess",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/Browser Refresh/win/pywinauto/findwindows.py",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/Browser Refresh/win/pywinauto/win32functions.py",
+		"/W/rutherford/equality/resources/public/js/react/react.js",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/Web Inspector/swi.sublime-settings",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/User/swi.sublime-settings",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/Web Inspector/Default (Windows).sublime-keymap",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 3/Packages/Web Inspector/packages.json",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/W/rutherford/scooter/src/main/webapp/static/js/app/github.js",
+		"/W/rutherford/segue.content_editor/src/main/webapp/static/js/app/main.js",
+		"/C/dev/lein/equality/resources/public/css/app.css",
+		"/C/dev/lein/equality/resources/public/js/main.js",
+		"/C/dev/lein/equality/resources/public/js/MathJaxConfig.js",
+		"/C/dev/lein/equality/resources/public/index.html",
+		"/C/dev/lein/equality/resources/public/js/EquationCanvas.js",
+		"/C/dev/lein/equality/resources/public/css/equality.css",
+		"/C/dev/lein/equality/resources/public/js/equality.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/content_editor.js",
+		"/C/dev/lein/equality/resources/public/js/app.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/main.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/index.html",
+		"/C/dev/lein/equality/resources/public/js/EquationCanvas.jsx",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/lib/jsx.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/github.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/lib/tv4.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/content_schema.json",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/lib/base64.js",
+		"/C/dev/rutherford-content-test/src/main/resources/concepts/maths/example_question.json",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/local-app.js",
+		"/C/dev/rutherford-content-test/src/main/resources/concepts/maths/newtonii.json",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/local-main.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/local.html",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/main.jsx",
+		"/C/dev/rutherford/rutherford-content/src/main/python/segue/etl/ExtractMetadata.py",
+		"/C/dev/rutherford/rutherford-content/src/main/python/segue/etl/etlFileManager.py",
+		"/C/dev/rutherford/rutherford-content/src/main/resources/questions/dynamics/level2/a_toboggan.tex",
+		"/C/dev/rutherford/rutherford-content/src/main/resources/questions/dynamics/level3/three_collisions.tex",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/lib/codemirror/codemirror.js",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/editor.jsx",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app.jsx",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/react/react-with-addons.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/github_application.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/static/js/app/app.js",
+		"/C/dev/rutherford/experiments/segue.content_editor/src/main/webapp/example_question.json",
+		"/C/Users/ipd21/AppData/Roaming/Sublime Text 2/Packages/User/JavaScript.sublime-settings"
+	],
+	"find":
+	{
+		"height": 40.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"repositories",
+			"resolve",
+			"prompt",
+			"create",
+			".cookie",
+			"cookies",
+			"page",
+			"vertical",
+			"onValueChange",
+			".selected",
+			"nop",
+			"submenu",
+			"grabRegion",
+			"48",
+			"JSON",
+			"parse",
+			"JSON",
+			"JSON]",
+			"onSpecChange",
+			"onSpec",
+			"spec",
+			"onSpecChance",
+			"handler",
+			"this",
+			"specchange",
+			"specchan",
+			"spec",
+			"static",
+			"statics",
+			"selection-box",
+			"canvas_Release",
+			"canvas_Click",
+			"symbol_Click",
+			"Update",
+			"update",
+			"unmount",
+			"symbol_",
+			".selected",
+			"<Symbol",
+			"<Symb",
+			"console.log",
+			".key",
+			"createSymbol",
+			"inputBox",
+			"this.state.inputBox",
+			"selectionBox",
+			"onTouchMove",
+			"canvas_Click",
+			"symbol_Grab",
+			"screen",
+			"dragstartmousex",
+			"symbol_Click",
+			"onM",
+			"			\n",
+			"inputBox",
+			"measureText",
+			".hash",
+			"initialFile",
+			"initialBranch",
+			"gitHub = ",
+			"atob",
+			"typeset",
+			"switch",
+			"<Block",
+			"Block",
+			"class=",
+			"class",
+			"extend",
+			"children:",
+			"content",
+			".content",
+			"map",
+			"ContentValueOrChildren",
+			"list",
+			"literal",
+			"Literal",
+			"ContentLiteralOrList ",
+			"ContentLiteral ",
+			"ContentLiteral",
+			"ContentList",
+			"loadFile(",
+			"loadJsonRaw",
+			"originalContent",
+			",\"",
+			"gitHub",
+			"github_client",
+			"tealight",
+			"reacttransitions",
+			"active",
+			"enter",
+			"ReactTransitionGroup",
+			"ReactTr",
+			"DeleteOp",
+			"insertop",
+			"InsertOp",
+			"listContainer",
+			"ContentListSimple",
+			"value",
+			"initialValue",
+			"this.state",
+			"initialDoc",
+			"VariantBlock",
+			"ContentLiteral",
+			"save",
+			"ContentListSimple",
+			"encoding",
+			"ContentLiteral",
+			"]#",
+			".map",
+			"VariantBlock",
+			"doc",
+			"ContentLiteralOrList",
+			"getComponentLiteralOrList",
+			"createComponentOfCorrectType",
+			"renderContent",
+			"FigureDocument",
+			"QuestionDocument",
+			"ContentDocument",
+			"span",
+			"state"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"ContentValueOrChildren ",
+			"openFile(",
+			"ContentList",
+			"getComponentLiteralOrList",
+			"FigureBlock",
+			"QuestionBlock",
+			"ContentBlock"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/main/webapp/index.html",
+					"settings":
+					{
+						"buffer_size": 5375,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4935,
+								4935
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2800.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/main/webapp/static/js/app/content_editor.js",
+					"settings":
+					{
+						"buffer_size": 28642,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								16909,
+								16909
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ReactJS/syntax/jsx/tmLanguage/JavaScript (JSX).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 839.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/main/webapp/static/js/app/main.js",
+					"settings":
+					{
+						"buffer_size": 28447,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1826,
+								1826
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ReactJS/syntax/jsx/tmLanguage/JavaScript (JSX).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 881.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/main/webapp/static/js/app/github.js",
+					"settings":
+					{
+						"buffer_size": 9256,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1978,
+								1987
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ReactJS/syntax/jsx/tmLanguage/JavaScript (JSX).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 706.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 172.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 148.0
+	},
+	"replace":
+	{
+		"height": 74.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
