@@ -41,8 +41,8 @@ ContentEditor.fileLoader = function(relativePath) {
             var dataUrl = "data:" + type + ";base64," + f.content.replace(/\s/g, '');
             console.log("Retrieved", f.path, "from git:", dataUrl, f);
             return resolve(dataUrl);
-        }).catch(function() {
-            console.error("Failed to retrieve", absPath);
+        }).catch(function(e) {
+            console.error("Failed to retrieve", absPath, e);
         });
     });
 };

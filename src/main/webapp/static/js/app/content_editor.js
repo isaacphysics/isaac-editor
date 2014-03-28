@@ -513,6 +513,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		},
 
 		loadImg: function() {
+
 			ContentEditor.fileLoader(this.props.doc.src).then((function(dataUrl){
 				$(this.refs.img.getDOMNode()).attr("src", dataUrl);
 			}).bind(this)).catch((function() {
@@ -559,8 +560,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		img_DragOver: function(e) {
 			e.stopPropagation();
 			e.preventDefault();
-			e.dataTransfer.dropEffect = "copy";
-			console.log("DRAG");
+			e.nativeEvent.dataTransfer.dropEffect = "copy";
 		},
 
 		img_Drop: function(e) {
@@ -573,6 +573,16 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.selectFile(e.nativeEvent.dataTransfer.files[0]);
 		},
 
+		file_Change: function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+
+			if (e.target.files.length != 1)
+				return;
+
+			this.selectFile(e.target.files[0]);
+		},
+
 		render: function() {
 
 			var optionalCaption = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
@@ -582,7 +592,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 					<div className="row">
 						<div className="small-6 columns text-center">
 							<img width="250px" height="250px" src="static/images/not-found.png" ref="img" onClick={this.img_Click} accept="image/svg+xml,image/png" onDragOver={this.img_DragOver} onDrop={this.img_Drop} /> 
-							<input type="file" ref="fileInput" style={{position: "absolute", left: -1000, top: -1000, visibility:"hidden"}}/>
+							<input type="file" ref="fileInput" style={{position: "absolute", left: -1000, top: -1000, visibility:"hidden"}} onChange={this.file_Change} />
 						</div>
 						<div className="small-6 columns">
 							{optionalCaption}
