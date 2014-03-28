@@ -680,6 +680,17 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		type_Change: function() {
+			var newType = $(this.refs.questionTypeRadios.getDOMNode()).find('input[name=question-type]:checked').val();
+
+			// newVal must be a doc
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.type = newType;
+
+			this.onDocChange(this, oldDoc, newDoc);			
+		},
+
 		render: function() {
 
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
@@ -692,6 +703,12 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 				console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
 			return (
 				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
+					<div ref="questionTypeRadios" style={{textAlign: "center"}}> 
+						<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question 
+						<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question 
+						<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question 
+						<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question 
+					</div>
 					{exposition}
 					{choices}
 					<div className="row">
