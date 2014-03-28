@@ -593,6 +593,7 @@ function createFile(type) {
             var stubPage = {
                 type: type,
                 encoding: "markdown",
+                title: "Page title",
                 value: "# New Page\n\nAdd page content here"
             }
         }
