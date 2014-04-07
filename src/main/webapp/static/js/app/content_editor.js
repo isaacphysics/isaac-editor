@@ -96,7 +96,8 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 					 theme: "eclipse",//"solarized light",
 					 lineNumbers: false,
 					 value: this.state.editedValue,
-					 lineWrapping: true});
+					 lineWrapping: true,
+					 autofocus: true});
 
 				cm.on("change", (function(inst, changeObj) { 
 					this.setState({editedValue: inst.getValue()});
