@@ -26,6 +26,11 @@ define(["mathjax"], function() {
 				"d": "\\operatorname{d}",
 				"vari": ["#1",1],
 				"s": ["_{\\sf{#1}}", 1],
+				"half": ["\\frac{1}{2}",0],
+				"third": ["\\frac{1}{3}",0],
+				"quarter": ["\\frac{1}{4}",0],
+				"eighth": ["\\frac{1}{8}",0],
+				"e": ["\\textrm{e}",0],
 			}
 		},
 	});
