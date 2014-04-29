@@ -967,6 +967,13 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 					children: [],
 					encoding: "markdown",
 				};
+			case "figure":
+				return {
+					type: "figure",
+					value: "_Enter caption here_", 
+					encoding:"markdown",
+					src: "/path/to/figure.svg",
+				};
 			default:
 				return {
 					type: type,
