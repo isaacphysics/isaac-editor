@@ -609,6 +609,7 @@ function createFile(type) {
                 type: type,
                 encoding: "markdown",
                 title: "Page title",
+                author: gitHub.user.login,
                 value: "# New Page\n\nAdd page content here",
                 id: generateGuid(),
             }
