@@ -332,6 +332,14 @@ $("body").on("click", ".save:not(.disabled)", function(e) {
 	saveFile();
 });
 
+$("body").on("keydown", function(e) {
+    if (e.which == 83 && e.ctrlKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        saveFile();
+    }
+})
+
 $(window).bind('beforeunload', function(){
     if (fileIsEdited())
         return 'This file is unsaved. Are you sure you want to leave?';
