@@ -170,7 +170,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		onItemInsert: function(insertBeforeIndex) {
 			var oldItems = this.props.items;
 			var newItems = oldItems.slice(0);
-			newItems.splice(insertBeforeIndex,0,generateNewBlock());
+			newItems.splice(insertBeforeIndex,0,generateNewBlock(this.props.requiredChildType));
 
 			newKeys = this.state.keys.slice(0);
 			newKeys.splice(insertBeforeIndex,0,Math.random());
@@ -698,7 +698,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentChildren items={this.props.doc.hints || []} encoding={this.encoding} onChange={this.onHintsChange}/></Block>
 			
 			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion")
-				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} /></Block>
+				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType="choice"/></Block>
 
 			if (!this.props.doc.answer)
 				console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
@@ -772,6 +772,14 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		onExplanationChange: function(c, oldVal, newVal) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.explanation = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
 		correct_toggle: function(e) {
 
 			var oldDoc = this.props.doc;
@@ -791,8 +799,11 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> : 
 								<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
 						</div>
-						<div className="small-11 columns" >
+						<div className="small-6 columns" >
 							<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+						</div>
+						<div className="small-5 columns" >
+							<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || generateNewBlock("explanation")} onChange={this.onExplanationChange} />
 						</div>
 					</div>
 				</Block>
@@ -920,8 +931,13 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 /////////////////////////////////
 
 	function generateNewBlock(type, value) {
-		if (!type)
-			return {value: value || "_Enter content here_", encoding:"markdown"};
+		if (!type) {
+
+			return {
+				value: value || "_Enter content here_", 
+				encoding:"markdown"
+			};
+		}
 
 		switch(type) {
 			case "isaacQuestion":
@@ -937,6 +953,19 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 					encoding: "markdown",
 					value: "_Add video caption here_",
 					type: type,
+				};
+			case "choice":
+				return {
+					encoding: "markdown",
+					value: "_Enter choice here_",
+					type: "choice",
+					explanation: generateNewBlock("explanation"),
+				};
+			case "explanation":
+				return {
+					type: "content",
+					children: [],
+					encoding: "markdown",
 				};
 			default:
 				return {
