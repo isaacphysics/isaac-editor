@@ -57,6 +57,80 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		}
 	});
 
+	var nextTagListId = 0;
+	var Tags = React.createClass({
+
+		getDefaultProps: function() {
+			return {
+				id: nextTagListId++,
+			};
+		},
+
+		componentDidMount: function() {
+			$(document).foundation();
+		},
+
+		componentDidUpdate: function(nextProps, nextState) {
+			$(document).foundation();
+		},
+
+		addNewTag: function() {
+			var newTag = window.prompt("Enter tag:");
+			if (newTag) {
+				this.props.onChange(this, this.props.tags, this.props.tags.concat(newTag.toLowerCase()));
+			}
+		},
+
+		render: function() {
+
+			var ts = [];
+
+			for(var t in this.props.tags) {
+				t = this.props.tags[t];
+
+				var removeTag = function(t) {
+					var newTags = JSON.parse(JSON.stringify(this.props.tags));
+					newTags.splice(newTags.indexOf(t),1);
+					this.props.onChange(this, this.props.tags, newTags);					
+				};
+
+				ts.push(<span className="tag">{t} <i className="general foundicon-remove" onClick={removeTag.bind(this, t)}/></span>);
+			}
+
+			var allTags = ["physics", "maths", "dynamics", "statics"];
+
+			var allTagComponents = [];
+
+			for(var t in allTags) {
+				t = allTags[t];
+
+				if (this.props.tags.indexOf(t) > -1)
+					continue;
+
+				var tag_choose = function(t) {
+					this.props.onChange(this, this.props.tags, this.props.tags.concat(t));
+				} 
+
+				var newT = (
+					<li key={t}>
+						<a href="javascript:void(0)" onClick={tag_choose.bind(this, t)}>{t}</a>
+					</li>
+				);
+
+				allTagComponents.push(newT);
+			}
+
+			return (<div className="tags-container" ref="container">
+				{ts}
+				<a ref="foo" href="javascript:void(0);" data-dropdown={"tag-dropdown-" + this.props.dropdownId} className="button dropdown tiny">Add tag...</a><br/>
+				<ul ref="bar" id={"tag-dropdown-" + this.props.dropdownId} data-dropdown-content className="f-dropdown">
+					{allTagComponents}
+					<li><a href="javascript:void(0)" >&lt;New tag...&gt;</a></li>					
+				</ul>
+			</div>);
+		}
+	});
+
 	var ContentValue = React.createClass({
 		getInitialState: function() {
 			return { mode: "render" };
@@ -743,13 +817,26 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		onTagsChange: function(c, oldTags, newTags) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.tags = newTags;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
 		render: function() {
 			if (typeMap[this.props.doc.type] != ContentBlock) {
 				return <div className="block type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
 			}
 
+			if (this.props.doc.type == "page" || this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacConceptPage") {
+				var tagsComponent = <Tags tags={this.props.doc.tags || []} onChange={this.onTagsChange}/>;
+			}
+
 			return (
 				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
+					{tagsComponent}
 					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
 				</Block>
 			);
