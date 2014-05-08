@@ -6,3 +6,4 @@ target/
 .project
 .lein-repl-history
 src/main/webapp/json/
+node_modules/
