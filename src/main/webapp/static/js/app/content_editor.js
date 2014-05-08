@@ -62,7 +62,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 
 		getDefaultProps: function() {
 			return {
-				id: nextTagListId++,
+				dropdownId: nextTagListId++,
 			};
 		},
 
@@ -122,12 +122,113 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 
 			return (<div className="tags-container" ref="container">
 				{ts}
-				<a ref="foo" href="javascript:void(0);" data-dropdown={"tag-dropdown-" + this.props.dropdownId} className="button dropdown tiny">Add tag...</a><br/>
+				<a ref="foo" href="javascript:void(0);" data-dropdown={"tag-dropdown-" + this.props.dropdownId} className="button dropdown tiny success radius">Add tag...</a><br/>
 				<ul ref="bar" id={"tag-dropdown-" + this.props.dropdownId} data-dropdown-content className="f-dropdown">
 					{allTagComponents}
-					<li><a href="javascript:void(0)" >&lt;New tag...&gt;</a></li>					
+					<li><a href="javascript:void(0)" onClick={this.addNewTag}>&lt;New tag...&gt;</a></li>					
 				</ul>
 			</div>);
+		}
+	});
+
+	var MetaData = React.createClass({
+
+		getInitialState: function() {
+			return {
+				id: this.props.doc.id,
+				title: this.props.doc.title,
+				author: this.props.doc.author,
+				altText: this.props.doc.altText,
+			};
+		},
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},		
+		
+		onTagsChange: function(c, oldTags, newTags) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.tags = newTags;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onTextboxChange: function(key, e) {
+			var newState = {};
+			newState[key] = e.target.value;
+			this.setState(newState);
+
+			clearTimeout(this.metadataChangeTimeout);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimout, 500);
+		},
+
+		onMetadataChangeTimout: function() {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			
+			if (this.state.id)
+				newDoc.id = this.state.id;
+
+			if (this.state.title)
+				newDoc.title = this.state.title;
+			
+			if (this.state.author)
+				newDoc.author = this.state.author;
+			
+			if (this.state.altText)
+				newDoc.altText = this.state.altText;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		toggleMetaData_click: function(e) {
+			var n = $(this.refs.metadata.getDOMNode())
+			if (n.is(":visible")) {
+				n.hide();
+				$(this.refs.toggleButton.getDOMNode()).html("Show Metadata");
+			} else {
+				n.show();
+				$(this.refs.toggleButton.getDOMNode()).html("Hide Metadata");
+			}
+		},
+
+		render: function() {
+
+			var tagsComponent = <Tags tags={this.props.doc.tags || []} onChange={this.onTagsChange}/>;
+
+			if (this.props.doc.type == "figure") {
+				var figureMeta = <div className="row">
+					<div className="small-2 columns text-right"><span className="metadataLabel">Alt text: </span></div>
+					<div className="small-10 columns"><input type="text" value={this.state.altText} onChange={this.onTextboxChange.bind(this, "altText")} /></div>
+				</div>;
+			}
+
+			return (
+				<div className="metadata-container">
+					<button onClick={this.toggleMetaData_click} className="button tiny round" ref="toggleButton">Show MetaData</button>
+					<div className="metadata" ref="metadata">
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Tags: </span></div>
+							<div className="small-10 columns">{tagsComponent}</div>
+						</div>
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">ID: </span></div>
+							<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} /></div>
+						</div>
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Title: </span></div>
+							<div className="small-10 columns"><input type="text" value={this.state.title} onChange={this.onTextboxChange.bind(this, "title")} /></div>
+						</div>
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Author: </span></div>
+							<div className="small-10 columns"><input type="text" value={this.state.author} onChange={this.onTextboxChange.bind(this, "author")} /></div>
+						</div>
+						
+						{figureMeta}
+					</div>
+				</div>
+			);
 		}
 	});
 
@@ -817,26 +918,13 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
-		onTagsChange: function(c, oldTags, newTags) {
-			var oldDoc = this.props.doc;
-			var newDoc = $.extend({}, oldDoc);
-			newDoc.tags = newTags;
-
-			this.onDocChange(this, oldDoc, newDoc);
-		},
-
 		render: function() {
 			if (typeMap[this.props.doc.type] != ContentBlock) {
 				return <div className="block type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
 			}
 
-			if (this.props.doc.type == "page" || this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacConceptPage") {
-				var tagsComponent = <Tags tags={this.props.doc.tags || []} onChange={this.onTagsChange}/>;
-			}
-
 			return (
 				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
-					{tagsComponent}
 					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
 				</Block>
 			);
@@ -962,13 +1050,23 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 			this.props.onChange(this, oldDoc, newDoc);
 		},
 
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
 		render: function() {
 			if (this.state.mode == "render") {
+
+				if (this.props.doc && displayMetadataForTypes.indexOf(this.props.doc.type) > -1) {
+					var metaDataComponent = <MetaData doc={this.props.doc} onChange={this.onDocChange} />;
+				}
+
 				return (
 					<div className={"block type-" + this.props.type}  ref="block">
 						<div className="row">
 							<div className="large-12 columns">
 								<Title onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} title={this.props.blockTypeTitle} />
+								{metaDataComponent}
 								{this.props.children}
 							</div>
 						</div>
@@ -1012,6 +1110,7 @@ define(["react", "jquery", "rsvp", "codemirrorJS", "showdown", "app/MathJaxConfi
 		"isaacSymbolicQuestion": QuestionBlock
 	};
 
+	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacConceptPage", "figure"];
 
 /////////////////////////////////
 // Private static methods

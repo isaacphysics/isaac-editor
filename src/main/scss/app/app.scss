@@ -244,3 +244,16 @@ span.tag i {
 span.tag i:hover {
 	opacity: 1;
 }
+
+div.metadata-container {
+	text-align: right;
+}
+
+div.metadata {
+	border: 1px solid #444;
+	border-radius: 10px;
+	padding: 20px;
+	background: #eee;
+	display: none;
+	text-align: left;
+}
