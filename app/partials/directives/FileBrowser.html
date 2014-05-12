@@ -1,0 +1,5 @@
+<h1>File Browser</h1>
+<h3>Folders</h3>
+<div ng-repeat="f in folders" ng-click="open(f.path)">{{f.name}}</div>
+<h3>Files</h3>
+<div ng-repeat="f in files" ng-click="open(f.path)">{{f.name}}</div>

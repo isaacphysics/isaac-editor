@@ -1,16 +1,14 @@
 'use strict';
 
-define(["angular", "angular-route", "app/filters", "app/services", "app/directives"], function() {
+define(["angular", "app/controllers/HomeController", "app/controllers/EditController", "app/controllers/LoginController"], function() {
 	
 	/* Controllers */
 
 	angular.module('scooter.controllers', [])
 	
-	.controller('MyCtrl1', ['$scope', function($scope) {
+	.controller('HomeController', require("app/controllers/HomeController"))
 
-	}])
+	.controller('EditController', require("app/controllers/EditController"))
 
-	.controller('MyCtrl2', ['$scope', function($scope) {
-
-	}]);
+	.controller('LoginController', require("app/controllers/LoginController"))
 });

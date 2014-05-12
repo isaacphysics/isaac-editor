@@ -10,25 +10,51 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
-    <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
+    <link rel="stylesheet" href="css/codemirror/codemirror.css" />
+    <link rel="stylesheet" href="css/codemirror/theme/solarized.css" />
+    <link rel="stylesheet" href="css/codemirror/theme/eclipse.css" />
     <link rel="stylesheet" href="css/app.css"/>
 
     <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 
     <script src="js/lib/require.js" data-main="js/config.js"></script>
 
-
   </head>
   <body>
-    <ul class="menu">
-      <li><a href="#/view1">view1</a></li>
-      <li><a href="#/view2">view2</a></li>
-    </ul>
+    <nav class="top-bar" data-topbar>
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="#"><i class="general foundicon-edit"></i> Isaac Content Editor</a></h1>
+        </li>
+        <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+      </ul>
+    
+      <section class="top-bar-section">
+
+        <ul class="right" ng-show="user">
+        
+          <li class="name"><h1><a class="git-repo-name" href="#"></a></h1></li>
+          <li><a href="#" class="save button secondary disabled radius">Saved</a></li>
+              
+<!--          <li class="has-dropdown">
+            <a href="javascript:void(0)">Branch: <span class="current-branch">master</span></a>
+            <ul id="branch-list" class="dropdown">
+            </ul>
+          </li>-->
+          <li><a class="logout-button button radius" href="#">Logout</a></li>
+        </ul>
+
+        <ul class="right" ng-show="(!user && !loggingIn)">
+          <li><a class="login-button success button radius" href="#/login">Login with GitHub</a></li>
+        </ul>
+    
+        <ul class="left">
+          <li class="name"><h1><a class="git-file-name" href="#"></a></h1></li>
+        </ul>
+      </section>
+    </nav>
 
     <div ng-view></div>
-
-    <div>Angular seed app: v<span app-version></span></div>
 
   </body>
 </html>

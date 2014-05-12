@@ -1,13 +1,13 @@
 'use strict';
 
-define(["angular"], function() {
+define(["angular", "app/services/LoginChecker"], function() {
 
 	/* Services */
-
 
 	// Demonstrate how to register services
 	// In this case it is a simple value service.
 	angular.module('scooter.services', [])
 
-		.value('version', '0.1');
+	.service('LoginChecker', require("app/services/LoginChecker"))
+
 });
