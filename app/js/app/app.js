@@ -1,6 +1,6 @@
 'use strict';
 
-define(["foundation", "angular", "angular-route", "app/controllers", "app/directives", "app/services", "app/filters"], function() {
+define(["foundation", "angular", "angular-route", "github/angular_github", "app/controllers", "app/directives", "app/services", "app/filters"], function() {
 
 	// Declare app level module which depends on filters, and services
 	angular.module('scooter', [
@@ -8,7 +8,8 @@ define(["foundation", "angular", "angular-route", "app/controllers", "app/direct
 		'scooter.filters',
 		'scooter.services',
 		'scooter.directives',
-		'scooter.controllers'
+		'scooter.controllers',
+		'github',
 	])
 
 	.config(['$routeProvider', function($routeProvider) {
@@ -17,8 +18,8 @@ define(["foundation", "angular", "angular-route", "app/controllers", "app/direct
 		$routeProvider.otherwise({redirectTo: '/view1'});
 	}])
 
-	.run([function() {
-		
+	.run(["github", function(github) {
+
 		$(document).foundation();
 
 	}]);
