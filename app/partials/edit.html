@@ -8,6 +8,7 @@
 
 <div class="row">
 	<div class="small-12 columns">
-		<content-editor document="document" document-string="documentString"></content-editor>
+		<content-editor ng-if="document" document="document" document-string="documentString"></content-editor>
+		<div ng-if="!document">{{documentString}}</div>
 	</div>
 </div>

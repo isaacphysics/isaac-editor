@@ -1,6 +1,6 @@
 'use strict';
 
-define(["github/github"], function() {
+define(["github/github", "app/helpers"], function() {
 
 	var repoOwner = "daviesian";
 	var repoName = "rutherford-content";
@@ -41,6 +41,13 @@ define(["github/github"], function() {
 				}).catch(function(e) {
 					console.error("Unable to list directory containing", scope.path, e);
 				});
+
+				scope.documentString = file.decodedContent;
+				scope.document = null;
+
+				try {
+					scope.document = JSON.parse(file.decodedContent);
+				} catch (e) { /* File is not a valid JSON document. Probably not a big deal, it may not even be a JSON file. */ }
 
 			} else {
 				scope.pathType = "dir";
