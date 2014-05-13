@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="small-12 columns">
-		<content-editor ng-if="document" document="document" on-change="editedFile"></content-editor>
+		<content-editor ng-if="document" document="document" on-change="editedFile" file-loader="fileLoader" figure-uploader="figureUploader"></content-editor>
 		<div ng-if="!document">{{documentString}}</div>
 	</div>
 </div>

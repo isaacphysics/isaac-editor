@@ -19,6 +19,8 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 		function link(scope, element, attrs) {
 			scope.$watch("document", function(newVal, oldVal, scope) {
 				console.log("document changed!", scope.document);
+				ContentEditor.fileLoader = scope.fileLoader;
+				ContentEditor.figureUploader = scope.figureUploader;
 				scope.editor = new ContentEditor(element[0], scope.document);
 			})
 
@@ -33,6 +35,8 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 			scope: {
 				document: "=",
 				onChange: "=",
+				fileLoader: "=",
+				figureUploader: "=",
 			},
 
 			restrict: "EA",

@@ -692,8 +692,8 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 
 			ContentEditor.fileLoader(this.props.doc.src).then((function(dataUrl){
 				$(this.refs.img.getDOMNode()).attr("src", dataUrl);
-			}).bind(this)).catch((function() {
-				console.error("Failed to load image", this.props.doc.src);
+			}).bind(this)).catch((function(e) {
+				console.error("Failed to load image", this.props.doc.src, e);
 			}).bind(this));
 		},
 
@@ -767,7 +767,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-6 columns text-center">
-							<img width="250px" height="250px" src="static/images/not-found.png" ref="img" onClick={this.img_Click} accept="image/svg+xml,image/png" onDragOver={this.img_DragOver} onDrop={this.img_Drop} /> 
+							<img width="250px" height="250px" src="img/not-found.png" ref="img" onClick={this.img_Click} accept="image/svg+xml,image/png" onDragOver={this.img_DragOver} onDrop={this.img_Drop} /> 
 							<input type="file" ref="fileInput" style={{position: "absolute", left: -1000, top: -1000, visibility:"hidden"}} onChange={this.file_Change} />
 						</div>
 						<div className="small-6 columns">

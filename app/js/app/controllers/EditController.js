@@ -5,7 +5,7 @@ define(["github/github", "app/helpers"], function() {
 	var repoOwner = "daviesian";
 	var repoName = "rutherford-content";
 
-	return ['$scope', '$routeParams', 'github', '$location', '$rootScope', function(scope, routeParams, github, location, $rootScope) {
+	return ['$scope', '$routeParams', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', function(scope, routeParams, github, location, $rootScope, fileLoader, figureUploader) {
 
 		scope.createFile = function(fullPath) {
 			console.log("Creating file", fullPath);
@@ -85,9 +85,18 @@ define(["github/github", "app/helpers"], function() {
 				return "This file is unsaved. Are you sure you want to leave?";
 		}
 
+		var keydown = function(e) {
+		    if (e.which == 83 && e.ctrlKey) {
+		        e.preventDefault();
+		        e.stopPropagation();
+		        scope.saveFile();
+		    }
+		}
+
 		// Keep a reference to this controller in the root scope. This is useful for, say, buttons on the nav bar.
 		$rootScope.editorScope = scope;
 		$(window).on("beforeunload", confirmNavigate);
+		$("body").on("keydown", keydown);
 
 		scope.$on("$destroy", function() {
 			// We are leaving the editor page.
@@ -97,6 +106,9 @@ define(["github/github", "app/helpers"], function() {
 
 			// Don't warn us about leaving anymore.
 			$(window).off("beforeunload", confirmNavigate);
+
+			// Remove event handlers
+			$("body").off("keydown", keydown);
 		});
 
 
@@ -104,6 +116,7 @@ define(["github/github", "app/helpers"], function() {
 
 		scope.branch = routeParams.branch || "master";
 		scope.path = routeParams.path || "";
+
 
 		github.branch = scope.branch;
 
@@ -150,6 +163,9 @@ define(["github/github", "app/helpers"], function() {
 			
 			loadDir.then(function() {
 				// Now we have scope.{filePath, file, dirPath, dir}
+
+				scope.fileLoader = fileLoader.bind(null, repoOwner, repoName, scope.dirPath);
+				scope.figureUploader = figureUploader.bind(null, repoOwner, repoName, scope.dirPath);
 
 				scope.$apply();
 
