@@ -2,7 +2,7 @@
 
 define(["github/github"], function() {
 
-	var repoOwner = "ucam-cl-dtg";
+	var repoOwner = "daviesian";
 	var repoName = "rutherford-content";
 
 	return ['$scope', '$routeParams', 'github', '$location', function(scope, routeParams, github, location) {
@@ -55,8 +55,6 @@ define(["github/github"], function() {
 			}
 			
 			loadDir.then(function() {
-				console.log("Dir loaded:", scope.dir);
-
 				// Now we have scope.{filePath, file, dirPath, dir}
 
 				scope.$apply();

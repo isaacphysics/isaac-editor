@@ -11,6 +11,8 @@ require.config({
         "angular-route": '../../bower_components/angular-route/angular-route',
         "react": '../../bower_components/react/react-with-addons',
         "JSXTransformer": '../../bower_components/react/JSXTransformer',
+        "codemirrorJS": "codemirror/mode/javascript/javascript",
+        "mathjax": "../../bower_components/MathJax/MathJax",
     },
 
     shim: {
@@ -18,7 +20,7 @@ require.config({
         "foundation": ['jquery', 'modernizr'],
         "angular-route": ['angular'],
         "angular": ['jquery'],
-
+        "codemirrorJS": ["codemirror/codemirror"],
     }
 });
 

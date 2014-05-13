@@ -57,7 +57,7 @@ define(["foundation", "angular", "angular-route", "github/angular_github", "app/
 		'github',
 	])
 
-	.config(['$routeProvider', function($routeProvider) {
+	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
 	 
 		function loginResolver(LoginChecker) {
@@ -75,6 +75,8 @@ define(["foundation", "angular", "angular-route", "github/angular_github", "app/
 		$routeProvider.when("/login_progress", {template: "Logging in..."});
 
 		$routeProvider.otherwise({redirectTo: '/home'});
+
+		$locationProvider.html5Mode(false).hashPrefix('!');
 
 	}])
 
@@ -113,7 +115,7 @@ define(["foundation", "angular", "angular-route", "github/angular_github", "app/
 
 					// Do this to get rid of the code from the url. But it will reload the page, so be sure you've saved the token somewhere. 
 					// Everything will still work with this line commented out, but the URL will be less nice.
-					document.location.href = document.location.href.split("?")[0] + "#" + target;
+					document.location.href = document.location.href.split("?")[0] + "#!" + target;
 
 					resolve();
 				}).catch(function(e) { reject(e); });

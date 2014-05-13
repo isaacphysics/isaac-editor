@@ -2,4 +2,12 @@
 <p>Branch: {{branch}}</p>
 <p>Path: {{path}}</p>
 
-<file-browser path="dirPath" entries="dir" on-open="openFile" on-create="createFile"></file-browser>
+<div class="file-browser">
+	<file-browser path="dirPath" entries="dir" on-open="openFile" on-create="createFile"></file-browser>
+</div>
+
+<div class="row">
+	<div class="small-12 columns">
+		<content-editor document="document" document-string="documentString"></content-editor>
+	</div>
+</div>

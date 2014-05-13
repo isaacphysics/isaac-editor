@@ -19,7 +19,6 @@ define([], function() {
 				else
 					console.error("Got a file browser entry of unknown type:", e);
 			}
-			console.log("Updated Scope: ", scope);
 		}
 
 		return {

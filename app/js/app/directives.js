@@ -17,7 +17,12 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 	.directive("contentEditor", [function() {
 
 		function link(scope, element, attrs) {
-			scope.editor = new ContentEditor(element, scope.document || {});
+			scope.$watch("document", function(newVal, oldVal, scope) {
+				console.log("document changed!", scope.document);
+				scope.editor = new ContentEditor(element[0], scope.document);
+			})
+			//scope.editor = new ContentEditor(element[0], scope.document);
+
 		}
 
 		return {
@@ -25,6 +30,8 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 			scope: {
 				document: "=",
 			},
+
+			restrict: "EA",
 
 			link: link,
 		};

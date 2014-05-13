@@ -1,32 +1,224 @@
 /* app css stylesheet */
 
 @import "foundation";
+@import "foundicons/general_foundicons/general_foundicons";
 
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+.file-browser {
+
+  background-color: #fff;
+  border: 1px solid #d1d1d1;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  float: left;
+  margin-left:10px;
+  padding:10px;
+
+  a.file:before {
+      content: "\f009";
+      font-family: "GeneralFoundicons";
+      margin-right: 10px;
+      color: #788;
+  }
+  
+  a.folder:before {
+      content: "\f02a";
+      font-family: "GeneralFoundicons";
+      margin-right: 10px;
+      color: #788;
+  }
+
 }
 
-.menu:before {
-  content: "[";
+.title-container {
+  height: 20px;
+  margin-bottom: 10px;
+  opacity: 0.7;
+  
+  .title-triangle {
+    border-right: 20px solid transparent;
+    border-top: 20px solid #ebebeb;
+    display: inline-block;
+    height: 0px;
+  }
+  
+  .title-content {
+    background-color: #ebebeb;
+    display: inline-block;
+    height: 20px;
+    font-size: 11px;
+    vertical-align: top;
+    padding-top: 4px;
+    padding-left: 4px;
+    min-width: 50px;
+    color: #4d4d4d;
+  }
 }
 
-.menu:after {
-  content: "]";
+.title-placeholder {
+  height: 0px;
+  background-color: red;
 }
 
-.menu > li {
-  display: inline;
+.CodeMirror {
+  height: 100%;
+  border: 1px solid grey;
 }
 
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
+#json-editor-holder {
+  position: absolute;
+  top: 50px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
+.highlight {
+  background-color: #f5f5f5;
+  transition: all 0.1s;
+  z-index: 50;
+}
+
+.highlight.above-split {
+  -webkit-transform: translateY(-10px);
+  -webkit-transform-origin: 0%  100%;
+}
+
+
+.highlight.below-split {
+  -webkit-transform: translateY(10px);
+  -webkit-transform-origin: 100%  0%;
+}
+
+.block h1 {
+  color: #ccc;
+}
+
+$transformDelay: 0.2s;
+
+.op-insert {
+  background-color: transparent;
+  z-index: 100;
+  position: absolute;
+  color: #000;
+  opacity: 0.2;
+  transition: color,opacity,background $transformDelay;
+  width: 20px;
+  left: 50%;
+  margin-left: -10px;
+  display:none;
+}
+
+.op-insert i {
+  cursor: pointer;
+}
+
+.op-insert.below {
+  bottom:-10px;
+}
+
+.op-insert.above {
+  top: -7px;
+}
+ 
+.ops-wrapper {
+  position:relative;
+}
+
+.ops-wrapper.children .block, .ops-wrapper.value .content-value{
+  padding-bottom: 10px;
+}
+
+.ops-wrapper.value .content-value {
+  padding-top: 10px;
+}
+
+.op-insert.highlight {
+  background: radial-gradient(farthest-side, #ddd, transparent);
+  width: 100%;
+  left: 0;
+  margin-left: 0;
+  color: #333;
+  opacity: 1;
+  transition: color,opacity,background $transformDelay;
+}
+
+.op-delete {
+  cursor: pointer;
+  z-index: 100;
+  position: absolute;
+  color: #000;
+  opacity: 0.2;
+  transition: all $transformDelay;
+  right: 10px;
+  top: 10px;
+  height: 20px;
+  width: 20px;
+  display:none;
+}
+
+.op-display.op-insert, .op-display.op-delete {
+  display: block;
+}
+
+.highlight-delete {
+  //background-color: #f87;
+  border: 1px dashed #000;
+  opacity: 0.2;
+  transition: all $transformDelay;
+}
+
+.content-children-enter {
+  max-height: 0px;
+  opacity: 0;
+  overflow:hidden;
+  transition: all 0.4s ease-in;
+}
+
+.content-children-enter.content-children-enter-active {
+  max-height: 100px;
+  opacity: 1;
+}
+
+
+.content-children-leave {
+  opacity: 1;
+  transition: opacity 0.4s ease-in;
+}
+
+.content-children-leave.content-children-leave-active {
+  opacity: 0;
+}
+
+.cm-error-line {
+  background-color: red;
+}
+
+span.tag {
+  border: 1px solid #995;
+  border-radius: 5px;
+  padding: 5px;
+  margin-right: 10px;
+  background-color: #eed;
+
+  i {
+    margin-left: 5px;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+  i:hover {
+    opacity: 1;
+  }
+}
+
+div.metadata-container {
+  text-align: right;
+}
+
+div.metadata {
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 20px;
+  background: #eee;
+  display: none;
+  text-align: left;
 }

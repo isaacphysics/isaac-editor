@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-define("ContentEditor", ["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], function(React, $) {
+define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], function(React, $) {
 	
 	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
@@ -1180,9 +1180,7 @@ define("ContentEditor", ["react", "jquery", "codemirrorJS", "showdown", "app/Mat
 		this.history.push(oldDoc);
 		this.editor.setProps({doc: newDoc});
 		$(this.editor.getDOMNode()).trigger("docChanged", [oldDoc, newDoc]);
-
 	}
-
 
 /////////////////////////////////
 // Public instance methods
