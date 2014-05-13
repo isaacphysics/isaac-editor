@@ -17,7 +17,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		this.history = [];
 
 		React.renderComponent(this.editor, container);
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);			
 	}
 
 /////////////////////////////////

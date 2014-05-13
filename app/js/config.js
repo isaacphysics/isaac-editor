@@ -12,7 +12,7 @@ require.config({
         "react": '../../bower_components/react/react-with-addons',
         "JSXTransformer": '../../bower_components/react/JSXTransformer',
         "codemirrorJS": "codemirror/mode/javascript/javascript",
-        "mathjax": "../../bower_components/MathJax/MathJax",
+        "mathjax": 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
     },
 
     shim: {

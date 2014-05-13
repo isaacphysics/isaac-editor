@@ -1,6 +1,6 @@
 'use strict';
 
-define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_editor", "app/directives/FileBrowser"], function() {
+define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_editor", "app/directives/FileBrowser", "app/directives/ModalUnsaved"], function() {
 
 	var ContentEditor = require("jsx!app/directives/content_editor");
 
@@ -21,14 +21,18 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 				console.log("document changed!", scope.document);
 				scope.editor = new ContentEditor(element[0], scope.document);
 			})
-			//scope.editor = new ContentEditor(element[0], scope.document);
 
+			element.on("docChanged", function(e, oldDoc, newDoc) {
+	            var newJson = JSON.stringify(newDoc, null, 2);
+	            scope.onChange(newJson);
+	        });
 		}
 
 		return {
 
 			scope: {
 				document: "=",
+				onChange: "=",
 			},
 
 			restrict: "EA",
@@ -38,5 +42,7 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 	}])
 
 	.directive("fileBrowser", require("app/directives/FileBrowser"))
+
+	.directive("modalUnsaved", require("app/directives/ModalUnsaved"))
 
 });

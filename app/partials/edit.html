@@ -1,14 +1,12 @@
-<p>EDIT PAGE</p>
-<p>Branch: {{branch}}</p>
-<p>Path: {{path}}</p>
-
 <div class="file-browser">
 	<file-browser path="dirPath" entries="dir" on-open="openFile" on-create="createFile"></file-browser>
 </div>
 
 <div class="row">
 	<div class="small-12 columns">
-		<content-editor ng-if="document" document="document" document-string="documentString"></content-editor>
+		<content-editor ng-if="document" document="document" on-change="editedFile"></content-editor>
 		<div ng-if="!document">{{documentString}}</div>
 	</div>
 </div>
+
+<modal-unsaved ctrl="modalUnsavedCtrl"></modal-unsaved>

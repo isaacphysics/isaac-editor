@@ -24,7 +24,7 @@
     <nav class="top-bar" data-topbar>
       <ul class="title-area">
         <li class="name">
-          <h1><a href="#"><i class="general foundicon-edit"></i> Isaac Content Editor</a></h1>
+          <h1><a href="#!/home"><i class="general foundicon-edit"></i> Isaac Content Editor</a></h1>
         </li>
         <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
       </ul>
@@ -34,9 +34,9 @@
         <ul class="right" ng-show="user">
         
           <li class="name"><h1><a class="git-repo-name" href="#"></a></h1></li>
-          <li><a href="#" class="save button secondary disabled radius">Saved</a></li>
+          <li><a href="javascript:void(0)" class="save button success radius" ng-show="editorScope && editorScope.fileIsEdited" ng-click="editorScope.saveFile()">Save</a></li>
               
-<!--          <li class="has-dropdown">
+<!--      <li class="has-dropdown">
             <a href="javascript:void(0)">Branch: <span class="current-branch">master</span></a>
             <ul id="branch-list" class="dropdown">
             </ul>
@@ -49,7 +49,7 @@
         </ul>
     
         <ul class="left">
-          <li class="name"><h1><a class="git-file-name" href="#"></a></h1></li>
+          <li class="name"><h1><a class="git-file-name" href="javascript:void(0)"></a></h1></li>
         </ul>
       </section>
     </nav>
