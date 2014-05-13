@@ -3,9 +3,12 @@
 </div>
 
 <div class="row">
-	<div class="small-12 columns">
+	<div id="content" class="small-12 columns">
 		<content-editor ng-if="document" document="document" on-change="editedFile" file-loader="fileLoader" figure-uploader="figureUploader"></content-editor>
-		<div ng-if="!document">{{documentString}}</div>
+		<div ng-if="!document && documentString">{{documentString}}</div>
+		<div ng-if="!document && !documentString">
+			<h4>Please load a file from the browser on the left.</h4>
+		</div>
 	</div>
 </div>
 

@@ -3,6 +3,18 @@
 @import "foundation";
 @import "foundicons/general_foundicons/general_foundicons";
 
+body {
+  background: #eee;
+}
+
+#content {
+  margin-top: 10px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #d1d1d1;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
 .file-browser {
 
   background-color: #fff;
@@ -10,6 +22,7 @@
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
   float: left;
   margin-left:10px;
+  margin-top:10px;
   padding:10px;
 
   a.file:before {
