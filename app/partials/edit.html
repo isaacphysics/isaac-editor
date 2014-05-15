@@ -1,12 +1,12 @@
 <div class="file-browser">
-	<file-browser path="dirPath" entries="dir" on-open="openFile" on-create="createFile"></file-browser>
+	<file-browser path="dirPath" entries="dir" current-file-path="filePath" on-open="openFile" on-create="createFile"></file-browser>
 </div>
 
 <div class="row">
 	<div id="content" class="small-12 columns">
 		<content-editor ng-if="document" document="document" on-change="editedFile" file-loader="fileLoader" figure-uploader="figureUploader"></content-editor>
-		<div ng-if="!document && documentString">{{documentString}}</div>
-		<div ng-if="!document && !documentString">
+		<text-editor ng-if="!document && documentString != null" value="documentString" on-change="editedFile"></text-editor>
+		<div ng-if="!document && documentString == null">
 			<h4>Please load a file from the browser on the left.</h4>
 		</div>
 	</div>

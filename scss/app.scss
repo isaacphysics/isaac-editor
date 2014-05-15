@@ -7,6 +7,10 @@ body {
   background: #eee;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 #content {
   margin-top: 10px;
   background-color: #fff;
@@ -16,7 +20,7 @@ body {
 }
 
 .file-browser {
-
+  position:relative;
   background-color: #fff;
   border: 1px solid #d1d1d1;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
@@ -37,6 +41,10 @@ body {
       font-family: "GeneralFoundicons";
       margin-right: 10px;
       color: #788;
+  }
+
+  a.file.open {
+    background-color: #E7EBFF;
   }
 
 }
@@ -238,4 +246,41 @@ div.metadata {
 
 .top-bar ul.right li {
   margin-right: 15px;
+}
+
+.create-file {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-left: 4px;
+  padding-bottom: 3px;
+  border-left: 1px dashed #aaa;
+  border-bottom: 1px dashed #aaa;
+
+}
+
+.create-file:hover:after {
+  content: " Create new file...";
+}
+
+#modal .button {
+  margin-right: 20px;
+}
+
+.folder-entries {
+  padding-top: 0px;
+  border-left: 1px dotted rgba(0,0,0,0.1);
+  padding-left: 5px;
+}
+
+.folder-parents {
+  padding-bottom: 0px;
+  padding-left: 5px;
+
+  li {
+    border-left: 1px dotted rgba(0,0,0,0.1);
+    padding-left: 5px;
+  }
 }

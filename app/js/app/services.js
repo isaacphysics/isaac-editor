@@ -1,12 +1,15 @@
 'use strict';
 
-define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader"], function() {
+define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader", "app/services/SnippetLoader"], function() {
 
 	/* Services */
 
-	// Demonstrate how to register services
-	// In this case it is a simple value service.
 	angular.module('scooter.services', [])
+
+	.constant('Repo', {
+		owner: "ucam-cl-dtg",
+		name: "rutherford-content"
+	})
 
 	.service('LoginChecker', require("app/services/LoginChecker"))
 
@@ -14,6 +17,7 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 
 	.factory('FigureUploader', require("app/services/FigureUploader"))
 
+	.service('SnippetLoader', require("app/services/SnippetLoader"))
 
 
 });

@@ -343,15 +343,19 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		},
 
 		onItemInsert: function(insertBeforeIndex) {
-			var oldItems = this.props.items;
-			var newItems = oldItems.slice(0);
-			newItems.splice(insertBeforeIndex,0,generateNewBlock(this.props.requiredChildType));
+			ContentEditor.snippetLoader.loadContentTemplate(this.props.requiredChildType).then(function(t) {
+				var oldItems = this.props.items;
+				var newItems = oldItems.slice(0);
+				newItems.splice(insertBeforeIndex,0,t);
 
-			newKeys = this.state.keys.slice(0);
-			newKeys.splice(insertBeforeIndex,0,Math.random());
-			this.setState({keys: newKeys});
+				newKeys = this.state.keys.slice(0);
+				newKeys.splice(insertBeforeIndex,0,Math.random());
+				this.setState({keys: newKeys});
 
-			this.props.onChange(this, oldItems, newItems);
+				this.props.onChange(this, oldItems, newItems);				
+			}.bind(this)).catch(function(e) {
+				console.error("Could not load content template.", e);
+			})
 		},
 
 		onItemDelete: function(index) {
@@ -555,30 +559,40 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 			else {
 				function insertBeforeValue() {
 					// Transform to list, add new content object before this one.
-					var newChildren = [
-						generateNewBlock(),
-						{
-							type: "content",
-							encoding: this.props.encoding,
-							value: this.props.value
-						}
-					];
 
-					this.props.onChange(this, this.props.value, undefined, this.props.children, newChildren);
+					ContentEditor.snippetLoader.loadContentTemplate().then(function(t) {
+						var newChildren = [
+							t,
+							{
+								type: "content",
+								encoding: this.props.encoding,
+								value: this.props.value
+							}
+						];
+
+						this.props.onChange(this, this.props.value, undefined, this.props.children, newChildren);
+					}.bind(this)).catch(function(e) {
+						console.error("Unable to load content template", e);
+					});
 				}
 
 				function insertAfterValue() {
 					// Transform to list, add new content object after this one.
-					var newChildren = [
-						{
-							type: "content",
-							encoding: this.props.encoding,
-							value: this.props.value
-						},
-						generateNewBlock()
-					];
 
-					this.props.onChange(this, this.props.value, undefined, this.props.children, newChildren);
+					ContentEditor.snippetLoader.loadContentTemplate().then(function(t) {
+						var newChildren = [
+							{
+								type: "content",
+								encoding: this.props.encoding,
+								value: this.props.value
+							},
+							t
+						];
+
+						this.props.onChange(this, this.props.value, undefined, this.props.children, newChildren);
+					}.bind(this)).catch(function(e) {
+						console.error("Unable to load content template", e);
+					});
 				}
 
 				function insertBeforeMouseEnter() {
@@ -966,6 +980,13 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		},
 
 		render: function() {
+
+			var emptyExplanation = {
+				type: "content",
+				children: [],
+				encoding: "markdown",
+			};
+
 			return (
 				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
@@ -978,7 +999,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 							<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
 						</div>
 						<div className="small-5 columns" >
-							<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || generateNewBlock("explanation")} onChange={this.onExplanationChange} />
+							<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />
 						</div>
 					</div>
 				</Block>
@@ -993,9 +1014,17 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 		},
 
 		chooseType: function(e) {
-			var newDoc = $.extend({}, this.props.doc, generateNewBlock($(e.target).data("chosenType")));
 
-			this.props.onChange(this, this.props.doc, newDoc);
+			var type = $(e.target).data("chosenType");
+
+			ContentEditor.snippetLoader.loadContentTemplate(type).then(function(t) {
+
+				var newDoc = $.extend({}, this.props.doc, t);
+				this.props.onChange(this, this.props.doc, newDoc);
+
+			}.bind(this)).catch(function(e) {
+				console.error("Unable to load content template of type", type, e);
+			});
 		},
 
 		render: function() {
@@ -1111,63 +1140,6 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 	};
 
 	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacConceptPage", "figure"];
-
-/////////////////////////////////
-// Private static methods
-/////////////////////////////////
-
-	function generateNewBlock(type, value) {
-		if (!type) {
-
-			return {
-				value: value || "_Enter content here_", 
-				encoding:"markdown"
-			};
-		}
-
-		switch(type) {
-			case "isaacQuestion":
-				return {
-					encoding: "markdown",
-					value: "_Enter exposition here_",
-					choices: [],
-					answer: generateNewBlock("content", "_Enter answer here_"),
-					type: type,
-			    };
-			case "video":
-				return {
-					encoding: "markdown",
-					value: "_Add video caption here_",
-					type: type,
-				};
-			case "choice":
-				return {
-					encoding: "markdown",
-					value: "_Enter choice here_",
-					type: "choice",
-					explanation: generateNewBlock("explanation"),
-				};
-			case "explanation":
-				return {
-					type: "content",
-					children: [],
-					encoding: "markdown",
-				};
-			case "figure":
-				return {
-					type: "figure",
-					value: "_Enter caption here_", 
-					encoding:"markdown",
-					src: "/path/to/figure.svg",
-				};
-			default:
-				return {
-					type: type,
-					value: value || "_Enter content here_", 
-					encoding:"markdown"
-				};
-		}
-	}
 
 /////////////////////////////////
 // Private instance methods

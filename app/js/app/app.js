@@ -32,6 +32,7 @@ define(["app/helpers", "foundation", "angular", "angular-route", "github/angular
 
 		$routeProvider.when("/login", {template: "", controller: "LoginController"});
 		$routeProvider.when("/login_progress", {template: "Logging in..."});
+		$routeProvider.when("/logout", {template: "", controller: "LogoutController"});
 
 		$routeProvider.otherwise({redirectTo: '/home'});
 
@@ -44,6 +45,8 @@ define(["app/helpers", "foundation", "angular", "angular-route", "github/angular
 		$(document).foundation();
 
 		$rootScope.user = null;
+
+		$rootScope.modal = {};
 
 		// On document load, we either have a code in the query string, or a token cookie, or neither.
 		var target = null;
@@ -83,7 +86,7 @@ define(["app/helpers", "foundation", "angular", "angular-route", "github/angular
 
 			$rootScope.loggingIn = false;
 			console.warn("Failed to load github. Clearing cookies.", e);
-			document.cookie = 'github-token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+			helpers.clearCookie("github-token");
 
 			$rootScope.user = null;
 			$location.url("/home");

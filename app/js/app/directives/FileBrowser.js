@@ -2,9 +2,11 @@
 
 define([], function() {
 
-	return function() {
+	return [function() {
 
 		function update(scope) {
+
+			scope.parents = scope.path ? scope.path.split("/") : [];
 
 			scope.folders = [];
 			scope.files = [];
@@ -26,6 +28,7 @@ define([], function() {
 			scope: {
 				path: "=",
 				entries: "=",
+				currentFilePath: "=",
 				create: "=onCreate",
 				open: "=onOpen"
 			},
@@ -37,8 +40,25 @@ define([], function() {
 			link: function(scope, element, attrs) {
 				scope.$watch("entries", function() {
 					update(scope);
-				})
+				});
+
+				scope.openParent = function(i) {
+					
+					scope.open(scope.parents.slice(0,i + 1).join("/"));
+				};
+
+				scope.create_click = function(e) {
+    				var newName = window.prompt("Please type a name for the new file. If no extension is provided, '.json' will be assumed", "untitled");
+
+    				if (newName) {
+				        if (newName.indexOf(".") == -1)
+				            newName += ".json";
+
+						scope.create(newName);
+    				}
+
+				};
 			},
 		};
-	};
+	}];
 });

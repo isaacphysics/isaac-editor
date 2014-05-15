@@ -1,6 +1,6 @@
 'use strict';
 
-define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_editor", "app/directives/FileBrowser", "app/directives/ModalUnsaved"], function() {
+define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_editor", "app/directives/FileBrowser", "app/directives/Modal", "app/directives/ModalUnsaved", "app/services/FigureUploader", "app/directives/TextEditor"], function() {
 
 	var ContentEditor = require("jsx!app/directives/content_editor");
 
@@ -14,13 +14,14 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 	    };
 	}])
 
-	.directive("contentEditor", [function() {
+	.directive("contentEditor", ["SnippetLoader", function(snippetLoader) {
 
 		function link(scope, element, attrs) {
 			scope.$watch("document", function(newVal, oldVal, scope) {
 				console.log("document changed!", scope.document);
 				ContentEditor.fileLoader = scope.fileLoader;
 				ContentEditor.figureUploader = scope.figureUploader;
+				ContentEditor.snippetLoader = snippetLoader;
 				scope.editor = new ContentEditor(element[0], scope.document);
 			})
 
@@ -45,8 +46,12 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 		};
 	}])
 
+	.directive("textEditor", require("app/directives/TextEditor"))
+
 	.directive("fileBrowser", require("app/directives/FileBrowser"))
 
 	.directive("modalUnsaved", require("app/directives/ModalUnsaved"))
+
+	.directive("modal", require("app/directives/Modal"))
 
 });

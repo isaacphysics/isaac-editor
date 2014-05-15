@@ -2,13 +2,48 @@
 
 define(["github/github", "app/helpers"], function() {
 
-	var repoOwner = "daviesian";
-	var repoName = "rutherford-content";
+	return ['$scope', '$routeParams', 'Repo', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', 'SnippetLoader', function(scope, routeParams, repo, github, location, $rootScope, fileLoader, figureUploader, snippetLoader) {
 
-	return ['$scope', '$routeParams', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', function(scope, routeParams, github, location, $rootScope, fileLoader, figureUploader) {
+		scope.createFile = function(relativePath) {
+			console.log("Creating file", relativePath);
 
-		scope.createFile = function(fullPath) {
-			console.log("Creating file", fullPath);
+			var fullPath = scope.dirPath + "/" + relativePath;
+
+			var doCreate = function(initialContent) {
+				github.createFile(repo.owner, repo.name, fullPath, initialContent).then(function(f) {
+					location.url("/edit/" + scope.branch + "/" + fullPath);
+					$rootScope.$apply();
+				}).catch(function(e) {
+					console.error("Couldn't create file. Perhaps it already exists.", e);
+				})				
+			}
+
+			if (fullPath.endsWith(".json")) {
+				$rootScope.modal.show("Choose Page Type", "What type of page would you like to create?", "", [
+					{
+						caption: "Question Page",
+						value: "isaacQuestionPage"
+					},
+					{
+						caption: "Concept Page",
+						value: "isaacConceptPage"
+					}
+				]).then(function(type) {
+
+					snippetLoader.loadPageTemplate(type).then(function(t) {
+						t = JSON.stringify(t, null, 2);
+						doCreate(t);
+					})
+				}).catch(function(e) {
+					if (e == "cancel") {
+						console.log("File creation cancelled.");
+					} else {
+						console.error("Something went wrong choosing new file type:", e);
+					}
+				});
+			} else {
+				doCreate("");
+			}
 		}
 		scope.openFile = function(fullPath) {
 			location.url("/edit/" + scope.branch + "/" + fullPath);
@@ -56,6 +91,50 @@ define(["github/github", "app/helpers"], function() {
 				})
 			});
 		}
+
+		var deleteFile = function() {
+		    if (confirm("Do you really want to delete " + scope.file.name + "?")) {
+		        console.log("Deleting", scope.file.path);
+
+		        github.deleteFile(repo.owner, repo.name, scope.file.path, scope.file.sha).then(function(f){
+		            location.url("/edit/" + scope.branch + "/" + scope.dirPath);
+		            $rootScope.$apply();
+		        }).catch(function(e) {
+		        	console.error("Unable to delete file.", e);
+		        });
+		    }
+		}
+
+		var renameFile = function() {
+			console.log("Renaming file");
+		}
+
+		scope.showFileInfo = function() {
+			var buttons = [];
+
+			buttons.push({
+				caption: "View on GitHub",
+				value: function() { },
+				target: "blank",
+				href: scope.file.html_url
+			});
+
+			buttons.push({
+				caption: "Delete",
+				value: deleteFile
+			});
+
+			buttons.push({
+				caption: "Rename",
+				value: renameFile
+			})
+
+			$rootScope.modal.show(scope.file.name, scope.file.path, "", buttons).then(function(f) {
+				f();
+			});
+
+
+		};
 
 		var allowNavigation = false;
 		scope.$on('$locationChangeStart', function (event, next, current) {
@@ -123,7 +202,7 @@ define(["github/github", "app/helpers"], function() {
 		if (scope.path[scope.path.length - 1] == "/")
 			scope.path = scope.path.substr(0, scope.path.length - 1);
 
-		github.getFile(repoOwner, repoName, scope.path).then(function(file) {
+		github.getFile(repo.owner, repo.name, scope.path).then(function(file) {
 
 			var loadDir = null;
 
@@ -135,7 +214,7 @@ define(["github/github", "app/helpers"], function() {
 
 				scope.dirPath = scope.path.substr(0, scope.path.lastIndexOf("/"));
 
-				loadDir = github.listFiles(repoOwner, repoName, scope.dirPath).then(function(files) {
+				loadDir = github.listFiles(repo.owner, repo.name, scope.dirPath).then(function(files) {
 					scope.dir = files;
 
 				}).catch(function(e) {
@@ -164,8 +243,8 @@ define(["github/github", "app/helpers"], function() {
 			loadDir.then(function() {
 				// Now we have scope.{filePath, file, dirPath, dir}
 
-				scope.fileLoader = fileLoader.bind(null, repoOwner, repoName, scope.dirPath);
-				scope.figureUploader = figureUploader.bind(null, repoOwner, repoName, scope.dirPath);
+				scope.fileLoader = fileLoader.bind(null, repo.owner, repo.name, scope.dirPath);
+				scope.figureUploader = figureUploader.bind(null, repo.owner, repo.name, scope.dirPath);
 
 				scope.$apply();
 
@@ -175,7 +254,9 @@ define(["github/github", "app/helpers"], function() {
 
 
 		}).catch(function(e) {
-			console.error("Unable to list files:", e);
+			console.error("Unable to list file(s):", scope.path, e);
+			location.url("/edit");
+			$rootScope.$apply();
 		});
 
 	}];

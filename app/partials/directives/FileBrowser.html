@@ -1,4 +1,12 @@
-<ul class="side-nav">
-	<li ng-repeat="f in folders"><a class="folder" ng-click="open(f.path)">{{f.name}}</a></li>
-	<li ng-repeat="f in files"><a class="file" ng-click="open(f.path)">{{f.name}}</a></li>
-</ul>
+<div>
+	<a class="create-file" href="javascript:void(0)" ng-click="create_click()"> <i class="foundicon-plus"></i></a>
+
+	<ul class="side-nav folder-parents">
+		<li style="margin-left: 0px;"><a class="folder" ng-click="openParent(-1)">ROOT</a></li>
+		<li ng-repeat="f in parents" style="margin-left: {{($index+1)*10}}px;"><a class="folder" ng-click="openParent($index)">{{f}}</a></li>
+	</ul>
+	<ul class="side-nav folder-entries" style="margin-left: {{parents.length*10+15}}px;">
+		<li ng-repeat="f in folders"><a class="folder" ng-click="open(f.path)">{{f.name}}</a></li>
+		<li ng-repeat="f in files"><a class="file {{f.path == currentFilePath ? 'open' : ''}}" ng-click="open(f.path)">{{f.name}}</a></li>
+	</ul>
+</div>

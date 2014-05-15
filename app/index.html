@@ -29,7 +29,7 @@
         <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
       </ul>
     
-      <section class="top-bar-section">
+      <section class="top-bar-section" ng-cloak>
 
         <ul class="right" ng-show="user">
         
@@ -48,13 +48,15 @@
           <li><a class="login-button success button radius" href="#!/login">Login with GitHub</a></li>
         </ul>
     
-        <ul class="left">
-          <li class="name"><h1><a class="git-file-name" href="javascript:void(0)"></a></h1></li>
+        <ul class="left" ng-if="editorScope && editorScope.file">
+          <li class="name"><h1><a class="git-file-name" href="javascript:void(0)" ng-click="editorScope.showFileInfo()">{{editorScope.file.name}}</a></h1></li>
         </ul>
       </section>
     </nav>
 
     <div ng-view></div>
+
+    <modal ctrl="modal"></modal>
 
   </body>
 </html>

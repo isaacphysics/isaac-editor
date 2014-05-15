@@ -1,0 +1,6 @@
+{
+	"type": "figure",
+	"value": "_Enter caption here_", 
+	"encoding":"markdown",
+	"src": "/path/to/figure.svg"
+}

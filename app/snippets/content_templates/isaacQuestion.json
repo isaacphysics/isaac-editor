@@ -1,0 +1,11 @@
+{
+	"type": "isaacQuestion",
+	"encoding": "markdown",
+	"value": "_Enter exposition here_",
+	"choices": [],
+	"answer": {
+		"type": "content",
+		"value": "_Enter answer here_", 
+		"encoding": "markdown"
+	}
+}
