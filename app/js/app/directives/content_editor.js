@@ -276,7 +276,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 
 				cm.setCursor(9999,9999);
 
-				$("body").scrollTop($(this.refs.placeholder.getDOMNode()).offset().top + $(this.refs.placeholder.getDOMNode()).height());
+				$("body").scrollTop($(this.refs.placeholder.getDOMNode()).offset().top + $(this.refs.placeholder.getDOMNode()).height() - $(window).height() / 2);
 
 				cm.on("change", (function(inst, changeObj) { 
 					this.setState({editedValue: inst.getValue()});
