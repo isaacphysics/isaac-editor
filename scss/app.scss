@@ -13,14 +13,18 @@ body {
 
 #content {
   margin-top: 10px;
+  margin-left: 50px;
   background-color: #fff;
   padding: 10px;
   border: 1px solid #d1d1d1;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
+  z-index: 10;
 }
 
 .file-browser {
-  position:relative;
+  position:absolute;
+  top: 45px;
+  left: 0px;
   background-color: #fff;
   border: 1px solid #d1d1d1;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
@@ -47,6 +51,37 @@ body {
     background-color: #E7EBFF;
   }
 
+  .open-arrow {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.8);
+    opacity: 1;
+    margin-top: -10px;
+    margin-left: -10px;
+    display: none;
+
+    i {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+    }
+  }
+
+  .open-arrow.file-browser-too-wide {
+    display: block;
+  }
+
+
+
+}
+
+.file-browser:hover {
+  z-index: 100;
+
+  .open-arrow {
+    display:none;
+  }
 }
 
 .title-container {

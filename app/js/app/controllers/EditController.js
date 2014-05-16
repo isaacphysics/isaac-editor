@@ -188,10 +188,21 @@ define(["github/github", "app/helpers"], function() {
 
 			// Remove event handlers
 			$("body").off("keydown", keydown);
+			$(window).off("resize", checkSize);
 		});
 
 
+		function checkSize() {
+			var fileBrowserRight = $(".file-browser").offset().left + $(".file-browser").width() + 20;
+			var contentLeft = $("#content").offset().left;
+			
+			if (fileBrowserRight > contentLeft)
+				$(".file-browser .open-arrow").addClass("file-browser-too-wide");
+			else
+				$(".file-browser .open-arrow").removeClass("file-browser-too-wide");
+		}
 
+		$(window).on("resize", checkSize);
 
 		scope.branch = routeParams.branch || "master";
 		scope.path = routeParams.path || "";
@@ -247,6 +258,8 @@ define(["github/github", "app/helpers"], function() {
 				scope.figureUploader = figureUploader.bind(null, repo.owner, repo.name, scope.dirPath);
 
 				scope.$apply();
+
+				checkSize();
 
 			}).catch(function(e) {
 				console.error("What?", e);
