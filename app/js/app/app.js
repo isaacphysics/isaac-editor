@@ -1,7 +1,10 @@
 'use strict';
 
-define(["app/helpers", "foundation", "angular", "angular-route", "github/angular_github", "app/controllers", "app/directives", "app/services", "app/filters"], function() {
+define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github/angular_github", "app/controllers", "app/directives", "app/services", "app/filters"], function() {
 
+	window.Promise = RSVP.Promise;
+	window.Promise.defer = RSVP.defer;
+	
 	var helpers = require("app/helpers");
 	///////////////////////////////////////////
 	// Main AngularJS App Module
