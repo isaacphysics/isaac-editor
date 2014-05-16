@@ -160,10 +160,21 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 			this.setState(newState);
 
 			clearTimeout(this.metadataChangeTimeout);
-			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimout, 500);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
 		},
 
-		onMetadataChangeTimout: function() {
+		onCheckboxChange: function(key, e) {
+			var newState = {};
+			newState[key] = e.target.checked;
+			this.setState(newState);
+
+			console.log("New checkbox state:", newState);
+
+			clearTimeout(this.metadataChangeTimeout);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+		},
+
+		onMetadataChangeTimeout: function() {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			
@@ -178,6 +189,9 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 			
 			if (this.state.altText)
 				newDoc.altText = this.state.altText;
+
+			if (this.state.published === true || this.state.published === false)
+				newDoc.published = this.state.published;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -204,6 +218,13 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 				</div>;
 			}
 
+			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacConceptPage") {
+				var pageMeta = <div className="row">
+					<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
+					<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
+				</div>;
+			}
+
 			return (
 				<div className="metadata-container">
 					<button onClick={this.toggleMetaData_click} className="button tiny round" ref="toggleButton">Show MetaData</button>
@@ -226,6 +247,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 						</div>
 						
 						{figureMeta}
+						{pageMeta}
 					</div>
 				</div>
 			);
