@@ -74,23 +74,30 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 				$analytics.eventTrack("save", {category: "git", label: scope.file.path});
 
-				github.commitChange(scope.file, scope.file.editedContent, "Edited " + scope.file.name).then(function(f) {
+				var msg = $('<input type="text" value="' + "Edited " + scope.file.name + '" />');
 
-		            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
-		            for (var attr in f.content) {
-		                scope.file[attr] = f.content[attr];
-		            }
-		            scope.file.decodedContent = scope.file.editedContent;
-		            delete scope.file.editedContent;
+				$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}]).then(function(v) {
 
-					scope.fileIsEdited = false;
-					scope.$apply();
+					github.commitChange(scope.file, scope.file.editedContent, msg.val()).then(function(f) {
 
-					return resolve();
-				}).catch(function(e) {
-					console.error("Could not save file:", e);
-					return reject();
+			            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
+			            for (var attr in f.content) {
+			                scope.file[attr] = f.content[attr];
+			            }
+			            scope.file.decodedContent = scope.file.editedContent;
+			            delete scope.file.editedContent;
+
+						scope.fileIsEdited = false;
+						scope.$apply();
+
+						return resolve();
+					}).catch(function(e) {
+						console.error("Could not save file:", e);
+						return reject();
+					})
+
 				})
+
 			});
 		}
 
@@ -150,14 +157,16 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 	            }, {
 	            	caption: "Save",
 	            	value: "save"
-	            }]).then(function(save) {
+	            }]).then(function(val) {
 					var continueNavigation = function() {
 						allowNavigation = true;
 	                    location.url(location.url(next).hash().substr(1)); // Ugh.
 	                    $rootScope.$apply();
 					}
-					if (save) {
-						scope.saveFile().then(continueNavigation);
+					if (val == "save") {
+						$(document).one('closed', '[data-reveal]', function () {
+							scope.saveFile().then(continueNavigation);							
+						});
 					} else {
 						continueNavigation();
 					}
