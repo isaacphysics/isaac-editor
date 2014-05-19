@@ -1,8 +1,8 @@
 'use strict';
 
-define(["github/github", "app/helpers"], function() {
+define(["github/github", "app/helpers", "angulartics"], function() {
 
-	return ['$scope', '$routeParams', 'Repo', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', 'SnippetLoader', function(scope, routeParams, repo, github, location, $rootScope, fileLoader, figureUploader, snippetLoader) {
+	return ['$scope', '$routeParams', 'Repo', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', 'SnippetLoader', '$analytics', function(scope, routeParams, repo, github, location, $rootScope, fileLoader, figureUploader, snippetLoader, $analytics) {
 
 		scope.createFile = function(relativePath) {
 			console.log("Creating file", relativePath);
@@ -71,6 +71,8 @@ define(["github/github", "app/helpers"], function() {
 
 				if (!scope.fileIsEdited)
 					return resolve();
+
+				$analytics.eventTrack("save", {category: "git", label: scope.file.path});
 
 				github.commitChange(scope.file, scope.file.editedContent, "Edited " + scope.file.name).then(function(f) {
 
