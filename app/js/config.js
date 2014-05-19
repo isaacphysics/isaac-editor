@@ -11,6 +11,8 @@ require.config({
         "angular-route": '../../bower_components/angular-route/angular-route',
         "react": '../../bower_components/react/react-with-addons',
         "JSXTransformer": '../../bower_components/react/JSXTransformer',
+        "angulartics": '../../bower_components/angulartics/src/angulartics',
+        "angulartics-ga": '../../bower_components/angulartics/src/angulartics-ga',
         "codemirrorJS": "codemirror/mode/javascript/javascript",
         "mathjax": 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
     },
@@ -21,6 +23,8 @@ require.config({
         "angular-route": ['angular'],
         "angular": ['jquery'],
         "codemirrorJS": ["codemirror/codemirror"],
+        "angulartics-ga": ["angulartics"],
+        "angulartics": ["angular"]
     }
 });
 

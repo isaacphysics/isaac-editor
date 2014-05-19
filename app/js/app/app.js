@@ -1,6 +1,6 @@
 'use strict';
 
-define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github/angular_github", "app/controllers", "app/directives", "app/services", "app/filters"], function() {
+define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github/angular_github", "app/controllers", "app/directives", "app/services", "app/filters", "angulartics", "angulartics-ga"], function() {
 
 	window.Promise = RSVP.Promise;
 	window.Promise.defer = RSVP.defer;
@@ -17,6 +17,8 @@ define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github
 		'scooter.directives',
 		'scooter.controllers',
 		'github',
+		'angulartics',
+		'angulartics.google.analytics'
 	])
 
 	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
