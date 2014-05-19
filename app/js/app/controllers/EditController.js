@@ -142,7 +142,13 @@ define(["github/github", "app/helpers"], function() {
 	        if (scope.fileIsEdited && !allowNavigation) {
 	            event.preventDefault();
 
-				scope.modalUnsavedCtrl.show().then(function(save) {
+	            $rootScope.modal.show("Changes not saved", "Do you really want to close " + scope.file.name + "?", "", [{
+	            	caption: "Discard",
+	            	value: "discard"
+	            }, {
+	            	caption: "Save",
+	            	value: "save"
+	            }]).then(function(save) {
 					var continueNavigation = function() {
 						allowNavigation = true;
 	                    location.url(location.url(next).hash().substr(1)); // Ugh.
@@ -156,8 +162,6 @@ define(["github/github", "app/helpers"], function() {
 				});
 	        }
 	    });
-
-		scope.modalUnsavedCtrl = {};
 
 		var confirmNavigate = function() {
 			if (scope.fileIsEdited)
