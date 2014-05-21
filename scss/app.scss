@@ -325,3 +325,16 @@ hr {
   border-width: 5px;
   border-color: #eee;
 }
+
+.version {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  color: #888;
+  font-style: italic;
+  display:inline-block;
+}
