@@ -28,9 +28,9 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 						caption: "Concept Page",
 						value: "isaacConceptPage"
 					}
-				]).then(function(type) {
+				]).then(function(r) {
 
-					snippetLoader.loadPageTemplate(type).then(function(t) {
+					snippetLoader.loadPageTemplate(r.value).then(function(t) {
 						t = JSON.stringify(t, null, 2);
 						doCreate(t);
 					})
@@ -76,7 +76,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 				var msg = $('<input type="text" value="' + "Edited " + scope.file.name + '" />');
 
-				$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}]).then(function(v) {
+				$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}]).then(function() {
 
 					github.commitChange(scope.file, scope.file.editedContent, msg.val()).then(function(f) {
 
@@ -115,7 +115,40 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 		}
 
 		var renameFile = function() {
-			console.log("Renaming file");
+
+			if (scope.fileIsEdited) {
+		        if (!window.confirm("This will save the current contents of this file. Are you sure you want to continue?"))
+		            return;
+		    }
+
+		    scope.saveFile().then(function() {
+
+		        var newName = window.prompt("Please type a new name for the file. If no extension is provided, \".json\" will be assumed", scope.file.name);
+
+		        if (newName) {
+
+		            var oldPath = scope.file.path;
+
+		            if (newName.indexOf(".") == -1 && oldPath.toLowerCase().endsWith(".json"))
+		                newName += ".json";
+
+		            var newPath = scope.dirPath + "/" + newName;
+
+		            console.log("Creating", newPath);
+
+		            github.createFile(repo.owner, repo.name, newPath, scope.file.decodedContent).then(function(f) {
+
+		                github.deleteFile(repo.owner, repo.name, oldPath, scope.file.sha).then(function() {
+		                    location.url("/edit/" + scope.branch + "/" + newPath);
+		                    $rootScope.$apply();                   
+		                }).catch(function(e) {
+		                    console.error("Could not delete old file.", e);
+		                })
+		            }).catch(function(e) {
+		                console.error("Could not create file. Perhaps it already exists.", e);
+		            });
+		        }  
+		    });
 		}
 
 		scope.showFileInfo = function() {
@@ -138,8 +171,8 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 				value: renameFile
 			})
 
-			$rootScope.modal.show(scope.file.name, scope.file.path, "", buttons).then(function(f) {
-				f();
+			$rootScope.modal.show(scope.file.name, scope.file.path, "", buttons).then(function(r) {
+				r.closedPromise.then(r.value);
 			});
 
 
@@ -157,14 +190,14 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 	            }, {
 	            	caption: "Save",
 	            	value: "save"
-	            }]).then(function(val) {
+	            }]).then(function(r) {
 					var continueNavigation = function() {
 						allowNavigation = true;
 	                    location.url(location.url(next).hash().substr(1)); // Ugh.
 	                    $rootScope.$apply();
 					}
-					if (val == "save") {
-						$(document).one('closed', '[data-reveal]', function () {
+					if (r.value == "save") {
+						r.closedPromise.then(function () {
 							scope.saveFile().then(continueNavigation);							
 						});
 					} else {

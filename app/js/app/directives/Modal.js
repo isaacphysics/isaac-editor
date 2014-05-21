@@ -7,6 +7,7 @@ define([], function() {
 		function show(scope, element, title, lead, text, buttons) {
 
 			var deferred = Promise.defer();
+			var closed = Promise.defer();
 
 			element.find(".modal-title").html(title);
 			element.find(".lead").html(lead);
@@ -30,7 +31,7 @@ define([], function() {
 					btn.attr("href", b.href);
 
 				btn.on("click", function(i, e) {
-					deferred.resolve(buttons[i].value);					
+					deferred.resolve({value: buttons[i].value, closedPromise: closed.promise});					
 				}.bind(null, i));
 
 				buttonContainer.append(btn);
@@ -47,6 +48,7 @@ define([], function() {
 			}
 
 			function hide() {
+				$(document).one('closed', '[data-reveal]', closed.resolve);
 				scope.modal.foundation("reveal", "close");
 				$("body").off("keyup", keyup);
 			}

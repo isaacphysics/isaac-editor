@@ -47,7 +47,10 @@ define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github
 
 	.run(["$rootScope", "$location", "github", function($rootScope, $location, github) {
 
-		$(document).foundation();
+		$(document).foundation({reveal: {
+			animation: "fade",
+			animation_speed: 50,
+		}});
 
 		$rootScope.user = null;
 
