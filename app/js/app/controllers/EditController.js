@@ -72,32 +72,60 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 				if (!scope.fileIsEdited)
 					return resolve();
 
-				$analytics.eventTrack("save", {category: "git", label: scope.file.path});
+				var doSave = function() {
 
-				var msg = $('<input type="text" value="' + "Edited " + scope.file.name + '" />');
+					$analytics.eventTrack("save", {category: "git", label: scope.file.path});
 
-				$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}]).then(function() {
+					var msg = $('<input type="text" value="' + "Edited " + scope.file.name + '" />');
 
-					github.commitChange(scope.file, scope.file.editedContent, msg.val()).then(function(f) {
+					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}]).then(function() {
 
-			            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
-			            for (var attr in f.content) {
-			                scope.file[attr] = f.content[attr];
-			            }
-			            scope.file.decodedContent = scope.file.editedContent;
-			            delete scope.file.editedContent;
+						github.commitChange(scope.file, scope.file.editedContent, msg.val()).then(function(f) {
 
-						scope.fileIsEdited = false;
-						scope.$apply();
+				            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
+				            for (var attr in f.content) {
+				                scope.file[attr] = f.content[attr];
+				            }
+				            scope.file.decodedContent = scope.file.editedContent;
+				            delete scope.file.editedContent;
 
-						return resolve();
-					}).catch(function(e) {
-						console.error("Could not save file:", e);
-						return reject();
-					})
+							scope.fileIsEdited = false;
+							scope.$apply();
 
-				})
+							return resolve();
+						}).catch(function(e) {
+							console.error("Could not save file:", e);
+							return reject();
+						})
 
+					});
+				};
+
+				var buttons = [];
+
+				buttons.push({
+					caption: "Save anyway",
+					value: "save"
+				});
+
+				var doc = null;
+				try {
+					doc = JSON.parse(scope.file.editedContent);
+				} catch (e) { /* File is not a valid JSON document. Probably not a big deal, it may not even be a JSON file. */ }
+
+				if (doc && (!doc.title || !doc.id || doc.title == "" || doc.id == "")) {
+					return $rootScope.modal.show("Missing Metadata", "The content you are trying to save is missing an ID, or a title, or both. All pages should have both.", "", buttons).then(function(r) {
+						debugger;
+						if (r.value == "save") {
+							r.closedPromise.then(doSave);
+						} else {
+							// Cancel the save operation.
+						}
+					});						
+				} else {
+					doSave();
+				}
+				
 			});
 		}
 
