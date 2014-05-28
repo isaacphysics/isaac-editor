@@ -115,7 +115,6 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 				if (doc && (!doc.title || !doc.id || doc.title == "" || doc.id == "")) {
 					return $rootScope.modal.show("Missing Metadata", "The content you are trying to save is missing an ID, or a title, or both. All pages should have both.", "", buttons).then(function(r) {
-						debugger;
 						if (r.value == "save") {
 							r.closedPromise.then(doSave);
 						} else {
