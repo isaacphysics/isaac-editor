@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
-define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], function(React, $) {
+define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extensions/table", "app/MathJaxConfig"], function(React, $) {
 	
-	var Showdown = require("showdown");
 	var ReactTransitionGroup = React.addons.TransitionGroup;
 
 /////////////////////////////////
@@ -326,7 +325,7 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 						break;
 					case "markdown":
 						var converter = new Showdown.converter({
-							tables: true,
+							extensions: ["table"],
 						});
 						var html = converter.makeHtml(this.props.value);
 						renderer.props.dangerouslySetInnerHTML = {__html: html};
