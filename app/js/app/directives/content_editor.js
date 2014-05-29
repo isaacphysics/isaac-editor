@@ -3,6 +3,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	
 	var ReactTransitionGroup = React.addons.TransitionGroup;
 
+	var enableMathJax = true;
+
 /////////////////////////////////
 // Constructor
 /////////////////////////////////
@@ -1137,9 +1139,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 
 			if (this.state.activeTab != null) {
-				var thisTab = <div>
-					<button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;
-					<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
+				var thisTab = <div className="active-tab">
+					<div style={{textAlign: "right"}}>
+						<button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;
+						<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
+					</div>
 					<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange} />
 				</div>;
 			}
