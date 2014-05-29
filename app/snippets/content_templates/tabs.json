@@ -1,0 +1,8 @@
+{
+	"type": "content",
+	"layout": "tabs",
+	"children": [ {
+		"type": "content",
+		"children": [{ }]
+	}]
+}

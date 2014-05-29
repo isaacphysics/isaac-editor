@@ -1246,6 +1246,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				var button = <button onClick={this.activateSection.bind(this, i)} className={"round" + (this.state.activeSection == i ? " success" : "")}>{i}: {t.title}</button>;
 				sectionButtons.push(button);
+				sectionButtons.push(<br/>);
 			}
 
 			var button = <button onClick={this.addSection} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
@@ -1303,10 +1304,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<div className="row">
 						<div className="large-8 large-offset-2 columns text-center">
 							Please choose a block type: <br/>
-							<a onClick={this.chooseType} data-chosen-type="content">content</a> | 
-							<a onClick={this.chooseType} data-chosen-type="isaacQuestion">question</a> | 
-							<a onClick={this.chooseType} data-chosen-type="figure">figure</a> |
-							<a onClick={this.chooseType} data-chosen-type="video">video</a>
+							<a onClick={this.chooseType} data-chosen-type="content">content</a>&nbsp; | &nbsp;
+							<a onClick={this.chooseType} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp; 
+							<a onClick={this.chooseType} data-chosen-type="figure">figure</a>&nbsp; | &nbsp;
+							<a onClick={this.chooseType} data-chosen-type="video">video</a>&nbsp; | &nbsp;
+							<a onClick={this.chooseType} data-chosen-type="tabs">tabs</a>&nbsp; | &nbsp;
+							<a onClick={this.chooseType} data-chosen-type="accordion">accordion</a>
 						</div>
 					</div>
 				</Block>
