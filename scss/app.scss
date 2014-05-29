@@ -327,7 +327,7 @@ hr {
 }
 
 .version {
-  position: absolute;
+  position: fixed;
   right: 0px;
   bottom: 0px;
   text-align: center;
@@ -338,3 +338,13 @@ hr {
   font-style: italic;
   display:inline-block;
 }
+
+.block.type-tabs {
+  margin: 0px 20px;
+  border: 1px solid #ccc;
+
+  .tabs-content {
+    padding: 0px 20px;
+  }
+}
+

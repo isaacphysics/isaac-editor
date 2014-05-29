@@ -16,7 +16,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		this.history = [];
 
 		React.renderComponent(this.editor, container);
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub]);			
 	}
 
 /////////////////////////////////
@@ -304,12 +303,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				}).bind(this));
 			}
 			MathJax.resetLabels();
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+			if (enableMathJax)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.contentRow.getDOMNode()]);
 
 		},
 
 		componentDidMount: function() {
-					MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+			if (enableMathJax)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.contentRow.getDOMNode()]);
 		},
 
 		render: function() {
@@ -336,7 +338,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				}
 
 				return (
-					<div className="row">
+					<div className="row" ref="contentRow">
 						<div className="large-12 columns">
 							{renderer}
 						</div>
@@ -964,11 +966,23 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				return <div className="block type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
 			}
 
-			return (
-				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
-					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
-				</Block>
-			);
+			if (this.props.doc.layout == "tabs") {
+
+				return (
+					<TabsBlock doc={this.props.doc} onChange={this.onDocChange}/>
+				);
+
+			//} else if (this.props.doc.layout == "accordion") {
+
+			//	return (<h1>ACCORDION</h1>);
+			} else {
+
+				return (
+					<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
+						<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+					</Block>
+				);
+			}
 		}
 	});
 
@@ -1033,6 +1047,118 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	});
+
+	var TabsBlock = React.createClass({
+
+		getInitialState: function() {
+			return {
+				activeTab: this.props.doc.children.length > 0 ? 0 : null,
+			}
+		},
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		activateTab: function(i) {
+			this.setState({
+				activeTab: i,
+			});
+		},
+
+		setTitle: function() {
+			var newTitle = window.prompt("Type a new title for this tab:", this.props.doc.children[this.state.activeTab].title);
+			if (newTitle != null)
+			{
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeTab].title = newTitle;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			}
+		},
+
+		deleteTab: function() {
+			var doIt = window.confirm("Are you sure you want to delete this tab?");
+
+			if (doIt) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children.splice(this.state.activeTab,1);
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.setState({
+					activeTab: newDoc.children.length > 0 ? 0 : null,
+				})
+			}
+		},
+
+		addTab: function() {
+
+			ContentEditor.snippetLoader.loadContentTemplate("tab").then(function(t) {
+
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children.push(t);
+
+				this.onDocChange(this, this.props.doc, newDoc);
+				this.setState({
+					activeTab: newDoc.children.length - 1,
+				})
+
+			}.bind(this)).catch(function(e) {
+				console.error("Unable to load tab template", e);
+			});
+
+		},
+
+		onTabChange: function(c, oldVal, newVal) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, this.props.doc);
+			newDoc.children[this.state.activeTab] = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+			this.forceUpdate();
+		},
+
+		render: function() {
+
+			var tabButtons = [];
+
+			for(var i in this.props.doc.children) {
+				var t = this.props.doc.children[i];
+
+				var button = <button onClick={this.activateTab.bind(this, i)} className={"round" + (this.state.activeTab == i ? " success" : "")}>{i}: {t.title}</button>;
+				tabButtons.push(button);
+			}
+
+			var button = <button onClick={this.addTab} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
+			tabButtons.push(button);
+
+
+			if (this.state.activeTab != null) {
+				var thisTab = <div>
+					<button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;
+					<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
+					<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange} />
+				</div>;
+			}
+			
+			console.log("ACTIVEtAB: ", this.state.activeTab);
+
+			return 	(
+				<Block type="tabs" blockTypeTitle="Tabs" doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row tabs-content">
+						<div className="small-12 columns">
+							{tabButtons} <br/>
+							{thisTab}
+						</div>
+					</div>
+				</Block>
+			);
+
+		},
+	})
 
 	var UnknownBlock = React.createClass({
 

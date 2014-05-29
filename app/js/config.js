@@ -24,7 +24,8 @@ require.config({
         "angular": ['jquery'],
         "codemirrorJS": ["codemirror/codemirror"],
         "angulartics-ga": ["angulartics"],
-        "angulartics": ["angular"]
+        "angulartics": ["angular"],
+        "showdown/extensions/table": ["showdown/showdown"],
     }
 });
 
