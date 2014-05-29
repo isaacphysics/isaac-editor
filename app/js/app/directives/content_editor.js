@@ -325,7 +325,9 @@ define(["react", "jquery", "codemirrorJS", "showdown", "app/MathJaxConfig"], fun
 						renderer.props.dangerouslySetInnerHTML = {__html: this.props.value};
 						break;
 					case "markdown":
-						var converter = new Showdown.converter();
+						var converter = new Showdown.converter({
+							tables: true,
+						});
 						var html = converter.makeHtml(this.props.value);
 						renderer.props.dangerouslySetInnerHTML = {__html: html};
 						break;
