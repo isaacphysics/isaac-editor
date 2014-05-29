@@ -974,9 +974,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<TabsBlock doc={this.props.doc} onChange={this.onDocChange}/>
 				);
 
-			//} else if (this.props.doc.layout == "accordion") {
+			} else if (this.props.doc.layout == "accordion") {
 
-			//	return (<h1>ACCORDION</h1>);
+				return (
+					<AccordionBlock doc={this.props.doc} onChange={this.onDocChange}/>
+				);
+
 			} else {
 
 				return (
@@ -1137,7 +1140,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var button = <button onClick={this.addTab} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
 			tabButtons.push(button);
 
-
 			if (this.state.activeTab != null) {
 				var thisTab = <div className="active-tab">
 					<div style={{textAlign: "right"}}>
@@ -1147,8 +1149,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange} />
 				</div>;
 			}
-			
-			console.log("ACTIVEtAB: ", this.state.activeTab);
 
 			return 	(
 				<Block type="tabs" blockTypeTitle="Tabs" doc={this.props.doc} onChange={this.onDocChange}>
@@ -1156,6 +1156,119 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="small-12 columns">
 							{tabButtons} <br/>
 							{thisTab}
+						</div>
+					</div>
+				</Block>
+			);
+
+		},
+	})
+
+	var AccordionBlock = React.createClass({
+
+		getInitialState: function() {
+			return {
+				activeSection: this.props.doc.children.length > 0 ? 0 : null,
+			}
+		},
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		activateSection: function(i) {
+			this.setState({
+				activeSection: i,
+			});
+		},
+
+		setTitle: function() {
+			var newTitle = window.prompt("Type a new title for this accordion section:", this.props.doc.children[this.state.activeSection].title);
+			if (newTitle != null)
+			{
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeSection].title = newTitle;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			}
+		},
+
+		deleteSection: function() {
+			var doIt = window.confirm("Are you sure you want to delete this section?");
+
+			if (doIt) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children.splice(this.state.activeSection,1);
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.setState({
+					activeSection: newDoc.children.length > 0 ? 0 : null,
+				})
+			}
+		},
+
+		addSection: function() {
+
+			ContentEditor.snippetLoader.loadContentTemplate("accordionSection").then(function(t) {
+
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children.push(t);
+
+				this.onDocChange(this, this.props.doc, newDoc);
+				this.setState({
+					activeSection: newDoc.children.length - 1,
+				})
+
+			}.bind(this)).catch(function(e) {
+				console.error("Unable to load accordion section template", e);
+			});
+
+		},
+
+		onSectionChange: function(c, oldVal, newVal) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, this.props.doc);
+			newDoc.children[this.state.activeSection] = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+			this.forceUpdate();
+		},
+
+		render: function() {
+
+			var sectionButtons = [];
+
+			for(var i in this.props.doc.children) {
+				var t = this.props.doc.children[i];
+
+				var button = <button onClick={this.activateSection.bind(this, i)} className={"round" + (this.state.activeSection == i ? " success" : "")}>{i}: {t.title}</button>;
+				sectionButtons.push(button);
+			}
+
+			var button = <button onClick={this.addSection} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
+			sectionButtons.push(button);
+
+			if (this.state.activeSection != null) {
+				var thisSection = <div className="active-accordion-section">
+					<div style={{textAlign: "right"}}>
+						<button onClick={this.setTitle} className="tiny radius">Edit section title...</button>&nbsp;
+						<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
+					</div>
+					<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange} />
+				</div>;
+			}
+
+			return 	(
+				<Block type="accordion" blockTypeTitle="Accordion" doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row accordion-content">
+						<div className="small-2 columns section-buttons">
+							{sectionButtons}
+						</div>
+						<div className="small-10 columns accordion-section">
+							{thisSection}
 						</div>
 					</div>
 				</Block>

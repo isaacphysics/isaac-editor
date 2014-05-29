@@ -353,6 +353,8 @@ hr {
   }
 
   button.round {
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
@@ -360,11 +362,58 @@ hr {
   button.round:first-of-type {
     margin-left: 10px;
   }
+
+  .active-tab {
+
+    border-radius: 10px;
+    border: 2px solid #43ac6a;
+    padding: 10px;
+  }
 }
 
-.active-tab {
 
-  border-radius: 10px;
-  border: 2px solid #43ac6a;
-  padding: 10px;
+.block.type-accordion {
+  margin: 0px 20px;
+  border: 1px solid #ccc;
+
+  .tabs-content {
+    padding: 0px 20px;
+  }
+
+  .accordion-section {
+    padding-left: 0px;
+
+  }
+
+  .section-buttons {
+    text-align: right;
+    padding-right: 0px;
+
+    button {
+      margin-bottom: 2px;
+    }
+
+    button.success {
+      background-color: #E77800;
+    }
+
+    button.round {
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 30px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+
+    button.round:first-of-type {
+      margin-top: 10px;
+    }
+  }
+
+
+  .active-accordion-section {
+
+    border-radius: 10px;
+    border: 2px solid #E77800;
+    padding: 10px;
+  }
 }
