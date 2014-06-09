@@ -352,6 +352,17 @@ hr {
     vertical-align: bottom;
   }
 
+  button.inactive-tab {
+    background-color: rgba(0,140,186,0.2);
+    border: 1px solid rgba(0,140,186,1);
+    color: #000;
+  }
+
+  button.active-tab {
+    background-color: rgba(0,140,186,1);
+    color: #fff;
+  }
+
   button.round {
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
@@ -363,10 +374,10 @@ hr {
     margin-left: 10px;
   }
 
-  .active-tab {
+  div.active-tab {
 
     border-radius: 10px;
-    border: 2px solid #43ac6a;
+    border: 2px solid rgb(0,140,186);
     padding: 10px;
   }
 }
@@ -393,9 +404,19 @@ hr {
       margin-bottom: 2px;
     }
 
-    button.success {
-      background-color: #E77800;
-    }
+      button.active-section {
+        background-color: rgba(231,120,0,1);
+        color: #fff;
+      }
+
+      button.inactive-section {
+        background-color: rgba(231,120,0,0.2);
+        border: 1px solid rgba(231,120,0,1);
+        border-right: none;
+        color: #000;
+      }
+    
+
 
     button.round {
       border-top-left-radius: 30px;

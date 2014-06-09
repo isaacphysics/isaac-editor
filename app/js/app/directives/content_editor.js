@@ -1133,7 +1133,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			for(var i in this.props.doc.children) {
 				var t = this.props.doc.children[i];
 
-				var button = <button onClick={this.activateTab.bind(this, i)} className={"round" + (this.state.activeTab == i ? " success" : "")}>{i}: {t.title}</button>;
+				var button = <button onClick={this.activateTab.bind(this, i)} className={"round " + (this.state.activeTab == i ? "active-tab" : "inactive-tab")}>{i}: {t.title}</button>;
 				tabButtons.push(button);
 			}
 
@@ -1244,7 +1244,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			for(var i in this.props.doc.children) {
 				var t = this.props.doc.children[i];
 
-				var button = <button onClick={this.activateSection.bind(this, i)} className={"round" + (this.state.activeSection == i ? " success" : "")}>{i}: {t.title}</button>;
+				var button = <button onClick={this.activateSection.bind(this, i)} className={"round " + (this.state.activeSection == i ? "active-section" : "inactive-section")}>{i}: {t.title}</button>;
 				sectionButtons.push(button);
 				sectionButtons.push(<br/>);
 			}
