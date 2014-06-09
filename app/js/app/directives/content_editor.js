@@ -1237,6 +1237,23 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.forceUpdate();
 		},
 
+		onScroll: function(e) {
+			var sectionButtons = $(this.refs.sectionButtons.getDOMNode());
+			var sectionButtonsTop = sectionButtons.offset().top - $(document).scrollTop();
+
+			var maxPadding = sectionButtons.parent().height() - sectionButtons.height();
+			
+			sectionButtons.css("padding-top", Math.max(0,Math.min(maxPadding, -sectionButtonsTop)));
+		},
+
+		componentDidMount: function() {
+			$(document).on("scroll", this.onScroll);
+		},
+
+		componentWillUnmount: function() {
+			$(document).off("scroll");
+		},
+
 		render: function() {
 
 			var sectionButtons = [];
@@ -1265,7 +1282,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			return 	(
 				<Block type="accordion" blockTypeTitle="Accordion" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row accordion-content">
-						<div className="small-2 columns section-buttons">
+						<div className="small-2 columns section-buttons" ref="sectionButtons">
 							{sectionButtons}
 						</div>
 						<div className="small-10 columns accordion-section">

@@ -404,17 +404,23 @@ hr {
       margin-bottom: 2px;
     }
 
-      button.active-section {
-        background-color: rgba(231,120,0,1);
-        color: #fff;
-      }
+    button.active-section {
 
-      button.inactive-section {
-        background-color: rgba(231,120,0,0.2);
-        border: 1px solid rgba(231,120,0,1);
-        border-right: none;
-        color: #000;
-      }
+      background-color: rgba(231,120,0,1);
+      color: #fff;
+    }
+
+    button.active-section-fixed {
+      position: fixed;
+      top: 0px;
+    }
+
+    button.inactive-section {
+      background-color: rgba(231,120,0,0.2);
+      border: 1px solid rgba(231,120,0,1);
+      border-right: none;
+      color: #000;
+    }
     
 
 
