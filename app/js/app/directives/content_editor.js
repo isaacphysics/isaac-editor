@@ -1067,7 +1067,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		activateTab: function(i) {
 			this.setState({
-				activeTab: i,
+				activeTab: null,
+			}, function() {
+				this.setState({
+					activeTab: i,
+				})
 			});
 		},
 
@@ -1133,11 +1137,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			for(var i in this.props.doc.children) {
 				var t = this.props.doc.children[i];
 
-				var button = <button onClick={this.activateTab.bind(this, i)} className={"round " + (this.state.activeTab == i ? "active-tab" : "inactive-tab")}>{i}: {t.title}</button>;
+				var button = <button key={"tabButton" + i} onClick={this.activateTab.bind(this, i)} className={"round " + (this.state.activeTab == i ? "active-tab" : "inactive-tab")}>{i}: {t.title}</button>;
 				tabButtons.push(button);
 			}
 
-			var button = <button onClick={this.addTab} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
+			var button = <button key="newTabButton" onClick={this.addTab} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
 			tabButtons.push(button);
 
 			if (this.state.activeTab != null) {
@@ -1178,7 +1182,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		activateSection: function(i) {
 			this.setState({
-				activeSection: i,
+				activeSection: null,
+			}, function() {
+				this.setState({
+					activeSection: i,
+				})
 			});
 		},
 
@@ -1261,12 +1269,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			for(var i in this.props.doc.children) {
 				var t = this.props.doc.children[i];
 
-				var button = <button onClick={this.activateSection.bind(this, i)} className={"round " + (this.state.activeSection == i ? "active-section" : "inactive-section")}>{i}: {t.title}</button>;
+				var button = <button key={"sectionButton"+i}  onClick={this.activateSection.bind(this, i)} className={"round " + (this.state.activeSection == i ? "active-section" : "inactive-section")}>{i}: {t.title}</button>;
 				sectionButtons.push(button);
-				sectionButtons.push(<br/>);
+				sectionButtons.push(<br key={Math.random()}/>);
 			}
 
-			var button = <button onClick={this.addSection} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
+			var button = <button key="newSectionButton" onClick={this.addSection} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
 			sectionButtons.push(button);
 
 			if (this.state.activeSection != null) {
