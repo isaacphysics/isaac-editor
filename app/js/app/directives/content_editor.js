@@ -306,13 +306,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 			MathJax.resetLabels();
 
-			if (enableMathJax)
+			if (enableMathJax && this.refs.contentRow)
 				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.contentRow.getDOMNode()]);
 
 		},
 
 		componentDidMount: function() {
-			if (enableMathJax)
+			if (enableMathJax && this.refs.contentRow)
 				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.contentRow.getDOMNode()]);
 		},
 
