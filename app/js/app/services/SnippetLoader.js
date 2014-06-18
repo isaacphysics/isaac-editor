@@ -35,6 +35,16 @@ define(["app/helpers", "github/github"], function(helpers) {
 			});
 		}
 
+		this.loadQuestionTemplate = function(type) {
+
+			return this.loadContentTemplate(type).then(function(t) {
+				t.id = helpers.generateGuid();
+				return t;
+			}).catch(function(e) {
+				console.error("Unable to load question template", e);
+			});
+		}
+
 	}];
 
 });
