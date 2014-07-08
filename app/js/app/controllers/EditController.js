@@ -303,6 +303,8 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 		if (scope.path[scope.path.length - 1] == "/")
 			scope.path = scope.path.substr(0, scope.path.length - 1);
 
+		scope.reportIssueUrl = encodeURI("https://github.com/ucam-cl-dtg/rutherford-content/issues/new?body=Issue found in " + scope.path + " by " + github.user.login + ".\n\n<Describe issue here>");
+
 		github.getFile(repo.owner, repo.name, scope.path).then(function(file) {
 
 			var loadDir = null;

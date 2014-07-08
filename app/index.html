@@ -56,6 +56,10 @@
 
     <modal ctrl="modal"></modal>
 
+    <div ng-if="editorScope.file" class="report-content-issue">
+      <a target="_blank" ng-href="{{editorScope.reportIssueUrl}}">Report Content Issue</a><br/><br/>
+    </div>    
+
     <div scooter-version></div>
 
     <script>
