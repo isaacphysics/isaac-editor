@@ -188,6 +188,21 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 				href: scope.file.html_url
 			});
 
+			if (scope.document && scope.document.id) {
+				var b = {
+					caption: "View on dev",
+					value: function() { },
+					target: "blank",
+				}
+				if (scope.document.type == "isaacConceptPage") {
+					b.href = "http://dev.isaacphysics.org/concepts/" + scope.document.id;
+					buttons.push(b);
+				} else if (scope.document.type == "isaacQuestionPage") {
+					b.href = "http://dev.isaacphysics.org/questions/" + scope.document.id;
+					buttons.push(b);
+				}
+			}
+
 			buttons.push({
 				caption: "Delete",
 				value: deleteFile
