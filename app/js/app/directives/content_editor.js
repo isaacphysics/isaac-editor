@@ -1401,12 +1401,17 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					var metaDataComponent = <MetaData doc={this.props.doc} onChange={this.onDocChange} />;
 				}
 
+				if (this.props.doc && this.props.doc.title) {
+					var title = <h1>{this.props.doc.title}</h1>;
+				}
+
 				return (
 					<div className={"block type-" + this.props.type}  ref="block">
 						<div className="row">
 							<div className="large-12 columns">
 								<Title onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} title={this.props.blockTypeTitle} />
 								{metaDataComponent}
+								{title}
 								{this.props.children}
 							</div>
 						</div>
