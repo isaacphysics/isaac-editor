@@ -139,6 +139,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				title: this.props.doc.title,
 				author: this.props.doc.author,
 				altText: this.props.doc.altText,
+				attribution: this.props.doc.attribution,
 			};
 		},
 
@@ -193,6 +194,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.state.published === true || this.state.published === false)
 				newDoc.published = this.state.published;
 
+			if (this.state.attribution)
+				newDoc.attribution = this.state.attribution;
+
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
@@ -225,6 +229,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;
 			}
 
+			if (this.props.doc.type == "isaacQuestionPage") {
+				var questionPageMeta = <div className="row">
+					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution</span></div>
+					<div className="small-10 columns"><input type="text" value={this.state.attribution} onChange={this.onTextboxChange.bind(this, "attribution")} /></div>
+				</div>;
+			}
+
 			return (
 				<div className="metadata-container">
 					<button onClick={this.toggleMetaData_click} className="button tiny round" ref="toggleButton">Show MetaData</button>
@@ -247,6 +258,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						</div>
 						
 						{figureMeta}
+						{questionPageMeta}
 						{pageMeta}
 					</div>
 				</div>
