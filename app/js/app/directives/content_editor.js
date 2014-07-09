@@ -1462,6 +1462,20 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 		},
 
+		setLevel: function() {
+			var newLevel = window.prompt("Type a new level for this accordion section. This should be an integer 1-6.", this.props.doc.children[this.state.activeSection].level);
+			if (newLevel != null && ((parseInt(newLevel) > 0 && parseInt(newLevel) < 7) || newLevel === "")) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeSection].level = newLevel;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			} else {
+				window.alert("Invalid level entered: " + newLevel);
+			}
+		},
+
 		deleteSection: function() {
 			var doIt = window.confirm("Are you sure you want to delete this section?");
 
@@ -1528,7 +1542,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			for(var i in this.props.doc.children) {
 				var t = this.props.doc.children[i];
 
-				var button = <button key={"sectionButton"+i}  onClick={this.activateSection.bind(this, i)} className={"round " + (this.state.activeSection == i ? "active-section" : "inactive-section")}>{i}: {t.title}</button>;
+				var button = <button key={"sectionButton"+i}  onClick={this.activateSection.bind(this, i)} className={"round " + (this.state.activeSection == i ? "active-section" : "inactive-section")}> {t.level ? "Level " + t.level : "Section " + i}</button>;
 				sectionButtons.push(button);
 				sectionButtons.push(<br key={Math.random()}/>);
 			}
@@ -1540,6 +1554,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				var thisSection = <div className="active-accordion-section">
 					<div style={{textAlign: "right"}}>
 						<button onClick={this.setTitle} className="tiny radius">Edit section title...</button>&nbsp;
+						<button onClick={this.setLevel} className="tiny radius">Edit section level...</button>&nbsp;
 						<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 					</div>
 					<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange} />
