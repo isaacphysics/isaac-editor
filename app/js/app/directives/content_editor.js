@@ -225,6 +225,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				author: this.props.doc.author,
 				altText: this.props.doc.altText,
 				attribution: this.props.doc.attribution,
+				level: this.props.doc.level,
 			};
 		},
 
@@ -272,23 +273,27 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			
-			if (this.state.id)
+			if (this.state.id || this.props.doc.id)
 				newDoc.id = this.state.id;
 
-			if (this.state.title)
+			if (this.state.title || this.props.doc.title)
 				newDoc.title = this.state.title;
 			
-			if (this.state.author)
+			if (this.state.author || this.props.doc.author)
 				newDoc.author = this.state.author;
 			
-			if (this.state.altText)
+			if (this.state.altText || this.props.doc.altText)
 				newDoc.altText = this.state.altText;
 
 			if (this.state.published === true || this.state.published === false)
 				newDoc.published = this.state.published;
 
-			if (this.state.attribution)
+			if (this.state.attribution || this.props.doc.attribution)
 				newDoc.attribution = this.state.attribution;
+
+			if (this.state.level || this.props.doc.level) {
+				newDoc.level = parseInt(this.state.level);
+			}
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -332,6 +337,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution</span></div>
 					<div className="small-10 columns"><input type="text" value={this.state.attribution} onChange={this.onTextboxChange.bind(this, "attribution")} /></div>
 				</div>;
+
+				var levelMeta = <div className="row">
+					<div className="small-2 columns text-right"><span className="metadataLabel">Level</span></div>
+					<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
+				</div>;
 			}
 
 			return (
@@ -358,6 +368,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{relatedContent}
 						{figureMeta}
 						{questionPageMeta}
+						{levelMeta}
 						{pageMeta}
 					</div>
 				</div>
