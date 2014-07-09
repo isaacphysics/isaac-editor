@@ -1,4 +1,4 @@
-define(["github/github"], function() {
+define(["github/base64", "github/github"], function(B64) {
 	
 	return ['github', function(github) {
 		return function(repoOwner, repoName, currentGitDir, relativePath) {
@@ -14,7 +14,7 @@ define(["github/github"], function() {
 		            else if (f.name.toLowerCase().endsWith(".svg"))
 		                var type = "image/svg+xml";
 
-		            var dataUrl = "data:" + type + ";base64," + btoa(f.decodedContent); // This is horrible. We should be able to use the raw base64 from github.
+		            var dataUrl = "data:" + type + ";base64," + B64.btoa(f.decodedContent); // This is horrible. We should be able to use the raw base64 from github.
 		            console.log("Retrieved", f.path, "from git:", dataUrl, f);
 		            return resolve(dataUrl);
 		        }).catch(function(e) {
