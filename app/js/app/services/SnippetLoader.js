@@ -1,6 +1,6 @@
 define(["app/helpers", "github/github"], function(helpers) {
 	
-	return ["$http", "github", function($http, github) {
+	return ["$http", function($http) {
 
 		// This is a constructor function for the singleton SnippetLoader service. It will be called exactly once by the AngularJS Dependecy Injector.
 

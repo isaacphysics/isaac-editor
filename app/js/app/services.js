@@ -1,6 +1,6 @@
 'use strict';
 
-define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader", "app/services/SnippetLoader"], function() {
+define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader", "app/services/SnippetLoader", "app/services/TagLoader", "app/services/IdLoader"], function() {
 
 	/* Services */
 
@@ -11,6 +11,8 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 		name: "rutherford-content"
 	})
 
+	.constant('ApiServer', "http://dev.isaacphysics.org/api")
+
 	.service('LoginChecker', require("app/services/LoginChecker"))
 
 	.factory('FileLoader', require("app/services/FileLoader"))
@@ -18,6 +20,10 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 	.factory('FigureUploader', require("app/services/FigureUploader"))
 
 	.service('SnippetLoader', require("app/services/SnippetLoader"))
+
+	.factory('TagLoader', require("app/services/TagLoader"))
+
+	.factory('IdLoader', require("app/services/IdLoader"))
 
 
 });

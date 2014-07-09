@@ -39,6 +39,22 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		});
 	}
 
+	ContentEditor.getIdList = function() {
+		return new Promise(function(resolve, reject) {
+			console.error("No ID list provider registered");
+			// A real function will resolve to an array of id strings.
+			return reject();
+		})
+	}
+
+	ContentEditor.getTagList = function() {
+		return new Promise(function(resolve, reject) {
+			console.error("No tag list provider registered");
+			// A real function will resolve to an array of tag strings.
+			return reject();
+		})
+	}
+
 /////////////////////////////////
 // Private static component classes
 /////////////////////////////////
@@ -66,8 +82,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			};
 		},
 
+		getInitialState: function() {
+			return {
+				allTags: [],
+			};
+		},
+
 		componentDidMount: function() {
 			$(document).foundation();
+			var self = this;
+			ContentEditor.getTagList().then(function(tags) {
+				self.setState({allTags: tags});
+			})
 		},
 
 		componentDidUpdate: function(nextProps, nextState) {
@@ -97,12 +123,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				ts.push(<span className="tag">{t} <i className="general foundicon-remove" onClick={removeTag.bind(this, t)}/></span>);
 			}
 
-			var allTags = ["physics", "maths", "dynamics", "statics"];
-
 			var allTagComponents = [];
 
-			for(var t in allTags) {
-				t = allTags[t];
+			for(var t in this.state.allTags) {
+				t = this.state.allTags[t];
 
 				if (this.props.tags.indexOf(t) > -1)
 					continue;
@@ -131,6 +155,67 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		}
 	});
 
+	var RelatedContent = React.createClass({
+
+		getInitialState: function() {
+			return {
+				searchString: "",
+				results: [],
+			}
+		},
+
+		onSearchStringChange: function(e) {
+			this.setState({
+				searchString: e.target.value,
+			});
+			var self = this;
+			ContentEditor.getIdList(e.target.value).then(function(ids) {
+				self.setState({
+					results: ids,
+				});
+			});
+		},
+
+		render: function() {
+
+			var ids = [];
+
+			for (var id in this.props.ids) {
+				id = this.props.ids[id];
+
+				var removeId = function(id) {
+					var newIds = JSON.parse(JSON.stringify(this.props.ids));
+					newIds.splice(newIds.indexOf(id), 1);
+					this.props.onChange(this, this.props.ids, newIds);
+				};
+
+				ids.push(<span className="tag">{id} <i className="general foundicon-remove" onClick={removeId.bind(this, id)} /></span>);
+			}
+
+			var results = [];
+			for (var result in this.state.results) {
+				result = this.state.results[result];
+
+				if (this.props.ids.indexOf(result.id) > -1)
+					continue;
+
+				var addId = function(id) {
+					var newIds = JSON.parse(JSON.stringify(this.props.ids));
+					newIds.push(id);
+					this.props.onChange(this, this.props.ids, newIds);
+				}
+
+				results.push(<button className="button tiny success radius id-result" onClick={addId.bind(this,result.id)}>{result.title}<br/>{result.id} <i className="general foundicon-plus"/></button>)
+			}
+
+			return <div className="tags-container" ref="container">
+				{ids}
+				<input type="text" placeholder="Type to add related content..." value={this.state.searchString} onChange={this.onSearchStringChange} />
+				{results}
+			</div>;
+		}
+	});
+
 	var MetaData = React.createClass({
 
 		getInitialState: function() {
@@ -151,6 +236,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.tags = newTags;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onRelatedContentChange: function(c, oldRelatedContent, newRelatedContent) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.relatedContent = newRelatedContent;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -227,6 +320,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
 					<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
 				</div>;
+
+				var relatedContent = <div className="row">
+					<div className="small-2 columns text-right"><span className="metadataLabel">Related Content:</span></div>
+					<div className="small-10 columns"><RelatedContent ids={this.props.doc.relatedContent || []} onChange={this.onRelatedContentChange} /> </div>
+				</div>;;
 			}
 
 			if (this.props.doc.type == "isaacQuestionPage") {
@@ -256,7 +354,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 							<div className="small-2 columns text-right"><span className="metadataLabel">Author: </span></div>
 							<div className="small-10 columns"><input type="text" value={this.state.author} onChange={this.onTextboxChange.bind(this, "author")} /></div>
 						</div>
-						
+
+						{relatedContent}
 						{figureMeta}
 						{questionPageMeta}
 						{pageMeta}

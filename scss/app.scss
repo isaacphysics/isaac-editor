@@ -254,6 +254,8 @@ span.tag {
   padding: 5px;
   margin-right: 10px;
   background-color: #eed;
+  display: inline-block;
+  margin-bottom: 15px;
 
   i {
     margin-left: 5px;
@@ -263,6 +265,16 @@ span.tag {
 
   i:hover {
     opacity: 1;
+  }
+}
+
+button.id-result {
+  padding: 5px;
+  margin-right: 10px;
+
+  i {
+    margin-left: 5px;
+    opacity: 0.5;
   }
 }
 
