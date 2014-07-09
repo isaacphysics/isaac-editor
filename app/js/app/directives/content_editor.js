@@ -1028,8 +1028,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
 			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentChildren items={this.props.doc.hints || []} encoding={this.encoding} onChange={this.onHintsChange}/></Block>
 			
+			var requiredChildType = this.props.doc.type == "isaacNumericQuestion" ? "quantity" : "choice";
+
 			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion")
-				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType="choice"/></Block>
+				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/></Block>
 
 			if (!this.props.doc.answer)
 				console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
@@ -1154,6 +1156,141 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						</div>
 						<div className="small-6 columns" >
 							<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+						</div>
+						<div className="small-5 columns" >
+							<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />
+						</div>
+					</div>
+				</Block>
+			);
+		}
+	});
+
+	var QuantityChoiceBlock = React.createClass({
+
+		getInitialState: function() {
+			return {
+				editing: false,
+				editedValue: this.props.doc.value,
+				editedUnits: this.props.doc.units,
+			};
+		},
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		onContentChange: function(c, oldVal, newVal, oldUnits, newUnits) {
+			// newVal could be a string or a list.
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.value = newVal;
+			newDoc.units = newUnits;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onExplanationChange: function(c, oldVal, newVal) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.explanation = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		correct_toggle: function(e) {
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+
+			newDoc.correct = !oldDoc.correct;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		componentDidMount: function() {
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+		},
+
+		componentDidUpdate: function() {
+			MathJax.resetLabels();
+
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+
+		},
+
+		edit: function() {
+			this.setState({
+				editing: true,
+			});
+
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+		},
+
+		done: function() {
+			this.setState({
+				editing: false,
+			});
+
+			this.onContentChange(this, this.props.doc.value, this.state.editedValue, this.props.doc.units, this.state.editedUnits);
+
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+		},
+
+		setEditedValue: function(e) {
+			this.setState({editedValue: e.target.value});
+		},
+
+		setEditedUnits: function(e) {
+			this.setState({editedUnits: e.target.value});
+		},
+
+		render: function() {
+
+			var emptyExplanation = {
+				type: "content",
+				children: [],
+				encoding: "markdown",
+			};
+
+			if (this.state.editing) {
+				var content = <div ref="content">
+					{[
+						"$\\\\quantity{", 
+						<input type="text" placeholder="Value" style={{width: "80px", display: "inline-block"}} onChange={this.setEditedValue} value={this.state.editedValue} />, 
+						"}{", 
+						<input type="text" placeholder="Units" style={{width: "80px", display: "inline-block"}} onChange={this.setEditedUnits} value={this.state.editedUnits} />, 
+						"}$"
+					]} 
+					&nbsp;<button onClick={this.done} className="button tiny">Done</button>
+				</div>;
+			} else {
+				var converter = new Showdown.converter({
+					extensions: ["table"],
+				});
+				var html = converter.makeHtml("$\\\\quantity{" + (this.props.doc.value || "") + "}{" + (this.props.doc.units || "") + "}$");
+
+				if (this.props.doc.value) {
+					var content = <span onClick={this.edit} ref="content" dangerouslySetInnerHTML={{__html: html}}></span>;
+				} else {
+					var content = <span onClick={this.edit} ref="content" > <i>Enter value and units here</i></span>;
+				}
+			}
+
+			return (
+				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row">
+						<div className="small-1 column text-right">
+							{this.props.doc.correct ? 
+								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> : 
+								<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
+						</div>
+						<div className="small-6 columns" >
+							{content}
 						</div>
 						<div className="small-5 columns" >
 							<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />
@@ -1557,6 +1694,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacConceptPage": ContentBlock,
 		"page": ContentBlock,
 		"choice": ChoiceBlock,
+		"quantity": QuantityChoiceBlock,
 		"video": VideoBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
