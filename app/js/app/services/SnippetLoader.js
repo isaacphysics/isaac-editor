@@ -1,4 +1,4 @@
-define(["app/helpers", "github/github"], function(helpers) {
+define(["app/helpers", "github/github"], function(helpers, gitHub) {
 	
 	return ["$http", function($http) {
 
@@ -27,7 +27,7 @@ define(["app/helpers", "github/github"], function(helpers) {
 		this.loadPageTemplate = function(type) {
 
 			return this.loadContentTemplate(type).then(function(t) {
-				t.author = github.user.login;
+				t.author = gitHub.user.login;
 				t.id = helpers.generateGuid();
 				return t;
 			}).catch(function(e) {
