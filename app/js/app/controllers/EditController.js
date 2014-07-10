@@ -31,6 +31,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 				]).then(function(r) {
 
 					snippetLoader.loadPageTemplate(r.value).then(function(t) {
+						t.author = github.user.login;
 						t = JSON.stringify(t, null, 2);
 						doCreate(t);
 					})
