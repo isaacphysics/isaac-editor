@@ -191,15 +191,15 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 			if (scope.document && scope.document.id) {
 				var b = {
-					caption: "View on dev",
+					caption: "View on staging",
 					value: function() { },
 					target: "blank",
 				}
 				if (scope.document.type == "isaacConceptPage") {
-					b.href = "http://dev.isaacphysics.org/concepts/" + scope.document.id;
+					b.href = "http://staging.isaacphysics.org/concepts/" + scope.document.id;
 					buttons.push(b);
 				} else if (scope.document.type == "isaacQuestionPage") {
-					b.href = "http://dev.isaacphysics.org/questions/" + scope.document.id;
+					b.href = "http://staging.isaacphysics.org/questions/" + scope.document.id;
 					buttons.push(b);
 				}
 			}
