@@ -332,7 +332,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Summary</span></div>
-						<div className="small-10 columns"><input type="text" value={this.state.summary} onChange={this.onCheckboxChange.bind(this, "summary")} /> </div>
+						<div className="small-10 columns"><input type="text" value={this.state.summary} onChange={this.onTextboxChange.bind(this, "summary")} /> </div>
 					</div>
 				];
 
