@@ -223,6 +223,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				id: this.props.doc.id,
 				title: this.props.doc.title,
 				author: this.props.doc.author,
+				summary: this.props.doc.summary,
 				altText: this.props.doc.altText,
 				attribution: this.props.doc.attribution,
 				level: this.props.doc.level,
@@ -282,6 +283,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.state.author || this.props.doc.author)
 				newDoc.author = this.state.author;
 			
+			if (this.state.summary || this.props.doc.summary)
+				newDoc.summary = this.state.summary;
+			
 			if (this.state.altText || this.props.doc.altText)
 				newDoc.altText = this.state.altText;
 
@@ -320,11 +324,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;
 			}
 
-			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacConceptPage") {
-				var pageMeta = <div className="row">
-					<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
-					<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
-				</div>;
+			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page") {
+				var pageMeta = [
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
+						<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Summary</span></div>
+						<div className="small-10 columns"><input type="text" value={this.state.summary} onChange={this.onCheckboxChange.bind(this, "summary")} /> </div>
+					</div>
+				];
+
 
 				var relatedContent = <div className="row">
 					<div className="small-2 columns text-right"><span className="metadataLabel">Related Content:</span></div>
@@ -1519,6 +1530,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onScroll: function(e) {
+			if (!this.refs.sectionButtons)
+				return; // We are in edit mode, so no section buttons were rendered.
+
 			var sectionButtons = $(this.refs.sectionButtons.getDOMNode());
 			var sectionButtonsTop = sectionButtons.offset().top - $(document).scrollTop();
 
