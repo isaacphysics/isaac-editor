@@ -1,7 +1,7 @@
 {
     "type": "isaacQuestionPage",
     "encoding": "markdown",
-    "title": "Page title",
-    "value": "# New Page\n\nAdd page content here",
+    "title": "New Page",
+    "value": "Add page content here",
     "level": 0
 }

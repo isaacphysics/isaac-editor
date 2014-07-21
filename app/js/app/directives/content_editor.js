@@ -1616,7 +1616,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			ContentEditor.snippetLoader.loadContentTemplate(type).then(function(t) {
 
-				var newDoc = $.extend({}, this.props.doc, t);
+				var newDoc = $.extend({}, t);
 				this.props.onChange(this, this.props.doc, newDoc);
 
 			}.bind(this)).catch(function(e) {
