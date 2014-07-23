@@ -205,7 +205,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					this.props.onChange(this, this.props.ids, newIds);
 				}
 
-				results.push(<button className="button tiny success radius id-result" onClick={addId.bind(this,result.id)}>{result.title}<br/>{result.id} <i className="general foundicon-plus"/></button>)
+				var type = result.type;
+
+				if (type == "isaacQuestionPage")
+					type = "Question";
+
+				if (type == "isaacConceptPage")
+					type = "Concept";
+
+				results.push(<button className={"button tiny " + (type == 'Question' ? 'success' : '') + " radius id-result"} onClick={addId.bind(this,result.id)}>{result.title} ({type})<br/>{result.id} <i className="general foundicon-plus"/></button>)
 			}
 
 			return <div className="tags-container" ref="container">

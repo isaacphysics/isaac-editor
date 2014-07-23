@@ -11,7 +11,7 @@ define([], function(helpers) {
 					var ids = [];
 
 					for (var i in results.results) {
-						ids.push({id: results.results[i].id, title: results.results[i].title});
+						ids.push({id: results.results[i].id, title: results.results[i].title, type: results.results[i].type});
 					}
 
 					return resolve(ids);
