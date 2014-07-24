@@ -235,6 +235,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				altText: this.props.doc.altText,
 				attribution: this.props.doc.attribution,
 				level: this.props.doc.level,
+				published: this.props.doc.published,
 			};
 		},
 
