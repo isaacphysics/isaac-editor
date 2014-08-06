@@ -78,13 +78,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getDefaultProps: function() {
 			return {
-				dropdownId: nextTagListId++,
+				dropdownId: nextTagListId++
 			};
 		},
 
 		getInitialState: function() {
 			return {
-				allTags: [],
+				allTags: []
 			};
 		},
 
@@ -160,18 +160,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getInitialState: function() {
 			return {
 				searchString: "",
-				results: [],
+				results: []
 			}
 		},
 
 		onSearchStringChange: function(e) {
 			this.setState({
-				searchString: e.target.value,
+				searchString: e.target.value
 			});
 			var self = this;
 			ContentEditor.getIdList(e.target.value).then(function(ids) {
 				self.setState({
-					results: ids,
+					results: ids
 				});
 			});
 		},
@@ -285,35 +285,45 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			
-			if (this.state.id || this.props.doc.id)
+			if (this.state.id || this.props.doc.id) {
 				newDoc.id = this.state.id;
+			}
 
-			if (this.state.title || this.props.doc.title)
+			if (this.state.title || this.props.doc.title) {
 				newDoc.title = this.state.title;
-			
-			if (this.state.author || this.props.doc.author)
-				newDoc.author = this.state.author;
-			
-			if (this.state.summary || this.props.doc.summary)
+			}
+
+			if (this.state.author || this.props.doc.author) {
+				newDoc.author = this.state.author
+			}
+
+			if (this.state.summary || this.props.doc.summary) {
 				newDoc.summary = this.state.summary;
-			
-			if (this.state.altText || this.props.doc.altText)
+			}
+
+			if (this.state.altText || this.props.doc.altText) {
 				newDoc.altText = this.state.altText;
+			}
 
-			if (this.state.published === true || this.state.published === false)
+			if (this.state.published === true || this.state.published === false) {
 				newDoc.published = this.state.published;
+			}
 
-			if (this.state.attribution || this.props.doc.attribution)
+			if (this.state.attribution || this.props.doc.attribution) {
 				newDoc.attribution = this.state.attribution;
+			}
 
-			if (this.state.level || this.props.doc.level)
+			if (this.state.level || this.props.doc.level) {
 				newDoc.level = parseInt(this.state.level);
+			}
 
-			if (this.state.description || this.props.doc.description)
+			if (this.state.description || this.props.doc.description) {
 				newDoc.description = this.state.description;
+			}
 
-			if (this.state.url || this.props.doc.url)
+			if (this.state.url || this.props.doc.url) {
 				newDoc.url = this.state.url;
+			}
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -356,7 +366,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				var relatedContent = <div className="row">
 					<div className="small-2 columns text-right"><span className="metadataLabel">Related Content:</span></div>
 					<div className="small-10 columns"><RelatedContent ids={this.props.doc.relatedContent || []} onChange={this.onRelatedContentChange} /> </div>
-				</div>;;
+				</div>;
 			}
 
 			if (this.props.doc.type == "isaacWildcard") {
@@ -492,7 +502,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						break;
 					case "markdown":
 						var converter = new Showdown.converter({
-							extensions: ["table"],
+							extensions: ["table"]
 						});
 						var html = converter.makeHtml(this.props.value);
 						renderer.props.dangerouslySetInnerHTML = {__html: html};
@@ -517,7 +527,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>
 				);
 			}
-		},
+		}
 	});
 
 	var ContentChildren = React.createClass({
@@ -683,7 +693,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getInitialState: function() {
 			return {
 				valid: true,
-				editedDoc: this.props.doc,
+				editedDoc: this.props.doc
 			};
 		},
 
@@ -840,7 +850,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					{child}
 				</div>
 			);
-		},
+		}
 	});
 
 	var InsertOp = React.createClass({
@@ -878,7 +888,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			else
 				var DocClass = UnknownBlock;
 			return this.transferPropsTo(DocClass ? DocClass() : <Block blockTypeTitle={"Unknown content type: " + this.props.doc.type} />);
-		},
+		}
 	});
 
 	var FigureBlock = React.createClass({
@@ -1018,7 +1028,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>
 				</Block>
 			);
-		},
+		}
 	});
 
 	var QuestionBlock = React.createClass({
@@ -1225,7 +1235,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var emptyExplanation = {
 				type: "content",
 				children: [],
-				encoding: "markdown",
+				encoding: "markdown"
 			};
 
 			return (
@@ -1254,7 +1264,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			return {
 				editing: false,
 				editedValue: this.props.doc.value,
-				editedUnits: this.props.doc.units,
+				editedUnits: this.props.doc.units
 			};
 		},
 
@@ -1305,7 +1315,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		edit: function() {
 			this.setState({
-				editing: true,
+				editing: true
 			});
 
 			if (enableMathJax && this.refs.content)
@@ -1314,7 +1324,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		done: function() {
 			this.setState({
-				editing: false,
+				editing: false
 			});
 
 			this.onContentChange(this, this.props.doc.value, this.state.editedValue, this.props.doc.units, this.state.editedUnits);
@@ -1336,7 +1346,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var emptyExplanation = {
 				type: "content",
 				children: [],
-				encoding: "markdown",
+				encoding: "markdown"
 			};
 
 			if (this.state.editing) {
@@ -1352,7 +1362,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;
 			} else {
 				var converter = new Showdown.converter({
-					extensions: ["table"],
+					extensions: ["table"]
 				});
 				var html = converter.makeHtml("$\\\\quantity{" + (this.props.doc.value || "") + "}{" + (this.props.doc.units || "") + "}$");
 
@@ -1387,7 +1397,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getInitialState: function() {
 			return {
-				activeTab: this.props.doc.children.length > 0 ? 0 : null,
+				activeTab: this.props.doc.children.length > 0 ? 0 : null
 			}
 		},
 
@@ -1397,10 +1407,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		activateTab: function(i) {
 			this.setState({
-				activeTab: null,
+				activeTab: null
 			}, function() {
 				this.setState({
-					activeTab: i,
+					activeTab: i
 				})
 			});
 		},
@@ -1428,7 +1438,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				this.onDocChange(this, oldDoc, newDoc);
 				this.setState({
-					activeTab: newDoc.children.length > 0 ? 0 : null,
+					activeTab: newDoc.children.length > 0 ? 0 : null
 				})
 			}
 		},
@@ -1442,7 +1452,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				this.onDocChange(this, this.props.doc, newDoc);
 				this.setState({
-					activeTab: newDoc.children.length - 1,
+					activeTab: newDoc.children.length - 1
 				})
 
 			}.bind(this)).catch(function(e) {
@@ -1499,14 +1509,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</Block>
 			);
 
-		},
+		}
 	})
 
 	var AccordionBlock = React.createClass({
 
 		getInitialState: function() {
 			return {
-				activeSection: this.props.doc.children.length > 0 ? 0 : null,
+				activeSection: this.props.doc.children.length > 0 ? 0 : null
 			}
 		},
 
@@ -1516,10 +1526,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		activateSection: function(i) {
 			this.setState({
-				activeSection: null,
+				activeSection: null
 			}, function() {
 				this.setState({
-					activeSection: i,
+					activeSection: i
 				})
 			});
 		},
@@ -1561,7 +1571,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				this.onDocChange(this, oldDoc, newDoc);
 				this.setState({
-					activeSection: newDoc.children.length > 0 ? 0 : null,
+					activeSection: newDoc.children.length > 0 ? 0 : null
 				})
 			}
 		},
@@ -1575,7 +1585,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				this.onDocChange(this, this.props.doc, newDoc);
 				this.setState({
-					activeSection: newDoc.children.length - 1,
+					activeSection: newDoc.children.length - 1
 				})
 
 			}.bind(this)).catch(function(e) {
@@ -1652,7 +1662,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</Block>
 			);
 
-		},
+		}
 	})
 
 	var UnknownBlock = React.createClass({
@@ -1712,13 +1722,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getDefaultProps: function() {
 			return {
 				blockTypeTitle: "",
-				onChange: (function() { console.warn("Called undefined onChange function of block", this.props.doc); }).bind(this),
+				onChange: (function() { console.warn("Called undefined onChange function of block", this.props.doc); }).bind(this)
 			};
 		},
 
 		getInitialState: function() {
 			return {
-				mode: "render",
+				mode: "render"
 			}
 		},
 
