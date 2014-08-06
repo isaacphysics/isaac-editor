@@ -1050,8 +1050,30 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.type = newType;
+			if (newType == "isaacNumericQuestion") {
+				if (!newDoc.hasOwnProperty("requireUnits")) {
+					// Add the default value if it is missing
+					newDoc.requireUnits = false;
+				}
+			} else {
+				// Remove the requireUnits property as it is no longer applicable to this type of question
+				delete newDoc.requireUnits;
+			}
 
-			this.onDocChange(this, oldDoc, newDoc);			
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onCheckboxChange: function(key, e) {
+			if (key != "requireUnits") return;
+
+			console.log("New checkbox state:", e.target.checked);
+
+			// newVal must be a doc
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.requireUnits = e.target.checked;
+
+			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		render: function() {
@@ -1074,6 +1096,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question 
 						<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question 
 						<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question 
+					</div>
+					<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
+						<label><input type="checkbox" checked={this.props.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
 					</div>
 					</form>
 					{exposition}
