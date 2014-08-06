@@ -1053,7 +1053,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (newType == "isaacNumericQuestion") {
 				if (!newDoc.hasOwnProperty("requireUnits")) {
 					// Add the default value if it is missing
-					newDoc.requireUnits = false;
+					newDoc.requireUnits = true;
 				}
 			} else {
 				// Remove the requireUnits property as it is no longer applicable to this type of question
@@ -1098,7 +1098,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question 
 					</div>
 					<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
-						<label><input type="checkbox" checked={this.props.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+						<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
 					</div>
 					</form>
 					{exposition}
