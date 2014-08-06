@@ -92,7 +92,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			$(document).foundation();
 			var self = this;
 			ContentEditor.getTagList().then(function(tags) {
-				self.setState({allTags: tags});
+				self.setState({allTags: tags.sort()});
 			})
 		},
 
@@ -111,7 +111,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			var ts = [];
 
-			for(var t in this.props.tags) {
+			for(var t in this.props.tags.sort()) {
 				t = this.props.tags[t];
 
 				var removeTag = function(t) {
