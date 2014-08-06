@@ -236,6 +236,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				attribution: this.props.doc.attribution,
 				level: this.props.doc.level,
 				published: this.props.doc.published,
+				url: this.props.doc.url,
+				description: this.props.doc.description
 			};
 		},
 
@@ -304,9 +306,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.state.attribution || this.props.doc.attribution)
 				newDoc.attribution = this.state.attribution;
 
-			if (this.state.level || this.props.doc.level) {
+			if (this.state.level || this.props.doc.level)
 				newDoc.level = parseInt(this.state.level);
-			}
+
+			if (this.state.description || this.props.doc.description)
+				newDoc.description = this.state.description;
+
+			if (this.state.url || this.props.doc.url)
+				newDoc.url = this.state.url;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -352,6 +359,19 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;;
 			}
 
+			if (this.props.doc.type == "isaacWildcard") {
+				var wildcardMetadata = [
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Description</span></div>
+						<div className="small-10 columns"><input type="text" value={this.state.description} onChange={this.onTextboxChange.bind(this, "description")} /></div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">URL</span></div>
+						<div className="small-10 columns"><input type="text" value={this.state.url} onChange={this.onTextboxChange.bind(this, "url")} /></div>
+					</div>
+				];
+			}
+
 			if (this.props.doc.type == "isaacQuestionPage") {
 				var questionPageMeta = <div className="row">
 					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution</span></div>
@@ -385,6 +405,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 							<div className="small-10 columns"><input type="text" value={this.state.author} onChange={this.onTextboxChange.bind(this, "author")} /></div>
 						</div>
 
+						{wildcardMetadata}
 						{relatedContent}
 						{figureMeta}
 						{questionPageMeta}
@@ -1142,25 +1163,26 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 
 			if (this.props.doc.layout == "tabs") {
-
 				return (
 					<TabsBlock doc={this.props.doc} onChange={this.onDocChange}/>
 				);
+			}
 
-			} else if (this.props.doc.layout == "accordion") {
-
+			if (this.props.doc.layout == "accordion") {
 				return (
 					<AccordionBlock doc={this.props.doc} onChange={this.onDocChange}/>
 				);
-
-			} else {
-
-				return (
-					<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
-						<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
-					</Block>
-				);
 			}
+
+			if (this.props.doc.type !== "isaacWildcard") {
+				var children = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>;
+			}
+
+			return (
+				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
+					{children}
+				</Block>
+			);
 		}
 	});
 
@@ -1774,6 +1796,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"concept": ContentBlock,
 		"isaacQuestionPage": ContentBlock,
 		"isaacConceptPage": ContentBlock,
+		"isaacWildcard": ContentBlock,
 		"page": ContentBlock,
 		"choice": ChoiceBlock,
 		"quantity": QuantityChoiceBlock,
@@ -1786,7 +1809,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacSymbolicQuestion": QuestionBlock
 	};
 
-	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacConceptPage", "figure"];
+	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacConceptPage", "isaacWildcard", "figure"];
 
 /////////////////////////////////
 // Private instance methods
