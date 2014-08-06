@@ -79,7 +79,20 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 					var msg = $('<input type="text" value="' + "Edited " + scope.file.name + '" />');
 
-					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}]).then(function() {
+					var onShow = function(buttonContainer) {
+						// Deal with enter key
+						function keyup(e) {
+							if (e.which == 13) {
+								buttonContainer.children(":first").click();
+							}
+						}
+
+						msg.on("keyup", keyup);
+						msg.focus();
+						msg.val(msg.val()); // Hackery to put the caret at the end of the textbox
+					}
+
+					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
 
 						github.commitChange(scope.file, scope.file.editedContent, msg.val()).then(function(f) {
 

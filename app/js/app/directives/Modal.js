@@ -4,7 +4,7 @@ define([], function() {
 
 	return function() {
 
-		function show(scope, element, title, lead, text, buttons) {
+		function show(scope, element, title, lead, text, buttons, onShow) {
 
 			var deferred = Promise.defer();
 			var closed = Promise.defer();
@@ -55,7 +55,13 @@ define([], function() {
 
 			deferred.promise.then(hide, hide);
 
+			if (onShow != null) {
+				scope.modal.on('opened.fndtn.reveal', function () {
+					onShow(buttonContainer);
+				});
+			}
 			scope.modal.foundation("reveal", "open");
+
 			$("body").one("click", ".reveal-modal-bg", scope.cancel);
 			$("body").on("keyup", keyup);
 
