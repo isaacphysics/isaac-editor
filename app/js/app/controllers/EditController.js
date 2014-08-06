@@ -21,6 +21,10 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 			if (fullPath.endsWith(".json")) {
 				$rootScope.modal.show("Choose Page Type", "What type of page would you like to create?", "", [
 					{
+						caption: "Wildcard Page",
+						value: "isaacWildcard"
+					},
+					{
 						caption: "Question Page",
 						value: "isaacQuestionPage"
 					},
