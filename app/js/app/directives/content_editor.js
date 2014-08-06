@@ -1016,13 +1016,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
-		onHintsChange: function(c, oldChildren, newChildren) {
-			// newVal must be a list
+		onHintsChange: function(c, oldHintsDoc, newHintsDoc) {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.hints = newChildren;
+			newDoc.hints = newHintsDoc.children;
 
-			this.onDocChange(this, oldDoc, newDoc)
+			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		onChoicesChange: function(c, oldChildren, newChildren) {
@@ -1077,9 +1076,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		render: function() {
+			var hints = {
+				"type": "content",
+				"layout": "tabs",
+				"children": this.props.doc.hints || []
+			};
 
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
-			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><ContentChildren items={this.props.doc.hints || []} encoding={this.encoding} onChange={this.onHintsChange}/></Block>
+			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><TabsBlock doc={hints} onChange={this.onHintsChange} allowTabTitles="false"/></Block>
 			
 			var requiredChildType = this.props.doc.type == "isaacNumericQuestion" ? "quantity" : "choice";
 
@@ -1449,9 +1453,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			tabButtons.push(button);
 
 			if (this.state.activeTab != null) {
+				var editTitle = null;
+				if (!this.props.hasOwnProperty("allowTabTitles") || this.props.allowTabTitles !== "false") {
+					editTitle = <button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;
+				}
 				var thisTab = <div className="active-tab">
 					<div style={{textAlign: "right"}}>
-						<button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;
+						{editTitle}
 						<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
 					</div>
 					<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange} />
