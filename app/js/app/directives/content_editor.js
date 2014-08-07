@@ -1497,7 +1497,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.state.activeTab != null) {
 				var editTitle = null;
 				if (!this.props.hasOwnProperty("allowTabTitles") || this.props.allowTabTitles !== "false") {
-					editTitle = <button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;
+					editTitle = <span><button onClick={this.setTitle} className="tiny radius">Edit tab title...</button>&nbsp;</span>
 				}
 				var thisTab = <div className="active-tab">
 					<div style={{textAlign: "right"}}>
