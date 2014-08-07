@@ -5,8 +5,7 @@
 <div class="row">
 	<div id="content" class="small-12 columns">
 		<content-editor ng-if="document" document="document" on-change="editedFile" file-loader="fileLoader" figure-uploader="figureUploader"></content-editor>
-        <file-editor ng-if="!document && fileType === 'svg'" value="documentString" on-change="editedFile"></file-editor>
-        <text-editor ng-if="!document && documentString != null && fileType !== 'svg'" value="documentString" on-change="editedFile"></text-editor>
+		<text-editor ng-if="!document && documentString != null" value="documentString" on-change="editedFile"></text-editor>
 		<div ng-if="!document && documentString == null">
 			<h4>Please load a file from the browser on the left.</h4>
 		</div>

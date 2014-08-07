@@ -1107,10 +1107,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		render: function() {
-			if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
-				this.props.doc.requireUnits = true;
-			}
-
 			var hints = {
 				"type": "content",
 				"layout": "tabs",
@@ -1118,21 +1114,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			};
 
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
-			var optionalHints = <Block type="hints" blockTypeTitle="Hints">
-				<TabsBlock doc={hints} onChange={this.onHintsChange} allowTabTitles="false"/>
-			</Block>
-
+			var optionalHints = <Block type="hints" blockTypeTitle="Hints"><TabsBlock doc={hints} onChange={this.onHintsChange} allowTabTitles="false"/></Block>
+			
 			var requiredChildType = this.props.doc.type == "isaacNumericQuestion" ? "quantity" : "choice";
 
 			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion")
-				var choices = <Block type="choices" blockTypeTitle="Choices">
-					<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
-				</Block>
+				var choices = <Block type="choices" blockTypeTitle="Choices"><ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/></Block>
 
-			if (!this.props.doc.answer) {
+			if (!this.props.doc.answer)
 				console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
-			}
-
 			return (
 				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 					<form>
