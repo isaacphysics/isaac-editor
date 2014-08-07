@@ -332,6 +332,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 				scope.filePath = file.path;
 				scope.file = file;
+				scope.fileType = file.name.split('.').pop();
 
 				scope.dirPath = scope.path.substr(0, scope.path.lastIndexOf("/"));
 
