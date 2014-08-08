@@ -1149,11 +1149,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					{exposition}
 					{choices}
 					<div className="row">
-						<div className="large-6 columns">
+						<div className="large-12 columns">
 							<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
 						</div>
-						<div className="large-6 columns">
-							{optionalHints}
+					</div>
+					<div className="row">
+						<div className="large-12 columns">
+								{optionalHints}
 						</div>
 					</div>
 				</Block>
