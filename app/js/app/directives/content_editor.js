@@ -1371,10 +1371,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					&nbsp;<button onClick={this.done} className="button tiny">Done</button>
 				</div>;
 			} else {
-				var converter = new Showdown.converter({
-					extensions: ["table"]
-				});
-				var html = converter.makeHtml("$\\\\quantity{" + (this.props.doc.value || "") + "}{" + (this.props.doc.units || "") + "}$");
+				var html = "$\\quantity{" + (this.props.doc.value || "") + "}{" + (this.props.doc.units || "") + "}$";
 
 				if (this.props.doc.value) {
 					var content = <span onClick={this.edit} ref="content" dangerouslySetInnerHTML={{__html: html}}></span>;
