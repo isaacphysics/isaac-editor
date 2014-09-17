@@ -1033,6 +1033,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 	var QuestionBlock = React.createClass({
 
+		getInitialState: function() {
+			return {
+				sigFigs: this.props.doc.sigFigs,
+			}
+		},
+
 		onDocChange: function(c, oldDoc, newDoc) {
 			this.props.onChange(this, oldDoc, newDoc);
 		},
@@ -1069,6 +1075,19 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.answer = newAnswerDoc;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onSigFigsChange: function(e) {
+
+			this.setState({
+				sigFigs: e.target.value
+			});
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.sigFigs = parseInt(e.target.value);
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -1144,6 +1163,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>
 					<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
 						<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+						<label>Significant Figures: <input type="text" value={this.state.sigFigs} onChange={this.onSigFigsChange} style={{display:"inline", width: "initial"}}/></label>
 					</div>
 					</form>
 					{exposition}
