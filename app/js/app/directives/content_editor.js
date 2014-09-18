@@ -1035,7 +1035,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getInitialState: function() {
 			return {
-				sigFigs: this.props.doc.sigFigs,
+				significantFigures: this.props.doc.significantFigures,
 			}
 		},
 
@@ -1079,15 +1079,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
-		onSigFigsChange: function(e) {
+		onSignificantFiguresChange: function(e) {
 
 			this.setState({
-				sigFigs: e.target.value
+				significantFigures: e.target.value
 			});
 
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.sigFigs = parseInt(e.target.value);
+			newDoc.significantFigures = parseInt(e.target.value);
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -1163,7 +1163,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>
 					<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
 						<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
-						<label>Significant Figures: <input type="text" value={this.state.sigFigs} onChange={this.onSigFigsChange} style={{display:"inline", width: "initial"}}/></label>
+						<label>Significant Figures: <input type="text" value={this.state.significantFigures} onChange={this.onSignificantFiguresChange} style={{display:"inline", width: "initial"}}/></label>
 					</div>
 					</form>
 					{exposition}
