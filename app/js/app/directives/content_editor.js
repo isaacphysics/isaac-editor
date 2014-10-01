@@ -350,7 +350,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;
 			}
 
-			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page") {
+			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page") {
 				var pageMeta = [
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
@@ -382,7 +382,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				];
 			}
 
-			if (this.props.doc.type == "isaacQuestionPage") {
+			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage") {
 				var questionPageMeta = <div className="row">
 					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution</span></div>
 					<div className="small-10 columns"><input type="text" value={this.state.attribution} onChange={this.onTextboxChange.bind(this, "attribution")} /></div>
@@ -1834,6 +1834,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"content": ContentBlock,
 		"concept": ContentBlock,
 		"isaacQuestionPage": ContentBlock,
+		"isaacFastTrackQuestionPage": ContentBlock,
 		"isaacConceptPage": ContentBlock,
 		"isaacWildcard": ContentBlock,
 		"page": ContentBlock,
@@ -1848,7 +1849,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacSymbolicQuestion": QuestionBlock
 	};
 
-	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacConceptPage", "isaacWildcard", "figure"];
+	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure"];
 
 /////////////////////////////////
 // Private instance methods
