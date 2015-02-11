@@ -78,6 +78,16 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         {
             if (initialContent == null)
                 initialContent = " ";
+
+
+            var encodedContent = "";
+            try {
+                encodedContent = window.btoa(initialContent);
+            } catch (e) {
+                console.warn("Couldn't encode using built-in btoa")
+                encodedContent = B64.btoa(initialContent);
+            }
+
             var p = wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
                                     {
                                         type: "PUT",
@@ -87,8 +97,10 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
                                         JSON.stringify({
                                             message: "Creating " + path,
                                             branch: this.branch,
-                                            content: B64.btoa(initialContent),
-                                    })}));
+                                            content: encodedContent,
+                                        })
+                                    })
+                            );
                                     
             if (this.enableLogging)
                 p.then(function(f) {
