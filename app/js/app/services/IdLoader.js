@@ -4,7 +4,7 @@ define([], function(helpers) {
 
 		return function(searchText) {
 			return new Promise(function(resolve, reject) {
-				$http.get(api + "/content/search/" + searchText + "?types=isaacConceptPage,isaacQuestionPage").then(function(r) {
+				$http.get(api + "/search/" + searchText + "?types=isaacConceptPage,isaacQuestionPage").then(function(r) {
 					var results = r.data;
 					console.log("Received content search results:", results);
 
