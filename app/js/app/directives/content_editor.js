@@ -522,6 +522,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			case "edit":
 				return (
 					<div>
+						<div className="row">
+							<div className="small-1 small-offset-6 columns text-right">
+								ID:
+							</div>
+							<div className="small-5 columns">
+								<input type="text" value={this.props.id} />
+							</div>
+						</div>
 						<div ref="placeholder" />
 						<button type="button" onClick={this.onDone}>Done</button>
 					</div>
@@ -533,9 +541,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	var ContentChildren = React.createClass({
 
 		getInitialState: function() {
-			return {keys: this.props.items.map(function(e,i) {
-				return Math.random();
-			})};
+			return {
+				keys: this.props.items.map(function(e,i) {
+					return Math.random();
+				}),
+
+				itemIds: this.props.items.map(function(e,i) {
+					return e.id;
+				}),
+			};
 		},
 
 		onItemChange: function(index, c, oldDoc, newDoc) {
@@ -598,6 +612,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		},
 
+		onItemIdChange: function(index, e) {
+			var newId = e.target.value;
+			var oldDoc = this.props.items[index];
+			var newDoc = JSON.parse(JSON.stringify(oldDoc));
+			newDoc.id = newId;
+
+			this.onItemChange(index, this, oldDoc, newDoc);
+		},
+
 		getItemComponent: function(item,index) {
 
 			return (<div key={this.state.keys[index]} className="ops-wrapper children" onMouseEnter={this.opsMouseEnter.bind(this, index)} onMouseLeave={this.opsMouseLeave.bind(this, index)}>
@@ -607,6 +630,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						          onMouseLeave={this.insertMouseLeave.bind(this, index)} 
 						          ref={"insertBefore" + index}/>
 
+						<div className="op-id text-right" ref={"id" + index}>ID: <input className="inline" value={this.state.itemIds[index]} onChange={this.onItemIdChange.bind(this, index)} /></div>
 	           			<VariantBlock doc={item} 
 	           			              disableListOps 
 	           			              onChange={this.onItemChange.bind(this, index)} 
@@ -617,6 +641,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						          onMouseEnter={this.deleteMouseEnter.bind(this,index)} 
 						          onMouseLeave={this.deleteMouseLeave.bind(this,index)}
 						          ref={"delete" + index} />
+
 
 	           		</div>);
 		},
@@ -643,10 +668,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		deleteMouseEnter: function(index) {
 			$(this.refs["item" + index].getDOMNode()).addClass("highlight-delete")
+			$(this.refs["id" + index].getDOMNode()).addClass("highlight-delete")
 		},
 
 		deleteMouseLeave: function(index) {
 			$(this.refs["item" + index].getDOMNode()).removeClass("highlight-delete")
+			$(this.refs["id" + index].getDOMNode()).removeClass("highlight-delete")
 		},
 
 		onMouseEnter: function() {
@@ -1444,6 +1471,19 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			});
 		},
 
+		setId: function() {
+			var newId = window.prompt("Type a new ID for this tab:", this.props.doc.children[this.state.activeTab].id);
+			if (newId != null)
+			{
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeTab].id = newId;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			}
+		},
+
 		setTitle: function() {
 			var newTitle = window.prompt("Type a new title for this tab:", this.props.doc.children[this.state.activeTab].title);
 			if (newTitle != null)
@@ -1520,6 +1560,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				}
 				var thisTab = <div className="active-tab">
 					<div style={{textAlign: "right"}}>
+						<span><small>ID: {this.props.doc.children[this.state.activeTab].id}&nbsp;</small></span>
+						<button onClick={this.setId} className="tiny radius">Edit tab ID...</button>&nbsp;
 						{editTitle}
 						<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
 					</div>
@@ -1561,6 +1603,19 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					activeSection: i
 				})
 			});
+		},
+
+		setId: function() {
+			var newId = window.prompt("Type a new ID for this accordion section:", this.props.doc.children[this.state.activeSection].id);
+			if (newId != null)
+			{
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeSection].id = newId;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			}
 		},
 
 		setTitle: function() {
@@ -1670,6 +1725,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.state.activeSection != null) {
 				var thisSection = <div className="active-accordion-section">
 					<div style={{textAlign: "right"}}>
+						<span><small>ID: {this.props.doc.children[this.state.activeSection].id}&nbsp;</small></span>
+						<button onClick={this.setId} className="tiny radius">Edit section ID...</button>&nbsp;
 						<button onClick={this.setTitle} className="tiny radius">Edit section title...</button>&nbsp;
 						<button onClick={this.setLevel} className="tiny radius">Edit section level...</button>&nbsp;
 						<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>

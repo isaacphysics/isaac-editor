@@ -133,6 +133,16 @@ body {
   z-index: 50;
 }
 
+
+.op-id {
+  padding-top: 1rem;
+  margin-right: 50px;
+
+  &.highlight-delete {
+    border: none;
+  }
+}
+
 .highlight.above-split {
   -webkit-transform: translateY(-10px);
   -webkit-transform-origin: 0%  100%;
