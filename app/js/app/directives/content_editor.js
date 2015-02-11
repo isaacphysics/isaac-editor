@@ -1047,7 +1047,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				<Block type="video" blockTypeTitle="Video" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-6 columns text-center">
-							<img width="250px" height="250px" src="static/images/not-found.png" />
+							Video src: {this.props.doc.src}
 						</div>
 						<div className="small-6 columns">
 							{optionalCaption}
