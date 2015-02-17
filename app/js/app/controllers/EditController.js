@@ -110,6 +110,8 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 							scope.fileIsEdited = false;
 							scope.$apply();
 
+							scope.$broadcast("fileSaved");
+
 							return resolve();
 						}).catch(function(e) {
 							console.error("Could not save file:", e);
@@ -314,7 +316,6 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 		scope.branch = routeParams.branch || "master";
 		scope.path = routeParams.path || "";
-
 
 		github.branch = scope.branch;
 

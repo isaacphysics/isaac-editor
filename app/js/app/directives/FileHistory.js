@@ -1,6 +1,6 @@
 define(["github/github"], function() {
 
-	return ["github", "Repo", function(github, repo) {
+	return ["github", "Repo", "$routeParams", "$location", function(github, repo, $routeParams, $location) {
 
 		return {
 
@@ -16,11 +16,15 @@ define(["github/github"], function() {
 
 				scope.history = [];
 
-				scope.$watch("filePath", function(newPath) {
-					if (!newPath)
+				var refreshHistory = function() {
+					if (!scope.filePath)
 						return;
 
-					github.getCommits(repo.owner, repo.name, newPath).then(function(cs) {
+					scope.previewPastVersion = function(sha) {
+						$location.url("/edit/" + sha + "/" + scope.filePath);
+					}
+
+					github.getCommits(repo.owner, repo.name, scope.filePath).then(function(cs) {
 						console.debug("Commits:", cs);
 
 						scope.history.length = 0;
@@ -29,7 +33,7 @@ define(["github/github"], function() {
 							var c = cs[i];
 
 							scope.history.push({
-								date: c.commit.committer.date,
+								date: new Date(c.commit.committer.date).toString().substring(0,21),
 								name: c.commit.committer.name,
 								sha: c.sha,
 							});
@@ -37,8 +41,14 @@ define(["github/github"], function() {
 						}
 
 						scope.$apply();
-					})
-				})
+					});
+				};
+
+				scope.$watch("filePath", refreshHistory);
+				scope.$on("fileSaved", refreshHistory);
+
+
+				scope.sha = $routeParams.branch;
 			},
 		};
 	}];

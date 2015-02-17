@@ -9,7 +9,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 // Constructor
 /////////////////////////////////
 
-	function ContentEditor(container, document) {
+	function ContentEditor(container, document, readOnly) {
 		console.log("Loading doc into JSON editor:", document);
 
 		this.editor = <VariantBlock doc={document}  blockTypeTitle="Content Object"/>;
@@ -242,6 +242,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onDocChange: function(c, oldDoc, newDoc) {
+			if (ContentEditor.readOnly)
+				return;
+
 			this.props.onChange(this, oldDoc, newDoc);
 		},		
 		
@@ -262,6 +265,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onTextboxChange: function(key, e) {
+			if (ContentEditor.readOnly)
+				return;
+
 			var newState = {};
 			newState[key] = e.target.value;
 			this.setState(newState);
@@ -271,6 +277,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onCheckboxChange: function(key, e) {
+			if (ContentEditor.readOnly)
+				return;
+
 			var newState = {};
 			newState[key] = e.target.checked;
 			this.setState(newState);
@@ -434,6 +443,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		switchToEdit: function(e) {
 
+			if (ContentEditor.readOnly)
+				return;
+
 			var hasDefault = (/^_Enter .* Here_$/i).test(this.props.value);
 
 			this.setState({
@@ -522,14 +534,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			case "edit":
 				return (
 					<div>
-						<div className="row">
-							<div className="small-1 small-offset-6 columns text-right">
-								ID:
-							</div>
-							<div className="small-5 columns">
-								<input type="text" value={this.props.id} />
-							</div>
-						</div>
 						<div ref="placeholder" />
 						<button type="button" onClick={this.onDone}>Done</button>
 					</div>
@@ -593,7 +597,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.props.onChange(this, oldItems, newItems);
 		},
 
-		opsMouseEnter: function(index) {			
+		opsMouseEnter: function(index) {	
+			if (ContentEditor.readOnly)
+				return;
+
+		
 			if (index >= 0)
 				$(this.refs["insertBefore" + index].getDOMNode()).addClass("op-display");
 			$(this.refs["insertBefore" + (index + 1)].getDOMNode()).addClass("op-display");
@@ -695,15 +703,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				];
 			}
 
-			// Add the final insert op to the last child.
-			children[children.length-1].props.children.push(
-				<InsertOp className="below" 
-						  onClick={this.insertAtEnd} 
-						  disabled={this.props.disableListOps} 
-						  onMouseEnter={this.insertMouseEnter.bind(this, this.props.items.length)} 
-						  onMouseLeave={this.insertMouseLeave.bind(this, this.props.items.length)} 
-						  ref={"insertBefore" + this.props.items.length}/>
-			);
+			if (!ContentEditor.readOnly) {
+				// Add the final insert op to the last child.
+				children[children.length-1].props.children.push(
+					<InsertOp className="below" 
+							  onClick={this.insertAtEnd} 
+							  disabled={this.props.disableListOps} 
+							  onMouseEnter={this.insertMouseEnter.bind(this, this.props.items.length)} 
+							  onMouseLeave={this.insertMouseLeave.bind(this, this.props.items.length)} 
+							  ref={"insertBefore" + this.props.items.length}/>
+				);
+			}
+
 
 			return (
 				<div className="content-children" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
@@ -1498,6 +1509,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		deleteTab: function() {
+			if (ContentEditor.readOnly)
+				return;
+
 			var doIt = window.confirm("Are you sure you want to delete this tab?");
 
 			if (doIt) {
@@ -1550,8 +1564,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				tabButtons.push(button);
 			}
 
-			var button = <button key="newTabButton" onClick={this.addTab} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
-			tabButtons.push(button);
+			if (!ContentEditor.readOnly) {
+				var button = <button key="newTabButton" onClick={this.addTab} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
+				tabButtons.push(button);
+			}
+
 
 			if (this.state.activeTab != null) {
 				var editTitle = null;
@@ -1646,6 +1663,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		deleteSection: function() {
+			if (ContentEditor.readOnly)
+				return;
+
 			var doIt = window.confirm("Are you sure you want to delete this section?");
 
 			if (doIt) {
@@ -1719,8 +1739,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				sectionButtons.push(<br key={Math.random()}/>);
 			}
 
-			var button = <button key="newSectionButton" onClick={this.addSection} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
-			sectionButtons.push(button);
+			if (!ContentEditor.readOnly) {
+				var button = <button key="newSectionButton" onClick={this.addSection} className={"round alert tiny"}><i className="foundicon-plus"></i></button>;
+				sectionButtons.push(button);
+			}
+
 
 			if (this.state.activeSection != null) {
 				var thisSection = <div className="active-accordion-section">
@@ -1915,6 +1938,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	// Must be called with 'this' bound to the instance.
 	function docChanged(c, oldDoc, newDoc) {
 		console.log("Document changed:", newDoc);
+
+		if (ContentEditor.readOnly)
+			return;
 
 		this.history.push(oldDoc);
 		this.editor.setProps({doc: newDoc});

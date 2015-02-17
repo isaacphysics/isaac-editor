@@ -1,8 +1,12 @@
 <div>
-	<form>
-		<div ng-repeat="h in history">
-			<input name="chosenSha" type="radio" />
-			<a href="#"><span style="display:inline-block;" class="small">{{h.name}}<br>{{h.date}}</span></a>
-		</div>
-	</form>
+	<h4>Version History</h4>
+	<ul class="side-nav">
+		<li ng-repeat="h in history">
+			<a ng-if="sha!='master' && $first" href="javascript:void(0)" ng-click="previewPastVersion('master')"><span style="display:inline-block;" class="small">{{h.date}}<br>{{h.name}}</span></a>
+			<span ng-if="sha == 'master' && $first" style="display:inline-block;" class="small">{{h.date}}<br>{{h.name}}</span>
+
+			<a ng-if="h.sha != sha && !$first" href="javascript:void(0)" ng-click="previewPastVersion(h.sha)"><span style="display:inline-block;" class="small">{{h.date}}<br>{{h.name}}</span></a>
+			<span ng-if="h.sha == sha && !$first" style="display:inline-block;" class="small">{{h.date}}<br>{{h.name}}</span>
+		</li>
+	</ul>
 </div>

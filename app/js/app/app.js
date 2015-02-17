@@ -34,6 +34,7 @@ define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github
 		$routeProvider.when('/edit', {templateUrl: 'partials/edit.html', controller: 'EditController', resolve: {user: loginResolver}});
 		$routeProvider.when('/edit/:branch', {templateUrl: 'partials/edit.html', controller: 'EditController', resolve: {user: loginResolver}});
 		$routeProvider.when('/edit/:branch/:path*', {templateUrl: 'partials/edit.html', controller: 'EditController', resolve: {user: loginResolver}});
+		$routeProvider.when('/edit/:branch/:path*/:sha', {templateUrl: 'partials/edit.html', controller: 'EditController', resolve: {user: loginResolver}});
 
 		$routeProvider.when("/login", {template: "", controller: "LoginController"});
 		$routeProvider.when("/login_progress", {template: "Logging in..."});
