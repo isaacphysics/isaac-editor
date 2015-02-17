@@ -1,6 +1,6 @@
 'use strict';
 
-define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_editor", "app/directives/FileBrowser", "app/directives/Modal", "app/services/FigureUploader", "app/directives/TextEditor", "app/directives/ScooterVersion"], function() {
+define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_editor", "app/directives/FileBrowser", "app/directives/FileHistory", "app/directives/Modal", "app/services/FigureUploader", "app/directives/TextEditor", "app/directives/ScooterVersion"], function() {
 
 	var ContentEditor = require("jsx!app/directives/content_editor");
 
@@ -51,6 +51,8 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 	.directive("textEditor", require("app/directives/TextEditor"))
 
 	.directive("fileBrowser", require("app/directives/FileBrowser"))
+
+	.directive("fileHistory", require("app/directives/FileHistory"))
 
 	.directive("modal", require("app/directives/Modal"))
 

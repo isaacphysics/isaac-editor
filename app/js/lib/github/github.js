@@ -260,6 +260,18 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
                                    }));
         }
 
+        this.getCommits = function(repoOwner, repoName, filePath) {
+            return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/commits",
+            {
+                data: {
+                    "access_token": this.token,
+                    "path": filePath
+                },
+                type: "GET",
+                dataType: "json",
+            }))
+        }
+
     }
 
     return Github;
