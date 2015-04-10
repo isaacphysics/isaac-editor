@@ -758,6 +758,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		render: function() {
 			return (
 				<div>
+					<button type="button" onClick={this.onDone}>Done</button>
 					<div ref="content" />
 					<button type="button" onClick={this.onDone}>Done</button>
 				</div>
