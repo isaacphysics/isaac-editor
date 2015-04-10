@@ -530,6 +530,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 								<input type="text" value={this.props.id} />
 							</div>
 						</div>
+						<button type="button" onClick={this.onDone}>Done</button>
 						<div ref="placeholder" />
 						<button type="button" onClick={this.onDone}>Done</button>
 					</div>
