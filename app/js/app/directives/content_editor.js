@@ -232,8 +232,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getInitialState: function() {
 
-			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm") : "";
-			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm") : "";
+			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "+0000") : "";
+			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "+0000") : "";
 
 			return {
 				id: this.props.doc.id,
