@@ -232,8 +232,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getInitialState: function() {
 
-			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "+0000") : "";
-			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "+0000") : "";
+			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
+			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
 
 			return {
 				id: this.props.doc.id,
@@ -299,11 +299,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				dateInput: newVal,
 			});
 
-			var d = Date.parse(newVal + " +0000");
+			var d = Date.parse(newVal.replace("-", "/"));
 			if (d) {
 				dt = new Date(d);
 				this.setState({
-					dateOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "+0000"),
+					dateOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "UTC"),
 					dateInt: d,
 				});
 
