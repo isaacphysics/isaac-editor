@@ -238,6 +238,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			return {
 				id: this.props.doc.id,
 				title: this.props.doc.title,
+				subtitle: this.props.doc.subtitle,
 				author: this.props.doc.author,
 				summary: this.props.doc.summary,
 				altText: this.props.doc.altText,
@@ -323,6 +324,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.state.title || this.props.doc.title) {
 				newDoc.title = this.state.title;
+			}
+
+			if (this.state.subtitle || this.props.doc.subtitle) {
+				newDoc.subtitle = this.state.subtitle;
 			}
 
 			if (this.state.author || this.props.doc.author) {
@@ -458,6 +463,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Title: </span></div>
 							<div className="small-10 columns"><input type="text" value={this.state.title} onChange={this.onTextboxChange.bind(this, "title")} /></div>
+						</div>
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Subtitle: </span></div>
+							<div className="small-10 columns"><input type="text" value={this.state.subtitle} onChange={this.onTextboxChange.bind(this, "subtitle")} /></div>
 						</div>
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Author: </span></div>
