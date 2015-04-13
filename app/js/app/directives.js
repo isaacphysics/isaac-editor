@@ -14,7 +14,7 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 	    };
 	}])
 
-	.directive("contentEditor", ["SnippetLoader", "TagLoader", "IdLoader", function(snippetLoader, tagLoader, idLoader) {
+	.directive("contentEditor", ["SnippetLoader", "TagLoader", "IdLoader", "$filter", function(snippetLoader, tagLoader, idLoader, $filter) {
 
 		function link(scope, element, attrs) {
 			scope.$watch("document", function(newVal, oldVal, scope) {
@@ -24,6 +24,7 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 				ContentEditor.snippetLoader = snippetLoader;
 				ContentEditor.getTagList = tagLoader;
 				ContentEditor.getIdList = idLoader;
+				ContentEditor.dateFilter = $filter("date");
 				scope.editor = new ContentEditor(element[0], scope.document);
 			})
 

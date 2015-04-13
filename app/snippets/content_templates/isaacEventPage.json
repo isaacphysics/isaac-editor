@@ -2,5 +2,12 @@
     "title": "Student Workshop",
     "encoding": "markdown",
     "type": "isaacEventPage",
-    "value": "Add event page content here"
+    "value": "Add event page content here",
+    "location": {
+        "addressLine1": "",
+        "addressLine2": "",
+        "town": "",
+        "county": "",
+        "postalCode": ""
+    }
 }

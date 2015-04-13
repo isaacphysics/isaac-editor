@@ -55,6 +55,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		})
 	}
 
+	ContentEditor.dateFilter = function(d) {
+		return d.toString(); // Replace this with something nicer. Like the angular date filter, for instance.
+	}
+
 /////////////////////////////////
 // Private static component classes
 /////////////////////////////////
@@ -227,6 +231,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	var MetaData = React.createClass({
 
 		getInitialState: function() {
+
+			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm") : "";
+			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm") : "";
+
 			return {
 				id: this.props.doc.id,
 				title: this.props.doc.title,
@@ -237,8 +245,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				level: this.props.doc.level,
 				published: this.props.doc.published,
 				url: this.props.doc.url,
-				description: this.props.doc.description
+				description: this.props.doc.description,
+				dateInput: dip,
+				dateOutput: dop,
+				dateInt: this.props.doc.date,
 			};
+
 		},
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -279,6 +291,26 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			clearTimeout(this.metadataChangeTimeout);
 			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+		},
+
+		onDateChange: function(e) {
+			var newVal = e.target.value;
+			this.setState({
+				dateInput: newVal,
+			});
+
+			var d = Date.parse(newVal + " +0000");
+			if (d) {
+				dt = new Date(d);
+				this.setState({
+					dateOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "+0000"),
+					dateInt: d,
+				});
+
+				clearTimeout(this.metadataChangeTimeout);
+				this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+
+			}
 		},
 
 		onMetadataChangeTimeout: function() {
@@ -323,6 +355,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.state.url || this.props.doc.url) {
 				newDoc.url = this.state.url;
+			}
+
+			if (this.state.dateInt || this.props.doc.dateInt) {
+				newDoc.date = this.state.dateInt;
 			}
 
 			this.onDocChange(this, oldDoc, newDoc);
@@ -382,6 +418,19 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				];
 			}
 
+			if (this.props.doc.type == "isaacEventPage") {
+				var eventMetadata = [
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
+						<div className="small-5 columns"><input type="text" value={this.state.dateInput} onChange={this.onDateChange} /></div>
+						<div className="small-5 columns">{this.state.dateOutput}</div>
+					</div>,
+					<div className="row">
+						<div className="small-offset-2 small-5 columns"><span className="metadataLabel"></span></div>
+					</div>
+				];
+			}
+
 			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage") {
 				var questionPageMeta = <div className="row">
 					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution</span></div>
@@ -421,6 +470,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{questionPageMeta}
 						{levelMeta}
 						{pageMeta}
+						{eventMetadata}
 					</div>
 				</div>
 			);
@@ -1895,6 +1945,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacQuestionPage": ContentBlock,
 		"isaacFastTrackQuestionPage": ContentBlock,
 		"isaacConceptPage": ContentBlock,
+		"isaacEventPage": ContentBlock,
 		"isaacWildcard": ContentBlock,
 		"page": ContentBlock,
 		"choice": ChoiceBlock,
@@ -1908,7 +1959,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacSymbolicQuestion": QuestionBlock
 	};
 
-	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure"];
+	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage"];
 
 /////////////////////////////////
 // Private instance methods
