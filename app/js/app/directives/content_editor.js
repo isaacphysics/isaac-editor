@@ -299,7 +299,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				dateInput: newVal,
 			});
 
-			var d = Date.parse(newVal.replace("-", "/"));
+			var d = Date.parse(newVal.replace(/\-/g, "/"));
 			if (d) {
 				dt = new Date(d);
 				this.setState({
