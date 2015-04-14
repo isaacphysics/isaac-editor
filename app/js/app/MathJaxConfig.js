@@ -32,7 +32,9 @@ define(["mathjax"], function() {
 				"eighth": ["\\frac{1}{8}",0],
 				"e": ["\\textrm{e}",0],
 				"units": ["\\rm{#1}",1],
-			}
+			},
+			extensions: ["mhchem.js"],
+
 		},
 	});
 
