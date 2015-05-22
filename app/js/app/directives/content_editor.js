@@ -1957,6 +1957,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacEventPage": ContentBlock,
 		"isaacWildcard": ContentBlock,
 		"page": ContentBlock,
+		"isaacPageFragment": ContentBlock,
 		"choice": ChoiceBlock,
 		"quantity": QuantityChoiceBlock,
 		"video": VideoBlock,
