@@ -1969,7 +1969,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacSymbolicQuestion": QuestionBlock
 	};
 
-	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage"];
+	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment"];
 
 /////////////////////////////////
 // Private instance methods
