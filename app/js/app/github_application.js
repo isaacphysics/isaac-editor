@@ -34,6 +34,10 @@ define(function() {
                 clientId : "382df8e67b1f810c99a3",
                 authCode : "d42ab912388a8deb41a875310c06b54743e9b90deabd127f88436ab98a9c0b294e4fc75e0a81bce5ee631b4fe74af4c26a9af49f1cfd8e26529b3471f611b11ccace2ec416f827013ec600caae16bf5cde99e5714601835436263411b5795a1c",
             },
+            "isaac-editor.dtg.cl.cam.ac.uk": {
+                clientId : "012d68f7ffd3a99110ff",
+                authCode : "6e7afcbf0e9eb62888223870af02eab8d726536e426b5151f4101d3e043fc0dfa4c09e6a3aa4d808da274c8e9f1bf0be4efd99fae0d5c7fded9c50cfa6425aec97ab9b62f5329de1f024c693323338cda1e3bcd9175e1a1c7a39585f13436d5f",
+            },
         }
     };
 });
