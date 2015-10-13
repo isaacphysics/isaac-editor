@@ -5,7 +5,6 @@ require.config({
     paths: {
         "app": '../app',
         "jquery": '../../bower_components/jquery/dist/jquery',
-        "modernizr": '../../bower_components/modernizr/modernizr',
         "foundation": '../../bower_components/foundation/js/foundation',
         "angular": '../../bower_components/angular/angular',
         "angular-route": '../../bower_components/angular-route/angular-route',
@@ -19,7 +18,7 @@ require.config({
 
     shim: {
 
-        "foundation": ['jquery', 'modernizr'],
+        "foundation": ['jquery'],
         "angular-route": ['angular'],
         "angular": ['jquery'],
         "codemirrorJS": ["codemirror/codemirror"],
