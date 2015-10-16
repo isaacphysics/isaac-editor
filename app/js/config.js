@@ -13,7 +13,7 @@ require.config({
         "angulartics": '../../bower_components/angulartics/src/angulartics',
         "angulartics-ga": '../../bower_components/angulartics/src/angulartics-ga',
         "codemirrorJS": "codemirror/mode/javascript/javascript",
-        "mathjax": 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+        "mathjax": '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
     },
 
     shim: {
