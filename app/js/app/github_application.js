@@ -19,7 +19,7 @@
 define(function() {
 
     return {
-        authServer: "http://www-dyn.cl.cam.ac.uk/~ipd21/tealight-auth-server/",
+        authServer: "https://www-dyn.cl.cam.ac.uk/~ipd21/tealight-auth-server/",
 
         hosts: {
         	"localhost:8000": {
