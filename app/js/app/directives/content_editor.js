@@ -252,6 +252,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				dateInt: this.props.doc.date,
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
+				location: this.props.doc.location || {},
 			};
 
 		},
@@ -376,7 +377,21 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.appAccessKey = this.state.appAccessKey;
 			}
 
+			if (this.state.location || this.props.doc.location) {
+				newDoc.location = this.state.location;
+			}
+
 			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onLocationChange: function(field, e) {
+			var newLoc = {};
+			newState = $.extend({}, this.state);
+			newState.location[field] = e.target.value;
+
+			this.setState(newState);
+			clearTimeout(this.metadataChangeTimeout);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
 		},
 
 		toggleMetaData_click: function(e) {
@@ -441,8 +456,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="small-5 columns">{this.state.dateOutput}</div>
 					</div>,
 					<div className="row">
-						<div className="small-offset-2 small-5 columns"><span className="metadataLabel"></span></div>
-					</div>
+						<div className="small-2 columns text-right"><span className="metadataLabel">Location</span></div>
+						<div className="small-5 columns end">
+							<input type="text" placeholder="Address Line 1" value={this.state.location.addressLine1} onChange={this.onLocationChange.bind(this, "addressLine1")} />
+							<input type="text" placeholder="Address Line 2" value={this.state.location.addressLine2} onChange={this.onLocationChange.bind(this, "addressLine2")} />
+							<input type="text" placeholder="Town" value={this.state.location.town} onChange={this.onLocationChange.bind(this, "town")} />
+							<input type="text" placeholder="County" value={this.state.location.county} onChange={this.onLocationChange.bind(this, "county")} />
+							<input type="text" placeholder="Postal Code" value={this.state.location.postalCode} onChange={this.onLocationChange.bind(this, "postalCode")} />
+						</div>
+					</div>,
 				];
 			}
 
@@ -1351,9 +1373,20 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		onLocationClick: function() {
+			this.refs.blk.onMdClick();
+		},
+
 		render: function() {
+
+			if (this.props.doc.location) {
+				var loc = [<div style={{color: "#aaa"}} onClick={this.onLocationClick}><br/>
+					{this.props.doc.location.addressLine1}, {this.props.doc.location.county}
+				</div>,<br/>];
+			}
 			return (
-				<Block type="eventPage" blockTypeTitle="Event Page" doc={this.props.doc} onChange={this.onDocChange}>
+				<Block ref="blk" type="eventPage" blockTypeTitle="Event Page" doc={this.props.doc} onChange={this.onDocChange}>
+					{loc}
 					<FigureBlock doc={this.props.doc.eventThumbnail} onChange={this.onThumbnailChange} />
 					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
 				</Block>
@@ -1993,19 +2026,23 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.props.onChange(this, oldDoc, newDoc);
 		},
 
+		onMdClick: function() {
+			this.refs.md.toggleMetaData_click();
+		},
+
 		render: function() {
 			if (this.state.mode == "render") {
 
 				if (this.props.doc && displayMetadataForTypes.indexOf(this.props.doc.type) > -1) {
-					var metaDataComponent = <MetaData doc={this.props.doc} onChange={this.onDocChange} />;
+					var metaDataComponent = <MetaData ref="md" doc={this.props.doc} onChange={this.onDocChange} />;
 				}
 
 				if (this.props.doc && this.props.doc.title) {
-					var title = <h1>{this.props.doc.title}</h1>;
+					var title = <h1 onClick={this.onMdClick}>{this.props.doc.title}</h1>;
 				}
 
 				if (this.props.doc && this.props.doc.subtitle) {
-					var subtitle = <h4>{this.props.doc.subtitle}</h4>;
+					var subtitle = <h4 onClick={this.onMdClick}>{this.props.doc.subtitle}</h4>;
 				}
 
 				return (
