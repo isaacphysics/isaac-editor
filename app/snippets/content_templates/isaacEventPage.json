@@ -1,13 +1,59 @@
 {
-    "title": "Student Workshop",
-    "encoding": "markdown",
-    "type": "isaacEventPage",
-    "value": "Add event page content here",
-    "location": {
-        "addressLine1": "",
-        "addressLine2": "",
-        "town": "",
-        "county": "",
-        "postalCode": ""
+  "layout": "1-col",
+  "title": "Event Title Here",
+  "subtitle": "Some subtitle",
+  "tags": [
+    "physics_skills_14",
+    "teacher",
+    "virtual"
+  ],
+  "author": "",
+  "eventThumbnail": {
+    "src": "../../images/student2.jpg",
+    "type": "image",
+    "altText": "Photo of students working around a laptop.",
+    "id": "eventThumbnail"
+  },
+  "date": 1442430000000,
+  "numberOfPlaces": 20,
+  "eventStatus": "FULLY_BOOKED",
+  "preResources": [
+    {
+      "title": "Event brochure",
+      "url": "somewhere/interesting.pdf"
     }
+  ],
+  "postResources": [
+    {
+      "title": "Event brochure",
+      "url": "somewhere/interesting.pdf"
+    }
+  ],
+  "encoding": "markdown",
+  "type": "isaacEventPage",
+  "children": [
+    {
+      "type": "content",
+      "value": "####Groups and Assignments - getting started",
+      "encoding": "markdown"
+    },
+    {
+      "type": "content",
+      "value": "In this online Teacher CPD session, an experienced A level physics teacher from Isaac Physics will show you how to:\n\n* create a group\n* set assignments (simple Physics Skills questions and a custom board of mixed questions)\n* view the marks for an assignment\n\nYou will have the chance to do all of the above and ask questions at any time.\nYou'll see how this can reduce your marking workload <b>and</b> help you give better feedback to your students.",
+      "encoding": "markdown"
+    },
+    {
+      "type": "content",
+      "value": "####Taking part\nTo <b>take part</b> in this online meeting, you will need:\n\n* an account on isaacphysics.org\n* a Google plus account\n* a computer/tablet with webcam and microphone (and ideally headphones to reduce feedback)\n* a quiet place to take part\n* to register using the button below\n\n<a href=\"http://isaacphysics16092015hangout2000.eventbrite.co.uk\" class=\"ru-button-big\">Register online</a>",
+      "encoding": "markdown"
+    }
+  ],
+  "location": {
+      "addressLine1": "",
+      "addressLine2": "",
+      "town": "",
+      "county": "",
+      "postalCode": ""
+  },
+  "published": false
 }

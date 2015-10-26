@@ -154,7 +154,7 @@ body {
   -webkit-transform-origin: 100%  0%;
 }
 
-.block h1 {
+.block>div>div>h1, .block>div>div>h4 {
   color: #ccc;
 }
 

@@ -1097,7 +1097,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		render: function() {
 
-			var optionalCaption = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
+			var optionalCaption = !this.props.doc || this.props.doc.type == "image" ? null : <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
 
 			return (
 				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
@@ -1326,6 +1326,42 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		}
 	});
 
+	var EventPageBlock = React.createClass({
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		onContentChange: function(c, oldVal, newVal, oldChildren, newChildren) {
+			// newVal could be a string or a list.
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.value = newVal;
+			newDoc.children = newChildren;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onThumbnailChange: function(c, oldVal, newVal) {
+			//console.log("onThumbnailChange", newVal);
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.eventThumbnail = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		render: function() {
+			return (
+				<Block type="eventPage" blockTypeTitle="Event Page" doc={this.props.doc} onChange={this.onDocChange}>
+					<FigureBlock doc={this.props.doc.eventThumbnail} onChange={this.onThumbnailChange} />
+					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+				</Block>
+			);
+		}
+	});
+
+
 	var ContentBlock = React.createClass({
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -1370,7 +1406,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	});
-
 	var ChoiceBlock = React.createClass({
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -1969,6 +2004,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					var title = <h1>{this.props.doc.title}</h1>;
 				}
 
+				if (this.props.doc && this.props.doc.subtitle) {
+					var subtitle = <h4>{this.props.doc.subtitle}</h4>;
+				}
+
 				return (
 					<div className={"block type-" + this.props.type}  ref="block">
 						<div className="row">
@@ -1976,6 +2015,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 								<Title onClick={this.onClick} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} title={this.props.blockTypeTitle} />
 								{metaDataComponent}
 								{title}
+								{subtitle}
 								{this.props.children}
 							</div>
 						</div>
@@ -2009,7 +2049,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacQuestionPage": ContentBlock,
 		"isaacFastTrackQuestionPage": ContentBlock,
 		"isaacConceptPage": ContentBlock,
-		"isaacEventPage": ContentBlock,
+		"isaacEventPage": EventPageBlock,
 		"isaacWildcard": ContentBlock,
 		"page": ContentBlock,
 		"isaacPageFragment": ContentBlock,

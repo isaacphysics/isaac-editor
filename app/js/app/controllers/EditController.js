@@ -214,20 +214,6 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 				href: scope.file.html_url
 			});
 
-			if (scope.document && scope.document.id) {
-				var b = {
-					caption: "View on staging",
-					value: function() { },
-					target: "blank",
-				}
-				if (scope.document.type == "isaacConceptPage") {
-					b.href = "http://staging.isaacphysics.org/concepts/" + scope.document.id;
-					buttons.push(b);
-				} else if (scope.document.type == "isaacQuestionPage") {
-					b.href = "http://staging.isaacphysics.org/questions/" + scope.document.id;
-					buttons.push(b);
-				}
-			}
 
 			buttons.push({
 				caption: "Delete",
@@ -355,6 +341,19 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 				try {
 					scope.document = JSON.parse(file.decodedContent);
+
+					if (scope.document.id) {
+						if (scope.document.type == "isaacConceptPage") {
+							scope.previewLink = "https://staging.isaacphysics.org/concepts/" + scope.document.id;
+						} else if (scope.document.type == "isaacQuestionPage" || scope.document.type == "isaacFastTrackQuestionPage") {
+							scope.previewLink = "http://staging.isaacphysics.org/questions/" + scope.document.id;
+						} else if (scope.document.type == "isaacEventPage") {
+							scope.previewLink = "http://staging.isaacphysics.org/events/" + scope.document.id;
+						} else {
+							delete scope.previewLink;
+						}
+					}
+
 				} catch (e) { /* File is not a valid JSON document. Probably not a big deal, it may not even be a JSON file. */ }
 
 			} else {

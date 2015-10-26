@@ -49,6 +49,7 @@
     
         <ul class="left" ng-if="editorScope && editorScope.file">
           <li class="name"><h1><a class="git-file-name" href="javascript:void(0)" ng-click="editorScope.showFileInfo()">{{editorScope.file.name}}</a></h1></li>
+          <li class="name" ng-show="editorScope.previewLink"><a class="button small radius" target="_blank" ng-href="{{editorScope.previewLink}}">Preview on Staging</a></li>
         </ul>
       </section>
     </nav>

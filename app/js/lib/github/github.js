@@ -143,7 +143,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
                                        cache: false
                                    })).then(function(f) {
                 if (f.content != null)
-                    f.decodedContent = B64.atob(f.content.replace("\n", ""));
+                    f.decodedContent = B64.atob(f.content.replace("\n", "").replace(" ", ""));
                 return f;
             });
         };

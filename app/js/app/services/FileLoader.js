@@ -13,15 +13,12 @@ define(["github/base64", "github/github"], function(B64) {
 		                var type = "image/png";
 		            else if (f.name.toLowerCase().endsWith(".svg"))
 		                var type = "image/svg+xml";
+		            else if (f.name.toLowerCase().endsWith(".jpg"))
+		                var type = "image/jpeg";
 
-		            var b64 = "";
-		            try {
-		            	b64 = window.btoa(f.decodedContent);
-		            } catch (e) {
-		            	b64 = B64.btoa(f.decodedContent);
-		            }
-		            var dataUrl = "data:" + type + ";base64," +  b64; // This is horrible. We should be able to use the raw base64 from github.
-		            console.log("Retrieved", f.path, "from git:", dataUrl, f);
+		            var b64 = f.content;
+		            var dataUrl = "data:" + type + ";base64," +  b64;
+		            console.log("Retrieved", f.path, "from git.", f);
 		            return resolve(dataUrl);
 		        }).catch(function(e) {
 		            console.error("Failed to retrieve", absPath, e);

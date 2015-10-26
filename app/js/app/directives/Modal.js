@@ -21,7 +21,7 @@ define([], function() {
 
 				var btn = $("<a/>");
 
-				btn.addClass("button primary radius");
+				btn.addClass("button small primary radius");
 				btn.html(b.caption);
 
 				if(b.target)
