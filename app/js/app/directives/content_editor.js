@@ -250,6 +250,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				dateInput: dip,
 				dateOutput: dop,
 				dateInt: this.props.doc.date,
+				appId: this.props.doc.appId,
+				appAccessKey: this.props.doc.appAccessKey,
 			};
 
 		},
@@ -366,6 +368,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.date = this.state.dateInt;
 			}
 
+			if (this.state.appId != null || this.props.doc.appId) {
+				newDoc.appId = this.state.appId;
+			}
+
+			if (this.state.appAccessKey != null || this.props.doc.appAccessKey) {
+				newDoc.appAccessKey = this.state.appAccessKey;
+			}
+
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
@@ -448,6 +458,25 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;
 			}
 
+			if (this.props.doc.type == "anvilApp") {
+				var anvilAppMeta = [<div className="row">
+					<div className="small-2 columns text-right">
+						App ID:
+					</div>
+					<div className="small-4 columns end">
+						<input type="text" placeholder="App ID" onChange={this.onTextboxChange.bind(this,"appId")} value={this.state.appId} />, 
+					</div>					
+				</div>,
+				<div className="row">
+					<div className="small-2 columns text-right">
+						Access Key:
+					</div>
+					<div className="small-4 columns end">
+						<input type="text" placeholder="Access Key" onChange={this.onTextboxChange.bind(this,"appAccessKey")} value={this.state.appAccessKey} />, 
+					</div>					
+				</div>];
+			}
+
 			return (
 				<div className="metadata-container">
 					<button onClick={this.toggleMetaData_click} className="button tiny round" ref="toggleButton">Show MetaData</button>
@@ -480,6 +509,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{levelMeta}
 						{pageMeta}
 						{eventMetadata}
+						{anvilAppMeta}
 					</div>
 				</div>
 			);
@@ -1114,6 +1144,31 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 							{optionalCaption}
 						</div>					
 					</div>
+				</Block>
+			);
+		}
+	});
+
+	var AnvilAppBlock = React.createClass({
+
+		getInitialState: function() {
+			return {
+				editedAppId: this.props.doc.appId,
+				editedAccessKey: this.props.doc.appAccessKey
+			};
+		},
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+
+		render: function() {
+
+			return (
+				<Block type="anvilApp" blockTypeTitle="Anvil App" doc={this.props.doc} onChange={this.onDocChange}>
+					<div style={{color: "#bbb"}} className="text-center"><i>App height will be correct on live pages.</i></div><br/><br/>
+					<iframe style={{width: "100%", height: "300px"}} src={"https://anvil.works/apps/" + this.props.doc.appId + "/" + this.props.doc.appAccessKey + "/app"}/>
 				</Block>
 			);
 		}
@@ -1961,6 +2016,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"choice": ChoiceBlock,
 		"quantity": QuantityChoiceBlock,
 		"video": VideoBlock,
+		"anvilApp": AnvilAppBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
 		"isaacQuestion": QuestionBlock, 
@@ -1969,7 +2025,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacSymbolicQuestion": QuestionBlock
 	};
 
-	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment"];
+	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment", "anvilApp"];
 
 /////////////////////////////////
 // Private instance methods
