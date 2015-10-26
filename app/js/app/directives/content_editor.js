@@ -409,7 +409,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			var tagsComponent = <Tags tags={this.props.doc.tags || []} onChange={this.onTagsChange}/>;
 
-			if (this.props.doc.type == "figure") {
+			if (this.props.doc.type == "figure" || this.props.doc.type == "video") {
 				var figureMeta = <div className="row">
 					<div className="small-2 columns text-right"><span className="metadataLabel">Alt text: </span></div>
 					<div className="small-10 columns"><input type="text" value={this.state.altText} onChange={this.onTextboxChange.bind(this, "altText")} /></div>
