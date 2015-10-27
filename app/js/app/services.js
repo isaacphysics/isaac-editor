@@ -7,7 +7,7 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 	angular.module('scooter.services', [])
 
 	.constant('Repo', {
-		owner: "daviesian",
+		owner: "ucam-cl-dtg",
 		name: "rutherford-content"
 	})
 
