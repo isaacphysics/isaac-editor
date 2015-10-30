@@ -349,6 +349,8 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 							scope.previewLink = "http://staging.isaacphysics.org/questions/" + scope.document.id;
 						} else if (scope.document.type == "isaacEventPage") {
 							scope.previewLink = "http://staging.isaacphysics.org/events/" + scope.document.id;
+						} else if (scope.document.type == "page") {
+							scope.previewLink = "http://staging.isaacphysics.org/pages/" + scope.document.id;
 						} else {
 							delete scope.previewLink;
 						}
