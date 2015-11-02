@@ -377,7 +377,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.appAccessKey = this.state.appAccessKey;
 			}
 
-			if (this.state.location || this.props.doc.location) {
+			if (!$.isEmptyObject(this.state.location) || this.props.doc.location) {
 				newDoc.location = this.state.location;
 			}
 
