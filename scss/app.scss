@@ -47,8 +47,15 @@ body {
       color: #788;
   }
 
-  a.file.open {
-    background-color: #E7EBFF;
+  a.folder {
+    padding: 0 !important;
+  }
+
+  a.file {
+    padding: 0 !important;
+    &.open {
+      background-color: #E7EBFF;
+    }
   }
 
   .open-arrow {
@@ -478,4 +485,11 @@ hr {
     border: 2px solid #E77800;
     padding: 10px;
   }
+}
+
+input.inline {
+  display: inline-block;
+  width: initial;
+  height: initial;
+  padding: 0;
 }
