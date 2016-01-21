@@ -1201,6 +1201,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getInitialState: function() {
 			return {
 				significantFigures: this.props.doc.significantFigures,
+				title: this.props.doc.title,
+				suggestedDuration: this.props.doc.suggestedDuration,
 			}
 		},
 
@@ -1253,6 +1255,28 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.significantFigures = parseInt(e.target.value);
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onTitleChange: function(e) {
+			
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.title = e.target.value;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onsuggestedDurationChange: function(e) {
+
+			this.setState({
+				suggestedDuration: e.target.value,
+			});
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.suggestedDuration = parseInt(e.target.value);
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -1320,16 +1344,29 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			return (
 				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 					<form>
-					<div ref="questionTypeRadios" style={{textAlign: "center"}}> 
-						<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question 
-						<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question 
-						<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question 
-						<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question 
-					</div>
-					<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
-						<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
-						<label>Significant Figures: <input type="text" value={this.state.significantFigures} onChange={this.onSignificantFiguresChange} style={{display:"inline", width: "initial"}}/></label>
-					</div>
+						<div className="row">
+							<div className="small-6 small-offset-3 columns text-center end">
+								<input type="text" value={this.state.title} onChange={this.onTitleChange} placeholder="Question title"/>
+							</div>
+						</div>
+						<div ref="questionTypeRadios" style={{textAlign: "center"}}> 
+							<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question 
+							<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question 
+							<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question 
+							<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question 
+						</div>
+						<div className="row">
+							<div className="small-3 small-offset-3 columns text-right">
+								Suggested time (mins):
+							</div>
+							<div className="small-3 columns end">
+								<input type="text" value={this.state.suggestedDuration} onChange={this.onsuggestedDurationChange}/>
+							</div>
+						</div>
+						<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
+							<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+							<label>Significant Figures: <input type="text" value={this.state.significantFigures} onChange={this.onSignificantFiguresChange} style={{display:"inline", width: "initial"}}/></label>
+						</div>
 					</form>
 					{exposition}
 					{choices}
