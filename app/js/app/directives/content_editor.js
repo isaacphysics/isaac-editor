@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extensions/table", "app/MathJaxConfig"], function(React, $) {
-	
+
 	var ReactTransitionGroup = React.addons.TransitionGroup;
 
 	var enableMathJax = true;
@@ -14,7 +14,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		this.editor = <VariantBlock doc={document}  blockTypeTitle="Content Object"/>;
 		this.editor.props.onChange = docChanged.bind(this);
-		
+
 		this.history = [];
 
 		React.renderComponent(this.editor, container);
@@ -121,7 +121,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				var removeTag = function(t) {
 					var newTags = JSON.parse(JSON.stringify(this.props.tags));
 					newTags.splice(newTags.indexOf(t),1);
-					this.props.onChange(this, this.props.tags, newTags);					
+					this.props.onChange(this, this.props.tags, newTags);
 				};
 
 				ts.push(<span className="tag">{t} <i className="general foundicon-remove" onClick={removeTag.bind(this, t)}/></span>);
@@ -137,7 +137,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				var tag_choose = function(t) {
 					this.props.onChange(this, this.props.tags, this.props.tags.concat(t));
-				} 
+				}
 
 				var newT = (
 					<li key={t}>
@@ -153,7 +153,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				<a ref="foo" href="javascript:void(0);" data-dropdown={"tag-dropdown-" + this.props.dropdownId} className="button dropdown tiny success radius">Add tag...</a><br/>
 				<ul ref="bar" id={"tag-dropdown-" + this.props.dropdownId} data-dropdown-content className="f-dropdown">
 					{allTagComponents}
-					<li><a href="javascript:void(0)" onClick={this.addNewTag}>&lt;New tag...&gt;</a></li>					
+					<li><a href="javascript:void(0)" onClick={this.addNewTag}>&lt;New tag...&gt;</a></li>
 				</ul>
 			</div>);
 		}
@@ -259,8 +259,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		onDocChange: function(c, oldDoc, newDoc) {
 			this.props.onChange(this, oldDoc, newDoc);
-		},		
-		
+		},
+
 		onTagsChange: function(c, oldTags, newTags) {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
@@ -320,7 +320,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		onMetadataChangeTimeout: function() {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			
+
 			if (this.state.id || this.props.doc.id) {
 				newDoc.id = this.state.id;
 			}
@@ -416,6 +416,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				</div>;
 			}
 
+			if (this.props.doc.type == "emailTemplate") {
+
+			}
+
 			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment" || this.props.doc.type == "isaacEventPage") {
 				var pageMeta = [
 					<div className="row">
@@ -486,16 +490,16 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						App ID:
 					</div>
 					<div className="small-4 columns end">
-						<input type="text" placeholder="App ID" onChange={this.onTextboxChange.bind(this,"appId")} value={this.state.appId} />, 
-					</div>					
+						<input type="text" placeholder="App ID" onChange={this.onTextboxChange.bind(this,"appId")} value={this.state.appId} />,
+					</div>
 				</div>,
 				<div className="row">
 					<div className="small-2 columns text-right">
 						Access Key:
 					</div>
 					<div className="small-4 columns end">
-						<input type="text" placeholder="Access Key" onChange={this.onTextboxChange.bind(this,"appAccessKey")} value={this.state.appAccessKey} />, 
-					</div>					
+						<input type="text" placeholder="Access Key" onChange={this.onTextboxChange.bind(this,"appAccessKey")} value={this.state.appAccessKey} />,
+					</div>
 				</div>];
 			}
 
@@ -548,7 +552,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var hasDefault = (/^_Enter .* Here_$/i).test(this.props.value);
 
 			this.setState({
-				mode: "edit", 
+				mode: "edit",
 				editedValue: hasDefault ? "" : this.props.value
 			});
 		},
@@ -572,7 +576,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		componentDidUpdate: function(prevProps, prevState) {
 			if (this.state.mode == "edit" && prevState.mode != "edit") {
-				var cm = app.cm = CodeMirror(this.refs.placeholder.getDOMNode(), 
+				var cm = app.cm = CodeMirror(this.refs.placeholder.getDOMNode(),
 					{mode: "",
 					 theme: "eclipse",//"solarized light",
 					 lineNumbers: false,
@@ -584,7 +588,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				$("body").scrollTop($(this.refs.placeholder.getDOMNode()).offset().top + $(this.refs.placeholder.getDOMNode()).height() - $(window).height() / 2);
 
-				cm.on("change", (function(inst, changeObj) { 
+				cm.on("change", (function(inst, changeObj) {
 					this.setState({editedValue: inst.getValue()});
 				}).bind(this));
 			}
@@ -682,7 +686,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newKeys.splice(insertBeforeIndex,0,Math.random());
 				this.setState({keys: newKeys});
 
-				this.props.onChange(this, oldItems, newItems);				
+				this.props.onChange(this, oldItems, newItems);
 			}.bind(this)).catch(function(e) {
 				console.error("Could not load content template.", e);
 			})
@@ -705,7 +709,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.props.onChange(this, oldItems, newItems);
 		},
 
-		opsMouseEnter: function(index) {			
+		opsMouseEnter: function(index) {
 			if (index >= 0)
 				$(this.refs["insertBefore" + index].getDOMNode()).addClass("op-display");
 			$(this.refs["insertBefore" + (index + 1)].getDOMNode()).addClass("op-display");
@@ -736,21 +740,21 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getItemComponent: function(item,index) {
 
 			return (<div key={this.state.keys[index]} className="ops-wrapper children" onMouseEnter={this.opsMouseEnter.bind(this, index)} onMouseLeave={this.opsMouseLeave.bind(this, index)}>
-						<InsertOp className="above" 
-						          onClick={this.onItemInsert.bind(this, index)} 
-						          onMouseEnter={this.insertMouseEnter.bind(this, index)} 
-						          onMouseLeave={this.insertMouseLeave.bind(this, index)} 
+						<InsertOp className="above"
+						          onClick={this.onItemInsert.bind(this, index)}
+						          onMouseEnter={this.insertMouseEnter.bind(this, index)}
+						          onMouseLeave={this.insertMouseLeave.bind(this, index)}
 						          ref={"insertBefore" + index}/>
 
 						<div className="op-id text-right" ref={"id" + index}>ID: <input className="inline" value={this.state.itemIds[index]} onChange={this.onItemIdChange.bind(this, index)} /></div>
-	           			<VariantBlock doc={item} 
-	           			              disableListOps 
-	           			              onChange={this.onItemChange.bind(this, index)} 
+	           			<VariantBlock doc={item}
+	           			              disableListOps
+	           			              onChange={this.onItemChange.bind(this, index)}
 	           			              ref={"item" + index}/>
 
 
-						<DeleteOp onClick={this.onItemDelete.bind(this, index)} 
-						          onMouseEnter={this.deleteMouseEnter.bind(this,index)} 
+						<DeleteOp onClick={this.onItemDelete.bind(this, index)}
+						          onMouseEnter={this.deleteMouseEnter.bind(this,index)}
 						          onMouseLeave={this.deleteMouseLeave.bind(this,index)}
 						          ref={"delete" + index} />
 
@@ -809,11 +813,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			// Add the final insert op to the last child.
 			children[children.length-1].props.children.push(
-				<InsertOp className="below" 
-						  onClick={this.insertAtEnd} 
-						  disabled={this.props.disableListOps} 
-						  onMouseEnter={this.insertMouseEnter.bind(this, this.props.items.length)} 
-						  onMouseLeave={this.insertMouseLeave.bind(this, this.props.items.length)} 
+				<InsertOp className="below"
+						  onClick={this.insertAtEnd}
+						  disabled={this.props.disableListOps}
+						  onMouseEnter={this.insertMouseEnter.bind(this, this.props.items.length)}
+						  onMouseLeave={this.insertMouseLeave.bind(this, this.props.items.length)}
 						  ref={"insertBefore" + this.props.items.length}/>
 			);
 
@@ -837,14 +841,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		componentDidMount: function() {
-			var cm = app.cm = CodeMirror(this.refs.content.getDOMNode(), 
+			var cm = app.cm = CodeMirror(this.refs.content.getDOMNode(),
 				{mode: {name: "javascript", json: true},
 				 theme: "eclipse",//"solarized light",
 				 lineNumbers: false,
 				 value: JSON.stringify(this.props.doc,null,2),
 				 lineWrapping: true});
 
-			cm.on("change", (function(inst, changeObj) { 
+			cm.on("change", (function(inst, changeObj) {
 				try {
 					var newDoc = JSON.parse(cm.getValue());
 					this.setState({valid: true, editedDoc: newDoc});
@@ -876,11 +880,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	});
- 
+
  	var ContentValueOrChildren = React.createClass({
 
 		onChildChange: function(child, oldChildren, newChildren) {
-			
+
 			// Something has changed somewhere in our list of children.
 			// Set our value to undefined, and our children to the new list.
 
@@ -971,18 +975,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 				var child = (
 					<div className="ops-wrapper value" onMouseEnter={opsMouseEnter.bind(this)} onMouseLeave={opsMouseLeave.bind(this)}>
-						<InsertOp className="above" onClick={insertBeforeValue.bind(this)} 
-						          disabled={this.props.disableListOps} 
+						<InsertOp className="above" onClick={insertBeforeValue.bind(this)}
+						          disabled={this.props.disableListOps}
 						          ref="insertBefore"
 						          onMouseEnter={insertBeforeMouseEnter.bind(this)}
 						          onMouseLeave={insertBeforeMouseLeave.bind(this)} />
 						<ContentValue value={this.props.value} encoding={this.props.encoding} onChange={this.onValueChange} ref="value"/>
-						<InsertOp className="below" onClick={insertAfterValue.bind(this)} 
-						          disabled={this.props.disableListOps} 
+						<InsertOp className="below" onClick={insertAfterValue.bind(this)}
+						          disabled={this.props.disableListOps}
 						          ref="insertAfter"
 						          onMouseEnter={insertAfterMouseEnter.bind(this)}
 						          onMouseLeave={insertAfterMouseLeave.bind(this)} />
-					</div>);		
+					</div>);
 			}
 
 			return (
@@ -1028,6 +1032,43 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			else
 				var DocClass = UnknownBlock;
 			return this.transferPropsTo(DocClass ? DocClass() : <Block blockTypeTitle={"Unknown content type: " + this.props.doc.type} />);
+		}
+	});
+
+	var EmailTemplateBlock = React.createClass({
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		onTitleChange: function(e) {
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.title = e.target.value;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		render: function() {
+			// debugger;
+			return (
+				<Block type="emailTemplate" blockTypeTitle="E-mail template" doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row">
+						<div className="small-6 small-offset-3 columns text-center end">
+							<input type="text" value={this.props.doc.title} onChange={this.onTitleChange} placeholder="E-mail subject"/>
+						</div>
+					</div>
+					<div className="row">
+						<div className="small-12 columns">
+							<ContentValueOrChildren value={this.props.doc.plainTextContent} disableListOps="disabled" encoding="plain" />
+						</div>
+						<div className="small-12 columns">
+							<ContentValueOrChildren value={this.props.doc.htmlContent} disableListOps="disabled" encoding="html" />
+						</div>
+					</div>
+				</Block>
+			);
 		}
 	});
 
@@ -1125,12 +1166,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				<Block type="figure" blockTypeTitle="Figure" doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-6 columns text-center">
-							<img width="250px" height="250px" src="img/not-found.png" ref="img" onClick={this.img_Click} accept="image/svg+xml,image/png" onDragOver={this.img_DragOver} onDrop={this.img_Drop} /> 
+							<img width="250px" height="250px" src="img/not-found.png" ref="img" onClick={this.img_Click} accept="image/svg+xml,image/png" onDragOver={this.img_DragOver} onDrop={this.img_Drop} />
 							<input type="file" ref="fileInput" style={{position: "absolute", left: -1000, top: -1000, visibility:"hidden"}} onChange={this.file_Change} />
 						</div>
 						<div className="small-6 columns">
 							{optionalCaption}
-						</div>					
+						</div>
 					</div>
 				</Block>
 			);
@@ -1164,7 +1205,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						</div>
 						<div className="small-6 columns">
 							{optionalCaption}
-						</div>					
+						</div>
 					</div>
 				</Block>
 			);
@@ -1260,7 +1301,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onTitleChange: function(e) {
-			
+
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.title = e.target.value;
@@ -1349,11 +1390,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 								<input type="text" value={this.state.title} onChange={this.onTitleChange} placeholder="Question title"/>
 							</div>
 						</div>
-						<div ref="questionTypeRadios" style={{textAlign: "center"}}> 
-							<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question 
-							<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question 
-							<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question 
-							<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question 
+						<div ref="questionTypeRadios" style={{textAlign: "center"}}>
+							<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question
+							<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question
+							<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question
+							<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question
 						</div>
 						<div className="row">
 							<div className="small-3 small-offset-3 columns text-right">
@@ -1450,6 +1491,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		render: function() {
 			if (typeMap[this.props.doc.type] != ContentBlock) {
+				// debugger;
 				return <div className="block type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
 			}
 
@@ -1522,8 +1564,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-1 column text-right">
-							{this.props.doc.correct ? 
-								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> : 
+							{this.props.doc.correct ?
+								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> :
 								<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
 						</div>
 						<div className="small-6 columns" >
@@ -1632,12 +1674,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.state.editing) {
 				var content = <div ref="content">
 					{[
-						"$\\\\quantity{", 
-						<input type="text" placeholder="Value" style={{width: "80px", display: "inline-block"}} onChange={this.setEditedValue} value={this.state.editedValue} />, 
-						"}{", 
-						<input type="text" placeholder="Units" style={{width: "80px", display: "inline-block"}} onChange={this.setEditedUnits} value={this.state.editedUnits} />, 
+						"$\\\\quantity{",
+						<input type="text" placeholder="Value" style={{width: "80px", display: "inline-block"}} onChange={this.setEditedValue} value={this.state.editedValue} />,
+						"}{",
+						<input type="text" placeholder="Units" style={{width: "80px", display: "inline-block"}} onChange={this.setEditedUnits} value={this.state.editedUnits} />,
 						"}$"
-					]} 
+					]}
 					&nbsp;<button onClick={this.done} className="button tiny">Done</button>
 				</div>;
 			} else {
@@ -1654,8 +1696,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
 					<div className="row">
 						<div className="small-1 column text-right">
-							{this.props.doc.correct ? 
-								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> : 
+							{this.props.doc.correct ?
+								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> :
 								<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
 						</div>
 						<div className="small-6 columns" >
@@ -1916,7 +1958,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var sectionButtonsTop = sectionButtons.offset().top - $(document).scrollTop();
 
 			var maxPadding = sectionButtons.parent().height() - sectionButtons.height();
-			
+
 			sectionButtons.css("padding-top", Math.max(0,Math.min(maxPadding, -sectionButtonsTop)));
 		},
 
@@ -2012,7 +2054,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="large-8 large-offset-2 columns text-center">
 							Please choose a block type: <br/>
 							<a onClick={this.chooseType} data-chosen-type="content">content</a>&nbsp; | &nbsp;
-							<a onClick={this.chooseQuestion} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp; 
+							<a onClick={this.chooseQuestion} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp;
 							<a onClick={this.chooseType} data-chosen-type="figure">figure</a>&nbsp; | &nbsp;
 							<a onClick={this.chooseType} data-chosen-type="video">video</a>&nbsp; | &nbsp;
 							<a onClick={this.chooseType} data-chosen-type="tabs">tabs</a>&nbsp; | &nbsp;
@@ -2133,13 +2175,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"anvilApp": AnvilAppBlock,
 		"question": QuestionBlock,
 		"choiceQuestion": QuestionBlock,
-		"isaacQuestion": QuestionBlock, 
-		"isaacMultiChoiceQuestion": QuestionBlock, 
-		"isaacNumericQuestion": QuestionBlock, 
-		"isaacSymbolicQuestion": QuestionBlock
+		"isaacQuestion": QuestionBlock,
+		"isaacMultiChoiceQuestion": QuestionBlock,
+		"isaacNumericQuestion": QuestionBlock,
+		"isaacSymbolicQuestion": QuestionBlock,
+		"emailTemplate": EmailTemplateBlock
 	};
 
-	var displayMetadataForTypes = ["page", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment", "anvilApp"];
+	var displayMetadataForTypes = ["page", "emailTemplate", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment", "anvilApp"];
 
 /////////////////////////////////
 // Private instance methods
