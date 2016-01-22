@@ -1,0 +1,8 @@
+{
+  "type": "emailTemplate",
+  "encoding": "markdown",
+  "title": "",
+  "subject": "",
+  "plainTextContent": "Your plain text template here.",
+  "htmlContent": "Your HTML template here."
+}

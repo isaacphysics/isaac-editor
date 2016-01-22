@@ -39,7 +39,7 @@ body {
       margin-right: 10px;
       color: #788;
   }
-  
+
   a.folder:before {
       content: "\f02a";
       font-family: "GeneralFoundicons";
@@ -95,14 +95,14 @@ body {
   height: 20px;
   margin-bottom: 10px;
   opacity: 0.7;
-  
+
   .title-triangle {
     border-right: 20px solid transparent;
     border-top: 20px solid #ebebeb;
     display: inline-block;
     height: 0px;
   }
-  
+
   .title-content {
     background-color: #ebebeb;
     display: inline-block;
@@ -191,7 +191,7 @@ $transformDelay: 0.2s;
 .op-insert.above {
   top: -7px;
 }
- 
+
 .ops-wrapper {
   position:relative;
 }
@@ -463,7 +463,7 @@ hr {
       border-right: none;
       color: #000;
     }
-    
+
 
 
     button.round {
@@ -492,4 +492,24 @@ input.inline {
   width: initial;
   height: initial;
   padding: 0;
+}
+
+// E-Mail template editorScope
+
+.type-emailTemplate {
+  .plain-text-content .content-value {
+    white-space: pre;
+    font-family: monospace;
+  }
+
+  // This is here for now
+  .separator-title {
+    display: block;
+    color: #4d4d4d;
+    font-weight: bold;
+  //  font-size: 1.1em;
+    margin-top: 2em;
+    border-bottom: 1px solid #aaaaaa;
+
+  }
 }

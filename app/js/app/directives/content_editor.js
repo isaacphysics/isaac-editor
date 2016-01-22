@@ -622,6 +622,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						var html = converter.makeHtml(this.props.value);
 						renderer.props.dangerouslySetInnerHTML = {__html: html};
 						break;
+					case "plain":
+						renderer.props.children = this.props.value;
+						break;
 					default:
 						renderer.props.children = "<" + this.props.encoding + "> " + this.props.value;
 						break;
@@ -1037,36 +1040,79 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 	var EmailTemplateBlock = React.createClass({
 
+		getInitialState: function() {
+			return {
+				title: this.props.doc.subject,
+				subject: this.props.doc.subject,
+				plainTextContent: this.props.doc.plainTextContent,
+				htmlContent: this.props.doc.htmlContent
+			}
+		},
+
 		onDocChange: function(c, oldDoc, newDoc) {
 			this.props.onChange(this, oldDoc, newDoc);
 		},
 
-		onTitleChange: function(e) {
+		onSubjectChange: function(e) {
+			this.setState({
+				subject: e.target.value,
+				title: ""
+			});
 
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.title = e.target.value;
+			newDoc.subject = e.target.value;
+			newDoc.title = "";
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onPlainTextContentChange: function(c, oldVal, newVal, oldUnits, newUnits) {
+			this.setState({
+				plainTextContent: newVal
+			});
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.plainTextContent = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onHtmlContentChange: function(c, oldVal, newVal, oldUnits, newUnits) {
+			this.setState({
+				htmlContent: newVal
+			});
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.htmlContent = newVal;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
 		render: function() {
-			// debugger;
 			return (
 				<Block type="emailTemplate" blockTypeTitle="E-mail template" doc={this.props.doc} onChange={this.onDocChange}>
-					<div className="row">
-						<div className="small-6 small-offset-3 columns text-center end">
-							<input type="text" value={this.props.doc.title} onChange={this.onTitleChange} placeholder="E-mail subject"/>
+					<form>
+						<div className="row">
+							<div className="small-12 columns">
+								<label for="subjectTextBox">Subject: </label><input id="subjectTextBox" type="text" value={this.state.subject} onChange={this.onSubjectChange} placeholder="E-mail subject"/>
+							</div>
 						</div>
-					</div>
-					<div className="row">
-						<div className="small-12 columns">
-							<ContentValueOrChildren value={this.props.doc.plainTextContent} disableListOps="disabled" encoding="plain" />
+						<div className="row">
+
+							<div className="small-12 columns plain-text-content">
+								<div className="separator-title">Plain text</div>
+								<ContentValueOrChildren value={this.state.plainTextContent} disableListOps="disabled" encoding="plain" onChange={this.onPlainTextContentChange} />
+							</div>
+
+							<div className="small-12 columns">
+								<div className="separator-title">HTML</div>
+								<ContentValueOrChildren value={this.state.htmlContent} disableListOps="disabled" encoding="html" onChange={this.onHtmlContentChange} />
+							</div>
 						</div>
-						<div className="small-12 columns">
-							<ContentValueOrChildren value={this.props.doc.htmlContent} disableListOps="disabled" encoding="html" />
-						</div>
-					</div>
+					</form>
 				</Block>
 			);
 		}

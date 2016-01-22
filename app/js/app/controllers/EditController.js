@@ -15,7 +15,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 					$rootScope.$apply();
 				}).catch(function(e) {
 					console.error("Couldn't create file. Perhaps it already exists.", e);
-				})				
+				})
 			}
 
 			if (fullPath.endsWith(".json")) {
@@ -39,6 +39,10 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 					{
 						caption: "Event",
 						value: "isaacEventPage"
+					},
+					{
+						caption: "Email template",
+						value: "emailTemplate"
 					}
 				]).then(function(r) {
 
@@ -139,18 +143,31 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 					doc = JSON.parse(scope.file.editedContent);
 				} catch (e) { /* File is not a valid JSON document. Probably not a big deal, it may not even be a JSON file. */ }
 
-				if (doc && (!doc.title || !doc.id || doc.title == "" || doc.id == "")) {
+				// TODO Improve the logic here (af599)
+				if(doc && doc.type == "emailTemplate") {
+					if (doc && (!doc.id || doc.id == "")) {
+						return $rootScope.modal.show("Missing Metadata", "The content you are trying to save is missing an ID. All pages should have an ID.", "", buttons).then(function(r) {
+							if (r.value == "save") {
+								r.closedPromise.then(doSave);
+							} else {
+								// Cancel the save operation.
+							}
+						});
+					} else {
+						doSave();
+					}
+				} else if (doc && (!doc.title || !doc.id || doc.title == "" || doc.id == "")) {
 					return $rootScope.modal.show("Missing Metadata", "The content you are trying to save is missing an ID, or a title, or both. All pages should have both.", "", buttons).then(function(r) {
 						if (r.value == "save") {
 							r.closedPromise.then(doSave);
 						} else {
 							// Cancel the save operation.
 						}
-					});						
+					});
 				} else {
 					doSave();
 				}
-				
+
 			});
 		}
 
@@ -193,14 +210,14 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 		                github.deleteFile(repo.owner, repo.name, oldPath, scope.file.sha).then(function() {
 		                    location.url("/edit/" + scope.branch + "/" + newPath);
-		                    $rootScope.$apply();                   
+		                    $rootScope.$apply();
 		                }).catch(function(e) {
 		                    console.error("Could not delete old file.", e);
 		                })
 		            }).catch(function(e) {
 		                console.error("Could not create file. Perhaps it already exists.", e);
 		            });
-		        }  
+		        }
 		    });
 		}
 
@@ -252,7 +269,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 					}
 					if (r.value == "save") {
 						r.closedPromise.then(function () {
-							scope.saveFile().then(continueNavigation);							
+							scope.saveFile().then(continueNavigation);
 						});
 					} else {
 						continueNavigation();
@@ -297,7 +314,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 		function checkSize() {
 			var fileBrowserRight = $(".file-browser").offset().left + $(".file-browser").width() + 20;
 			var contentLeft = $("#content").offset().left;
-			
+
 			if (fileBrowserRight > contentLeft)
 				$(".file-browser .open-arrow").addClass("file-browser-too-wide");
 			else
@@ -369,7 +386,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 
 				loadDir = Promise.resolve();
 			}
-			
+
 			loadDir.then(function() {
 				// Now we have scope.{filePath, file, dirPath, dir}
 
