@@ -1042,10 +1042,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getInitialState: function() {
 			return {
-				title: this.props.doc.subject,
 				subject: this.props.doc.subject,
-				plainTextContent: this.props.doc.plainTextContent,
-				htmlContent: this.props.doc.htmlContent
 			}
 		},
 
@@ -1067,10 +1064,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
-		onPlainTextContentChange: function(c, oldVal, newVal, oldUnits, newUnits) {
-			this.setState({
-				plainTextContent: newVal
-			});
+		onPlainTextContentChange: function(c, oldVal, newVal) {
 
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
@@ -1079,11 +1073,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
-		onHtmlContentChange: function(c, oldVal, newVal, oldUnits, newUnits) {
-			this.setState({
-				htmlContent: newVal
-			});
-
+		onHtmlContentChange: function(c, oldVal, newVal) {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.htmlContent = newVal;
@@ -1097,19 +1087,19 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<form>
 						<div className="row">
 							<div className="small-12 columns">
-								<label for="subjectTextBox">Subject: </label><input id="subjectTextBox" type="text" value={this.state.subject} onChange={this.onSubjectChange} placeholder="E-mail subject"/>
+								<label for="subjectTextBox">Subject: </label><input id="subjectTextBox" type="text" value={this.props.doc.subject} onChange={this.onSubjectChange} placeholder="E-mail subject"/>
 							</div>
 						</div>
 						<div className="row">
 
 							<div className="small-12 columns plain-text-content">
 								<div className="separator-title">Plain text</div>
-								<ContentValueOrChildren value={this.state.plainTextContent} disableListOps="disabled" encoding="plain" onChange={this.onPlainTextContentChange} />
+								<ContentValueOrChildren value={this.props.doc.plainTextContent} disableListOps="disabled" encoding="plain" onChange={this.onPlainTextContentChange} />
 							</div>
 
 							<div className="small-12 columns">
 								<div className="separator-title">HTML</div>
-								<ContentValueOrChildren value={this.state.htmlContent} disableListOps="disabled" encoding="html" onChange={this.onHtmlContentChange} />
+								<ContentValueOrChildren value={this.props.doc.htmlContent} disableListOps="disabled" encoding="html" onChange={this.onHtmlContentChange} />
 							</div>
 						</div>
 					</form>
