@@ -498,7 +498,7 @@ input.inline {
 
 .type-emailTemplate {
   .plain-text-content .content-value {
-    white-space: pre;
+    white-space: pre-wrap;
     font-family: monospace;
   }
 
