@@ -234,6 +234,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
 			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
+			var edip = this.props.doc.endDate ? ContentEditor.dateFilter(new Date(this.props.doc.endDate), "yyyy-MM-dd HH:mm", "UTC") : "";
+			var edop = this.props.doc.endDate ? ContentEditor.dateFilter(new Date(this.props.doc.endDate), "yyyy-MM-dd HH:mm", "UTC") : "";
 
 			return {
 				id: this.props.doc.id,
@@ -249,7 +251,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				description: this.props.doc.description,
 				dateInput: dip,
 				dateOutput: dop,
+				endDateInput: edip,
+				endDateOutput: edop,
 				dateInt: this.props.doc.date,
+				endDateInt: this.props.doc.endDate,
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
 				location: this.props.doc.location || {},
@@ -317,6 +322,26 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 		},
 
+		onEndDateChange: function(e) {
+			var newVal = e.target.value;
+			this.setState({
+				endDateInput: newVal,
+			});
+
+			var d = Date.parse(newVal.replace(/\-/g, "/"));
+			if (d) {
+				dt = new Date(d);
+				this.setState({
+					endDateOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "UTC"),
+					endDateInt: d,
+				});
+
+				clearTimeout(this.metadataChangeTimeout);
+				this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+
+			}
+		},
+
 		onMetadataChangeTimeout: function() {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
@@ -367,6 +392,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.state.dateInt || this.props.doc.dateInt) {
 				newDoc.date = this.state.dateInt;
+			}
+
+			if (this.state.endDateInt || this.props.doc.endDateInt) {
+				newDoc.endDate = this.state.endDateInt;
 			}
 
 			if (this.state.appId != null || this.props.doc.appId) {
@@ -455,9 +484,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.props.doc.type == "isaacEventPage") {
 				var eventMetadata = [
 					<div className="row">
-						<div className="small-2 columns text-right"><span className="metadataLabel">Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
+						<div className="small-2 columns text-right"><span className="metadataLabel">Start Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
 						<div className="small-5 columns"><input type="text" value={this.state.dateInput} onChange={this.onDateChange} /></div>
 						<div className="small-5 columns">{this.state.dateOutput}</div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">End Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
+						<div className="small-5 columns"><input type="text" value={this.state.endDateInput} onChange={this.onEndDateChange} /></div>
+						<div className="small-5 columns">{this.state.endDateOutput}</div>
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Location</span></div>
