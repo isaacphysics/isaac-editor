@@ -24,6 +24,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 // Public static fields
 /////////////////////////////////
 
+
 	ContentEditor.fileLoader = function(path) {
 		return new Promise(function(resolve, reject) {
 			console.error("No file loader provided for file", path);
@@ -234,8 +235,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
 			var dop = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
-			var edip = this.props.doc.endDate ? ContentEditor.dateFilter(new Date(this.props.doc.endDate), "yyyy-MM-dd HH:mm", "UTC") : "";
-			var edop = this.props.doc.endDate ? ContentEditor.dateFilter(new Date(this.props.doc.endDate), "yyyy-MM-dd HH:mm", "UTC") : "";
+			var edip = this.props.doc.end_date ? ContentEditor.dateFilter(new Date(this.props.doc.end_date), "yyyy-MM-dd HH:mm", "UTC") : "";
+			var edop = this.props.doc.end_date ? ContentEditor.dateFilter(new Date(this.props.doc.end_date), "yyyy-MM-dd HH:mm", "UTC") : "";
 
 			return {
 				id: this.props.doc.id,
@@ -251,10 +252,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				description: this.props.doc.description,
 				dateInput: dip,
 				dateOutput: dop,
-				endDateInput: edip,
-				endDateOutput: edop,
+				end_dateInput: edip,
+				end_dateOutput: edop,
 				dateInt: this.props.doc.date,
-				endDateInt: this.props.doc.endDate,
+				end_dateInt: this.props.doc.end_date,
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
 				location: this.props.doc.location || {},
@@ -322,18 +323,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 		},
 
-		onEndDateChange: function(e) {
+		onend_dateChange: function(e) {
 			var newVal = e.target.value;
 			this.setState({
-				endDateInput: newVal,
+				end_dateInput: newVal,
 			});
 
 			var d = Date.parse(newVal.replace(/\-/g, "/"));
 			if (d) {
 				dt = new Date(d);
 				this.setState({
-					endDateOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "UTC"),
-					endDateInt: d,
+					end_dateOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "UTC"),
+					end_dateInt: d,
 				});
 
 				clearTimeout(this.metadataChangeTimeout);
@@ -394,8 +395,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.date = this.state.dateInt;
 			}
 
-			if (this.state.endDateInt || this.props.doc.endDateInt) {
-				newDoc.endDate = this.state.endDateInt;
+			if (this.state.end_dateInt || this.props.doc.end_dateInt) {
+				newDoc.end_date = this.state.end_dateInt;
 			}
 
 			if (this.state.appId != null || this.props.doc.appId) {
@@ -490,8 +491,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">End Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
-						<div className="small-5 columns"><input type="text" value={this.state.endDateInput} onChange={this.onEndDateChange} /></div>
-						<div className="small-5 columns">{this.state.endDateOutput}</div>
+						<div className="small-5 columns"><input type="text" value={this.state.end_dateInput} onChange={this.onend_dateChange} /></div>
+						<div className="small-5 columns">{this.state.end_dateOutput}</div>
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Location</span></div>
