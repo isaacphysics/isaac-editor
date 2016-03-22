@@ -11,7 +11,7 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 		name: "rutherford-content"
 	})
 
-	.constant('ApiServer', "https://staging.isaacphysics.org/api")
+	.constant('ApiServer', "https://dev.isaacphysics.org/api/docker/api")
 
 	.service('LoginChecker', require("app/services/LoginChecker"))
 
