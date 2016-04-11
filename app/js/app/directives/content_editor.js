@@ -447,7 +447,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 
 			if (this.props.doc.type == "emailTemplate") {
-
+				var emailTemplateMeta = [
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
+						<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
+					</div>
+				]
 			}
 
 			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment" || this.props.doc.type == "isaacEventPage") {
@@ -570,6 +575,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{levelMeta}
 						{pageMeta}
 						{eventMetadata}
+						{emailTemplateMeta}
 						{anvilAppMeta}
 					</div>
 				</div>
