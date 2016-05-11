@@ -1317,10 +1317,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	var QuestionBlock = React.createClass({
 
 		getInitialState: function() {
+			au = this.props.doc.availableUnits || [];
+			sy = this.props.doc.availableSymbols || [];
 			return {
 				significantFigures: this.props.doc.significantFigures,
 				title: this.props.doc.title,
 				suggestedDuration: this.props.doc.suggestedDuration,
+				availableUnits: au.join(" | "),
+				availableSymbols: sy.join(" | "),
+				formulaSeed: this.props.doc.formulaSeed,
 			}
 		},
 
@@ -1432,6 +1437,54 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		onAvailableUnitsChange: function(e) {
+			this.setState({
+				availableUnits: e.target.value,
+			});
+
+			clearTimeout(this.availableUnitsCommitTimeout);
+			this.availableUnitsCommitTimeout = setTimeout(function() {
+				// newVal must be a doc
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.availableUnits = this.state.availableUnits.split("|");
+
+				this.onDocChange(this, oldDoc, newDoc);
+			}.bind(this), 500);
+		},
+
+		onAvailableSymbolsChange: function(e) {
+			this.setState({
+				availableSymbols: e.target.value,
+			});
+
+			clearTimeout(this.availableSymbolsCommitTimeout);
+			this.availableUnitsCommitTimeout = setTimeout(function() {
+				// newVal must be a doc
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.availableSymbols = this.state.availableSymbols.split("|");
+
+				this.onDocChange(this, oldDoc, newDoc);
+			}.bind(this), 500);
+		},
+
+		onFormulaSeedChange: function(e) {
+			this.setState({
+				formulaSeed: e.target.value,
+			});
+
+			clearTimeout(this.formulaSeedCommitTimeout);
+			this.formulaSeedCommitTimeout = setTimeout(function() {
+				// newVal must be a doc
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.formulaSeed = this.state.formulaSeed;
+
+				this.onDocChange(this, oldDoc, newDoc);
+			}.bind(this), 500);
+		},
+
 		render: function() {
 			if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 				this.props.doc.requireUnits = true;
@@ -1452,11 +1505,13 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				var requiredChildType = "quantity";
 			} else if (this.props.doc.type == "isaacSymbolicQuestion") {
 				var requiredChildType = "formula";
+			} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
+				var requiredChildType = "chemicalFormula";
 			} else {
 				var requiredChildType = "choice";
 			}
 
-			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion")
+			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion")
 				var choices = <Block type="choices" blockTypeTitle="Choices">
 					<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 				</Block>
@@ -1465,33 +1520,79 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
 			}
 
+			if (this.props.doc.type == "isaacNumericQuestion" && this.props.doc.requireUnits) {
+				var unitsList = <div className="row">
+					<div className="small-3 columns text-right">
+						Available units:
+					</div>
+					<div className="small-9 columns">
+						<input type="text" placeholder="Enter list of units here" value={this.state.availableUnits} onChange={this.onAvailableUnitsChange} />
+					</div>
+				</div>;
+			}
+
+			if (this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion") {
+				var symbolsList = <div className="row">
+					<div className="small-3 columns text-right">
+						Available symbols:
+					</div>
+					<div className="small-9 columns">
+						<input type="text" placeholder="Enter list of symbols here" value={this.state.availableSymbols} onChange={this.onAvailableSymbolsChange} />
+					</div>
+				</div>;
+
+				var formulaSeed = <div className="row">
+					<div className="small-3 columns text-right">
+						Equation editor seed:
+					</div>
+					<div className="small-9 columns">
+						<input type="text" placeholder="Enter initial state here" value={this.state.formulaSeed} onChange={this.onFormulaSeedChange} />
+					</div>
+				</div>;
+			}
+
 			return (
 				<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 					<form>
 						<div className="row">
-							<div className="small-6 small-offset-3 columns text-center end">
+							<div className="small-6 columns">
 								<input type="text" value={this.state.title} onChange={this.onTitleChange} placeholder="Question title"/>
+								<div className="row">
+									<div className="small-6 columns text-right">
+										Suggested time (mins):
+									</div>
+									<div className="small-6 columns">
+										<input type="text" value={this.state.suggestedDuration} onChange={this.onsuggestedDurationChange}/>
+									</div>
+								</div>
+								<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
+									<div className="small-6 columns text-right">
+										Significant figures:
+									</div>
+									<div className="small-6 columns">
+										<input type="text" value={this.state.significantFigures} onChange={this.onSignificantFiguresChange}/>
+									</div>
+								</div>
+								<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
+									<div ref="requireUnitsCheckbox" className="small-6 small-offset-6 columns">
+										<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+									</div>
+								</div>
 							</div>
-						</div>
-						<div ref="questionTypeRadios" style={{textAlign: "center"}}>
-							<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question
-							<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question
-							<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question
-							<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question
-						</div>
-						<div className="row">
-							<div className="small-3 small-offset-3 columns text-right">
-								Suggested time (mins):
+							<div className="small-6 columns">
+								<div ref="questionTypeRadios">
+									<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question<br/>
+									<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question<br/>
+									<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question<br/>
+									<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question<br/>
+									<input type="radio" name="question-type" value="isaacSymbolicChemistryQuestion" checked={this.props.doc.type == "isaacSymbolicChemistryQuestion"} onChange={this.type_Change} /> Chemistry Question<br/>
+								</div>
 							</div>
-							<div className="small-3 columns end">
-								<input type="text" value={this.state.suggestedDuration} onChange={this.onsuggestedDurationChange}/>
-							</div>
-						</div>
-						<div ref="requireUnitsCheckbox" style={{textAlign: "center", display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
-							<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
-							<label>Significant Figures: <input type="text" value={this.state.significantFigures} onChange={this.onSignificantFiguresChange} style={{display:"inline", width: "initial"}}/></label>
 						</div>
 					</form>
+					{unitsList}
+					{symbolsList}
+					{formulaSeed}
 					{exposition}
 					{choices}
 					<div className="row">
@@ -1555,7 +1656,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		}
 	});
 
-
 	var ContentBlock = React.createClass({
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -1601,6 +1701,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	});
+
 	var ChoiceBlock = React.createClass({
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -1939,6 +2040,133 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	});
+
+	var ChemicalFormulaChoiceBlock = React.createClass({
+		getInitialState: function() {
+			return {
+				editing: false,
+				editedValue: this.props.doc.value,
+			};
+		},
+
+		onDocChange: function(c, oldDoc, newDoc) {
+			this.props.onChange(this, oldDoc, newDoc);
+		},
+
+		onContentChange: function(c, oldVal, newVal) {
+			// newVal could be a string or a list.
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.value = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onExplanationChange: function(c, oldVal, newVal) {
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.explanation = newVal;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		correct_toggle: function(e) {
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+
+			newDoc.correct = !oldDoc.correct;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		componentDidMount: function() {
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+		},
+
+		componentDidUpdate: function() {
+			MathJax.resetLabels();
+
+			if (enableMathJax && this.refs.content) {
+				console.debug("MJ")
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+			}
+
+		},
+
+		edit: function() {
+			this.setState({
+				editing: true
+			});
+
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+		},
+
+		done: function() {
+			this.setState({
+				editing: false
+			});
+
+			this.onContentChange(this, this.props.doc.value, this.state.editedValue);
+
+			if (enableMathJax && this.refs.content)
+				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
+		},
+
+		setEditedValue: function(e) {
+			this.setState({editedValue: e.target.value});
+		},
+
+		render: function() {
+
+			var emptyExplanation = {
+				type: "content",
+				children: [],
+				encoding: "markdown"
+			};
+
+			if (this.state.editing) {
+				var html = "$\\ce{" + (this.state.editedValue || "") + "}$";
+				var content = <div ref="content">
+					<table>
+						<tr>
+							<td className="text-right">mhchem formula:</td>
+							<td><input type="text" style={{display: "inline-block"}} onChange={this.setEditedValue} value={this.state.editedValue} /></td>
+						</tr>
+					</table>
+					<button onClick={this.done} className="button tiny">Done</button>
+				</div>;
+			} else {
+				var html = "$\\ce{" + (this.props.doc.value || "") + "}$";
+
+				if (this.props.doc.value) {
+					var content = <span onClick={this.edit} ref="content" dangerouslySetInnerHTML={{__html: html}}></span>;
+				} else {
+					var content = <span onClick={this.edit} ref="content" style={{display: "block"}}> <i>Enter mhchem expression here</i></span>;
+				}
+			}
+
+			return (
+				<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
+					<div className="row">
+						<div className="small-1 column text-right">
+							{this.props.doc.correct ?
+								<i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> :
+								<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
+						</div>
+						<div className="small-6 columns" >
+							{content}
+						</div>
+						<div className="small-5 columns" >
+							<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />
+						</div>
+					</div>
+				</Block>
+			);
+		}
+	})
 
 
 	var TabsBlock = React.createClass({
@@ -2401,6 +2629,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"choice": ChoiceBlock,
 		"quantity": QuantityChoiceBlock,
 		"formula": FormulaChoiceBlock,
+		"chemicalFormula": ChemicalFormulaChoiceBlock,
 		"video": VideoBlock,
 		"anvilApp": AnvilAppBlock,
 		"question": QuestionBlock,
@@ -2409,6 +2638,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		"isaacMultiChoiceQuestion": QuestionBlock,
 		"isaacNumericQuestion": QuestionBlock,
 		"isaacSymbolicQuestion": QuestionBlock,
+		"isaacSymbolicChemistryQuestion": QuestionBlock,
 		"emailTemplate": EmailTemplateBlock
 	};
 

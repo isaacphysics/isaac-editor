@@ -513,3 +513,15 @@ input.inline {
 
   }
 }
+
+::-webkit-input-placeholder {
+   color: #bbb;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #bbb;  
+}
+
+:-ms-input-placeholder {  
+   color: #bbb;  
+}
