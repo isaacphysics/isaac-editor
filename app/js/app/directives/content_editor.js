@@ -1324,7 +1324,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				title: this.props.doc.title,
 				suggestedDuration: this.props.doc.suggestedDuration,
 				availableUnits: au.join(" | "),
-				availableSymbols: sy.join(" | "),
+				availableSymbols: sy.join(" , "),
 				formulaSeed: this.props.doc.formulaSeed,
 			}
 		},
@@ -1463,7 +1463,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				// newVal must be a doc
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-				newDoc.availableSymbols = this.state.availableSymbols.split("|");
+				newDoc.availableSymbols = this.state.availableSymbols.split(",");
 
 				this.onDocChange(this, oldDoc, newDoc);
 			}.bind(this), 500);
@@ -1526,7 +1526,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						Available units:
 					</div>
 					<div className="small-9 columns">
-						<input type="text" placeholder="Enter list of units here" value={this.state.availableUnits} onChange={this.onAvailableUnitsChange} />
+						<input type="text" placeholder="Enter list of units here (|-separated)" value={this.state.availableUnits} onChange={this.onAvailableUnitsChange} />
 					</div>
 				</div>;
 			}
@@ -1537,7 +1537,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						Available symbols:
 					</div>
 					<div className="small-9 columns">
-						<input type="text" placeholder="Enter list of symbols here" value={this.state.availableSymbols} onChange={this.onAvailableSymbolsChange} />
+						<input type="text" placeholder="Enter list of symbols here (,-separated)" value={this.state.availableSymbols} onChange={this.onAvailableSymbolsChange} />
 					</div>
 				</div>;
 
