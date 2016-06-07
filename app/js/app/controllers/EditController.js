@@ -363,11 +363,11 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 						if (scope.document.type == "isaacConceptPage") {
 							scope.previewLink = "https://staging.isaacphysics.org/concepts/" + scope.document.id;
 						} else if (scope.document.type == "isaacQuestionPage" || scope.document.type == "isaacFastTrackQuestionPage") {
-							scope.previewLink = "http://staging.isaacphysics.org/questions/" + scope.document.id;
+							scope.previewLink = "https://staging.isaacphysics.org/questions/" + scope.document.id;
 						} else if (scope.document.type == "isaacEventPage") {
-							scope.previewLink = "http://staging.isaacphysics.org/events/" + scope.document.id;
+							scope.previewLink = "https://staging.isaacphysics.org/events/" + scope.document.id;
 						} else if (scope.document.type == "page") {
-							scope.previewLink = "http://staging.isaacphysics.org/pages/" + scope.document.id;
+							scope.previewLink = "https://staging.isaacphysics.org/pages/" + scope.document.id;
 						} else {
 							delete scope.previewLink;
 						}
