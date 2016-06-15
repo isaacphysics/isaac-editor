@@ -790,7 +790,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						          onMouseLeave={this.insertMouseLeave.bind(this, index)}
 						          ref={"insertBefore" + index}/>
 
-						<div className="op-id text-right" ref={"id" + index}>ID: <input className="inline" value={this.state.itemIds[index]} onChange={this.onItemIdChange.bind(this, index)} /></div>
 	           			<VariantBlock doc={item}
 	           			              disableListOps
 	           			              onChange={this.onItemChange.bind(this, index)}
