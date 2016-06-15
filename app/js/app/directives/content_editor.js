@@ -1496,9 +1496,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			};
 
 			var exposition = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onExpositionChange}/>;
-			var optionalHints = <Block type="hints" blockTypeTitle="Hints">
-				<TabsBlock doc={hints} onChange={this.onHintsChange} allowTabTitles="false"/>
-			</Block>
+			if (this.props.doc.type != "isaacQuestion") {
+				var optionalHints = <Block type="hints" blockTypeTitle="Hints">
+					<TabsBlock doc={hints} onChange={this.onHintsChange} allowTabTitles="false"/>
+				</Block>
+			}
 
 			if (this.props.doc.type == "isaacNumericQuestion") {
 				var requiredChildType = "quantity";
@@ -1510,7 +1512,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				var requiredChildType = "choice";
 			}
 
-			if (this.props.doc.type == "isaacQuestion" || this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion")
+			if (this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion")
 				var choices = <Block type="choices" blockTypeTitle="Choices">
 					<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 				</Block>
