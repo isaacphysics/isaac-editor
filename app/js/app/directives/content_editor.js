@@ -1321,7 +1321,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			return {
 				significantFigures: this.props.doc.significantFigures,
 				title: this.props.doc.title,
-				suggestedDuration: this.props.doc.suggestedDuration,
 				availableUnits: au.join(" | "),
 				availableSymbols: sy.join(" , "),
 				formulaSeed: this.props.doc.formulaSeed,
@@ -1386,19 +1385,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.title = e.target.value;
-
-			this.onDocChange(this, oldDoc, newDoc);
-		},
-
-		onsuggestedDurationChange: function(e) {
-
-			this.setState({
-				suggestedDuration: e.target.value,
-			});
-
-			var oldDoc = this.props.doc;
-			var newDoc = $.extend({}, oldDoc);
-			newDoc.suggestedDuration = parseInt(e.target.value);
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -1558,14 +1544,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="row">
 							<div className="small-6 columns">
 								<input type="text" value={this.state.title} onChange={this.onTitleChange} placeholder="Question title"/>
-								<div className="row">
-									<div className="small-6 columns text-right">
-										Suggested time (mins):
-									</div>
-									<div className="small-6 columns">
-										<input type="text" value={this.state.suggestedDuration} onChange={this.onsuggestedDurationChange}/>
-									</div>
-								</div>
 								<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
 									<div className="small-6 columns text-right">
 										Significant figures:
