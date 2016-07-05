@@ -2560,6 +2560,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					var subtitle = <h4 onClick={this.onMdClick}>{this.props.doc.subtitle}</h4>;
 				}
 
+				if (this.props.doc && this.props.doc.id && typeMap[this.props.doc.type] == QuestionBlock) {
+					var questionId = <h5 className="question-id-meta">{this.props.doc.id}</h5>
+				}
+
 				return (
 					<div className={"block type-" + this.props.type}  ref="block">
 						<div className="row">
@@ -2568,6 +2572,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 								{metaDataComponent}
 								{title}
 								{subtitle}
+								{questionId}
 								{this.props.children}
 							</div>
 						</div>
