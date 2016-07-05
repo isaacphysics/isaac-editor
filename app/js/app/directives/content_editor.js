@@ -259,6 +259,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
 				location: this.props.doc.location || {},
+				supersededBy: this.props.doc.supersededBy
 			};
 
 		},
@@ -411,6 +412,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.location = this.state.location;
 			}
 
+			if (this.state.supersededBy != null || this.props.doc.supersededBy) {
+				newDoc.supersededBy = this.state.supersededBy;
+			}
+
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
@@ -462,7 +467,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
 					</div>,
 					<div className="row">
-						<div className="small-2 columns text-right"><span className="metadataLabel">Summary</span></div>
+						<div className="small-2 columns text-right"><span className="metadataLabel">Summary:</span></div>
 						<div className="small-10 columns"><input type="text" value={this.state.summary} onChange={this.onTextboxChange.bind(this, "summary")} /> </div>
 					</div>
 				];
@@ -514,13 +519,18 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage") {
 				var questionPageMeta = <div className="row">
-					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution</span></div>
+					<div className="small-2 columns text-right"><span className="metadataLabel">Attribution:</span></div>
 					<div className="small-10 columns"><input type="text" value={this.state.attribution} onChange={this.onTextboxChange.bind(this, "attribution")} /></div>
 				</div>;
 
 				var levelMeta = <div className="row">
-					<div className="small-2 columns text-right"><span className="metadataLabel">Level</span></div>
+					<div className="small-2 columns text-right"><span className="metadataLabel">Level:</span></div>
 					<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
+				</div>;
+
+				var supersededByMeta = <div className="row">
+					<div className="small-2 columns text-right"><span className="metadataLabel">Superseded by:</span></div>
+					<div className="small-10 columns"><input type="text" value={this.state.supersededBy} onChange={this.onTextboxChange.bind(this, "supersededBy")} /></div>
 				</div>;
 			}
 
@@ -573,6 +583,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{figureMeta}
 						{questionPageMeta}
 						{levelMeta}
+						{supersededByMeta}
 						{pageMeta}
 						{eventMetadata}
 						{emailTemplateMeta}
