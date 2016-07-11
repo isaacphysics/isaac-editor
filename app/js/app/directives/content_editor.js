@@ -2035,7 +2035,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getInitialState: function() {
 			return {
 				editing: false,
-				editedValue: this.props.doc.value,
+				editedValue: this.props.doc.mhchemExpression,
 			};
 		},
 
