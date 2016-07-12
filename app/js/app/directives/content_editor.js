@@ -2035,7 +2035,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		getInitialState: function() {
 			return {
 				editing: false,
-				editedValue: this.props.doc.mhchemExpression,
+				editedMhchemExpression: this.props.doc.mhchemExpression,
 			};
 		},
 
@@ -2043,11 +2043,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.props.onChange(this, oldDoc, newDoc);
 		},
 
-		onContentChange: function(c, oldVal, newVal) {
+		onContentChange: function(c, oldVal, newVal, oldMhchemExpression, newMhchemExpression) {
 			// newVal could be a string or a list.
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.value = newVal;
+			// newDoc.value = newVal;
+			newDoc.mhchemExpression = newMhchemExpression;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -2099,7 +2100,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				editing: false
 			});
 
-			this.onContentChange(this, this.props.doc.value, this.state.editedValue);
+			this.onContentChange(this, this.props.doc.value, this.state.editedValue, this.props.doc.mhchemExpression, this.state.editedMhchemExpression);
 
 			if (enableMathJax && this.refs.content)
 				MathJax.Hub.Queue(["Typeset",MathJax.Hub, this.refs.content.getDOMNode()]);
@@ -2107,6 +2108,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		setEditedValue: function(e) {
 			this.setState({editedValue: e.target.value});
+		},
+
+		setEditedMhchemExpression: function(e) {
+			this.setState({editedMhchemExpression: e.target.value});
 		},
 
 		render: function() {
@@ -2118,20 +2123,20 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			};
 
 			if (this.state.editing) {
-				var html = "$\\ce{" + (this.state.editedValue || "") + "}$";
+				var html = "$\\ce{" + (this.state.editedMhchemExpression || "") + "}$";
 				var content = <div ref="content">
 					<table>
 						<tr>
 							<td className="text-right">mhchem formula:</td>
-							<td><input type="text" style={{display: "inline-block"}} onChange={this.setEditedValue} value={this.state.editedValue} /></td>
+							<td><input type="text" style={{display: "inline-block"}} onChange={this.setEditedMhchemExpression} value={this.state.editedMhchemExpression} /></td>
 						</tr>
 					</table>
 					<button onClick={this.done} className="button tiny">Done</button>
 				</div>;
 			} else {
-				var html = "$\\ce{" + (this.props.doc.value || "") + "}$";
+				var html = "$\\ce{" + (this.props.doc.mhchemExpression || "") + "}$";
 
-				if (this.props.doc.value) {
+				if (this.props.doc.mhchemExpression) {
 					var content = <span onClick={this.edit} ref="content" dangerouslySetInnerHTML={{__html: html}}></span>;
 				} else {
 					var content = <span onClick={this.edit} ref="content" style={{display: "block"}}> <i>Enter mhchem expression here</i></span>;
