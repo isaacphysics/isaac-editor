@@ -264,7 +264,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
 				location: this.props.doc.location || {},
-				supersededBy: this.props.doc.supersededBy
+				supersededBy: this.props.doc.supersededBy,
+                isaacGroupToken: this.props.doc.isaacGroupToken
 			};
 
 		},
@@ -429,6 +430,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.bookingDeadline = this.state.bookingDeadlineInt;
 			}
 
+			if (this.state.isaacGroupToken || this.props.doc.isaacGroupToken) {
+				newDoc.isaacGroupToken = this.state.isaacGroupToken;
+			}
+
 			if (this.state.appId != null || this.props.doc.appId) {
 				newDoc.appId = this.state.appId;
 			}
@@ -548,6 +553,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 							<input type="text" placeholder="Postal Code" value={this.state.location.postalCode} onChange={this.onLocationChange.bind(this, "postalCode")} />
 						</div>
 					</div>,
+                    <div className="row">
+                        <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
+                        <div className="small-10 columns"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
+                    </div>,
 				];
 			}
 
