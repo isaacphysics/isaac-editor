@@ -1407,14 +1407,17 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.type = newType;
-			if (newType == "isaacNumericQuestion") {
-				if (!newDoc.hasOwnProperty("requireUnits")) {
-					// Add the default value if it is missing
-					newDoc.requireUnits = true;
-				}
+			if (newType == "isaacNumericQuestion" && !newDoc.hasOwnProperty("requireUnits")) {
+				// Add the default value if it is missing
+				newDoc.requireUnits = true;
+			} else if (newType == "isaacMultiChoiceQuestion" && !newDoc.hasOwnProperty("randomiseChoices")) {
+				// Add the default value if it is missing
+				newDoc.randomiseChoices = true;
 			} else {
 				// Remove the requireUnits property as it is no longer applicable to this type of question
 				delete newDoc.requireUnits;
+				// Remove the randomiseChoices property as it is no longer applicable to this type of question
+				delete newDoc.randomiseChoices;
 			}
 
 			this.onDocChange(this, oldDoc, newDoc);
@@ -1423,12 +1426,23 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		onCheckboxChange: function(key, e) {
 			if (key != "requireUnits") return;
 
-			console.log("New checkbox state:", e.target.checked);
+			console.log("New checkbox state:", e.target.checked, "for key:", key);
 
 			// newVal must be a doc
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
 			newDoc.requireUnits = e.target.checked;
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
+		onRandomiseChoicesChange: function(e) {
+			console.log("Randomise choices: ", e.target.checked);
+
+			// newVal must be a doc
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.randomiseChoices = e.target.checked;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -1484,6 +1498,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		render: function() {
 			if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 				this.props.doc.requireUnits = true;
+			} else if (this.props.doc.type == "isaacMultiChoiceQuestion" && !this.props.doc.hasOwnProperty("randomiseChoices")) {
+				this.props.doc.randomiseChoices = true;
 			}
 
 			var hints = {
@@ -1566,6 +1582,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 								<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
 									<div ref="requireUnitsCheckbox" className="small-6 small-offset-6 columns">
 										<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+									</div>
+								</div>
+								<div className="row" style={{display: this.props.doc.type == "isaacMultiChoiceQuestion" ? "block" : "none"}}>
+									<div ref="randomiseChoicesCheckbox" className="small-6 small-offset-6 columns">
+										<label><input type="checkbox" checked={this.props.doc.randomiseChoices} onChange={this.onRandomiseChoicesChange.bind(this)} />Randomise Choices</label>
 									</div>
 								</div>
 							</div>
