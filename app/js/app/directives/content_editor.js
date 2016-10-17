@@ -1421,14 +1421,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onCheckboxChange: function(key, e) {
-			if (key != "requireUnits") return;
+			// if (key != "requireUnits") return;
 
 			console.log("New checkbox state:", e.target.checked);
 
 			// newVal must be a doc
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.requireUnits = e.target.checked;
+			newDoc[key] = e.target.checked;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
