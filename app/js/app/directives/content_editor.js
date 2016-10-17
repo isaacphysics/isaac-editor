@@ -1467,14 +1467,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onCheckboxChange: function(key, e) {
-			if (key != "requireUnits") return;
-
 			console.log("New checkbox state:", e.target.checked, "for key:", key);
 
 			// newVal must be a doc
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.requireUnits = e.target.checked;
+			newDoc[key] = e.target.checked;
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
@@ -1629,7 +1627,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 								</div>
 								<div className="row" style={{display: this.props.doc.type == "isaacMultiChoiceQuestion" ? "block" : "none"}}>
 									<div ref="randomiseChoicesCheckbox" className="small-6 small-offset-6 columns">
-										<label><input type="checkbox" checked={this.props.doc.randomiseChoices} onChange={this.onRandomiseChoicesChange.bind(this)} />Randomise Choices</label>
+										<label><input type="checkbox" checked={this.props.doc.randomiseChoices} onChange={this.onCheckboxChange.bind(this, "randomiseChoices")} />Randomise Choices</label>
 									</div>
 								</div>
 							</div>
