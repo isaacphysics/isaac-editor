@@ -265,7 +265,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				appAccessKey: this.props.doc.appAccessKey,
 				location: this.props.doc.location || {},
 				supersededBy: this.props.doc.supersededBy,
-                isaacGroupToken: this.props.doc.isaacGroupToken
+                isaacGroupToken: this.props.doc.isaacGroupToken,
+				numberOfPlaces: this.props.doc.numberOfPlaces,
+				eventStatus: this.props.doc.eventStatus
 			};
 
 		},
@@ -291,6 +293,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onTextboxChange: function(key, e) {
+			var newState = {};
+			newState[key] = e.target.value;
+			this.setState(newState);
+
+			clearTimeout(this.metadataChangeTimeout);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+		},
+
+		onDropdownChange: function(key, e) {
 			var newState = {};
 			newState[key] = e.target.value;
 			this.setState(newState);
@@ -434,6 +445,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.isaacGroupToken = this.state.isaacGroupToken;
 			}
 
+			if (this.state.numberOfPlaces || this.props.doc.numberOfPlaces) {
+				newDoc.numberOfPlaces = this.state.numberOfPlaces;
+			}
+
+			if (this.state.eventStatus || this.props.doc.eventStatus) {
+				newDoc.eventStatus = this.state.eventStatus;
+			}
+
 			if (this.state.appId != null || this.props.doc.appId) {
 				newDoc.appId = this.state.appId;
 			}
@@ -542,6 +561,20 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="small-2 columns text-right"><span className="metadataLabel">Booking Deadline<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
 						<div className="small-5 columns"><input type="text" value={this.state.bookingDeadlineInput} onChange={this.onBookingDeadlineChange} /></div>
 						<div className="small-5 columns">{this.state.bookingDeadlineOutput}</div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Number of places</span></div>
+						<div className="small-5 columns end"><input type="text" value={this.state.numberOfPlaces} onChange={this.onTextboxChange.bind(this, "numberOfPlaces")} /></div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Status</span></div>
+						<div className="small-5 columns end">
+							<select value={this.state.eventStatus} onChange={this.onDropdownChange.bind(this, "eventStatus")}>
+								<option value="OPEN">Open</option>
+								<option value="CANCELLED">Cancelled</option>
+								<option value="CLOSED">Closed</option>
+							</select>
+						</div>
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Location</span></div>
