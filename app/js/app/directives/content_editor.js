@@ -555,7 +555,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					</div>,
                     <div className="row">
                         <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
-                        <div className="small-10 columns"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
+                        <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
                     </div>,
 				];
 			}
