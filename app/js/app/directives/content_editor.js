@@ -263,7 +263,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				end_dateInt: this.props.doc.end_date,
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
-				location: this.props.doc.location || {},
+				location: this.props.doc.location || { address: {} },
 				supersededBy: this.props.doc.supersededBy,
                 isaacGroupToken: this.props.doc.isaacGroupToken,
 				numberOfPlaces: this.props.doc.numberOfPlaces,
@@ -473,9 +473,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onLocationChange: function(field, e) {
-			var newLoc = {};
 			newState = $.extend({}, this.state);
-			newState.location[field] = e.target.value;
+			if (field.indexOf('address.') >= 0) {
+                newState.location.address[field.split('.')[1]] = e.target.value;
+            } else {
+                newState.location[field] = e.target.value;
+			}
 
 			this.setState(newState);
 			clearTimeout(this.metadataChangeTimeout);
@@ -579,14 +582,20 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Location</span></div>
 						<div className="small-5 columns end">
-							<input type="text" placeholder="Address Line 1" value={this.state.location.addressLine1} onChange={this.onLocationChange.bind(this, "addressLine1")} />
-							<input type="text" placeholder="Address Line 2" value={this.state.location.addressLine2} onChange={this.onLocationChange.bind(this, "addressLine2")} />
-							<input type="text" placeholder="Town" value={this.state.location.town} onChange={this.onLocationChange.bind(this, "town")} />
-							<input type="text" placeholder="County" value={this.state.location.county} onChange={this.onLocationChange.bind(this, "county")} />
-							<input type="text" placeholder="Postal Code" value={this.state.location.postalCode} onChange={this.onLocationChange.bind(this, "postalCode")} />
+							<input type="text" placeholder="Address Line 1" value={this.state.location.address.addressLine1} onChange={this.onLocationChange.bind(this, "address.addressLine1")} />
+							<input type="text" placeholder="Address Line 2" value={this.state.location.address.addressLine2} onChange={this.onLocationChange.bind(this, "address.addressLine2")} />
+							<input type="text" placeholder="Town" value={this.state.location.address.town} onChange={this.onLocationChange.bind(this, "address.town")} />
+							<input type="text" placeholder="County" value={this.state.location.address.county} onChange={this.onLocationChange.bind(this, "address.county")} />
+							<input type="text" placeholder="Postal Code" value={this.state.location.address.postalCode} onChange={this.onLocationChange.bind(this, "address.postalCode")} />
+						</div>
+						<div className="small-offset-2 small-10 columns">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Longitude</span></div>
+							<div className="small-4 columns"><input type="text" placeholder="Longitude" value={this.state.location.longitude} onChange={this.onLocationChange.bind(this, "longitude")} /></div>
+							<div className="small-2 columns text-right"><span className="metadataLabel">Latitude</span></div>
+							<div className="small-4 columns end"><input type="text" placeholder="Latitude" value={this.state.location.latitude} onChange={this.onLocationChange.bind(this, "latitude")} /></div>
 						</div>
 					</div>,
-                    <div className="row">
+					<div className="row">
                         <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
                         <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
                     </div>,
@@ -1728,7 +1737,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.props.doc.location) {
 				var loc = [<div style={{color: "#aaa"}} onClick={this.onLocationClick}><br/>
-					{this.props.doc.location.addressLine1}, {this.props.doc.location.county}
+					{this.props.doc.location.address.addressLine1}, {this.props.doc.location.address.county}
 				</div>,<br/>];
 			}
 			return (
