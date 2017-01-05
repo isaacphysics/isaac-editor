@@ -263,7 +263,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				end_dateInt: this.props.doc.end_date,
 				appId: this.props.doc.appId,
 				appAccessKey: this.props.doc.appAccessKey,
-				location: this.props.doc.location || { address: {} },
+				location: this.props.doc.location || {},
 				supersededBy: this.props.doc.supersededBy,
                 isaacGroupToken: this.props.doc.isaacGroupToken,
 				numberOfPlaces: this.props.doc.numberOfPlaces,
