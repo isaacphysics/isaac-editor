@@ -1720,6 +1720,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
+		onEmailEventDetalsChange: function(c, oldVal, newVal, oldChildren, newChildren) {
+			console.log(oldVal);
+			console.log(newVal);
+		},
+
 		onThumbnailChange: function(c, oldVal, newVal) {
 			//console.log("onThumbnailChange", newVal);
 			var oldDoc = this.props.doc;
@@ -1744,7 +1749,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				<Block ref="blk" type="eventPage" blockTypeTitle="Event Page" doc={this.props.doc} onChange={this.onDocChange}>
 					{loc}
 					<FigureBlock doc={this.props.doc.eventThumbnail} onChange={this.onThumbnailChange} />
+					<h3>Event Details</h3>
 					<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+					<h3>Email Event Details</h3>
+					<ContentValue value={this.props.doc.emailEventDetails} disableListOps="true" encoding={this.props.encoding} onChange={this.onEmailEventDetalsChange}/>
 				</Block>
 			);
 		}
