@@ -243,7 +243,7 @@ define(["github/github", "app/helpers", "angulartics"], function() {
 			})
 
 			$rootScope.modal.show(scope.file.name, scope.file.path, "", buttons).then(function(r) {
-				r.closedPromise.then(r.value);
+				r.closedPromise.then(r.value());
 			});
 
 
