@@ -557,7 +557,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				var eventMetadata = [
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Email Event Details:</span></div>
-						<div className="small-10 columns"><input type="text" value={this.state.emailEventDetails} onChange={this.onTextboxChange.bind(this, "emailEventDetails")} /></div>
+						<div className="small-10 columns"><textarea value={this.state.emailEventDetails} onChange={this.onTextboxChange.bind(this, "emailEventDetails")}></textarea></div>
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Start Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>

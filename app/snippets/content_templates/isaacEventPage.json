@@ -27,7 +27,6 @@
       "url": "somewhere/interesting.pdf"
     }
   ],
-  "emailEventDetails": "Email event details in <em>markdown</em>",
   "encoding": "markdown",
   "type": "isaacEventPage",
   "children": [
