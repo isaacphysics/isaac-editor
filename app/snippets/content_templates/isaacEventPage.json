@@ -27,6 +27,7 @@
       "url": "somewhere/interesting.pdf"
     }
   ],
+  "emailEventDetails": "",
   "encoding": "markdown",
   "type": "isaacEventPage",
   "children": [
