@@ -239,6 +239,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			var edop = this.props.doc.end_date ? ContentEditor.dateFilter(new Date(this.props.doc.end_date), "yyyy-MM-dd HH:mm", "UTC") : "";
             var bookingDeadlineInput = this.props.doc.bookingDeadline ? ContentEditor.dateFilter(new Date(this.props.doc.bookingDeadline), "yyyy-MM-dd HH:mm", "UTC") : "";
             var bookingDeadlineOutput = this.props.doc.bookingDeadline ? ContentEditor.dateFilter(new Date(this.props.doc.bookingDeadline), "yyyy-MM-dd HH:mm", "UTC") : "";
+            var prepWorkDeadlineInput = this.props.doc.prepWorkDeadline ? ContentEditor.dateFilter(new Date(this.props.doc.prepWorkDeadline), "yyyy-MM-dd HH:mm", "UTC") : "";
+            var prepWorkDeadlineOutput = this.props.doc.prepWorkDeadline ? ContentEditor.dateFilter(new Date(this.props.doc.prepWorkDeadline), "yyyy-MM-dd HH:mm", "UTC") : "";
 
 			return {
 				id: this.props.doc.id,
@@ -259,6 +261,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
                 bookingDeadlineInput: bookingDeadlineInput,
                 bookingDeadlineOutput: bookingDeadlineOutput,
                 bookingDeadlineInt: this.props.doc.bookingDeadline,
+                prepWorkDeadlineInput: prepWorkDeadlineInput,
+                prepWorkDeadlineOutput: prepWorkDeadlineOutput,
+                prepWorkDeadlineInt: this.props.doc.prepWorkDeadline,
 				dateInt: this.props.doc.date,
 				end_dateInt: this.props.doc.end_date,
 				appId: this.props.doc.appId,
@@ -382,6 +387,26 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 		},
 
+        onPrepWorkDeadlineChange: function(e) {
+			var newVal = e.target.value;
+			this.setState({
+				prepWorkDeadlineInput: newVal,
+			});
+
+			var d = Date.parse(newVal.replace(/\-/g, "/"));
+			if (d) {
+				dt = new Date(d);
+				this.setState({
+                    prepWorkDeadlineOutput: ContentEditor.dateFilter(dt, "yyyy-MM-dd HH:mm", "UTC"),
+                    prepWorkDeadlineInt: d,
+				});
+
+				clearTimeout(this.metadataChangeTimeout);
+				this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+
+			}
+		},
+
 		onMetadataChangeTimeout: function() {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
@@ -440,6 +465,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.state.bookingDeadlineInt || this.props.doc.bookingDeadlineInt) {
 				newDoc.bookingDeadline = this.state.bookingDeadlineInt;
+			}
+
+			if (this.state.prepWorkDeadlineInt || this.props.doc.prepWorkDeadlineInt) {
+				newDoc.prepWorkDeadline = this.state.prepWorkDeadlineInt;
 			}
 
 			if (this.state.isaacGroupToken || this.props.doc.isaacGroupToken) {
@@ -555,6 +584,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 			if (this.props.doc.type == "isaacEventPage") {
 				var eventMetadata = [
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Prep Work Deadline<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
+						<div className="small-5 columns"><input type="text" value={this.state.prepWorkDeadlineInput} onChange={this.onPrepWorkDeadlineChange} /></div>
+						<div className="small-5 columns">{this.state.prepWorkDeadlineOutput}</div>
+					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Email Event Details:</span></div>
 						<div className="small-10 columns"><textarea value={this.state.emailEventDetails} onChange={this.onTextboxChange.bind(this, "emailEventDetails")}></textarea></div>
