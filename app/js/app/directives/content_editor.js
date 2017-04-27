@@ -272,7 +272,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				supersededBy: this.props.doc.supersededBy,
                 isaacGroupToken: this.props.doc.isaacGroupToken,
 				numberOfPlaces: this.props.doc.numberOfPlaces,
-				eventStatus: this.props.doc.eventStatus
+				eventStatus: this.props.doc.eventStatus,
+				emailEventDetails: this.props.doc.emailEventDetails
 			};
 
 		},
@@ -498,6 +499,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				newDoc.supersededBy = this.state.supersededBy;
 			}
 
+			if (this.state.emailEventDetails || this.props.doc.emailEventDetails) {
+				newDoc.emailEventDetails = this.state.emailEventDetails;
+			}
+
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
@@ -583,6 +588,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="small-2 columns text-right"><span className="metadataLabel">Prep Work Deadline<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
 						<div className="small-5 columns"><input type="text" value={this.state.prepWorkDeadlineInput} onChange={this.onPrepWorkDeadlineChange} /></div>
 						<div className="small-5 columns">{this.state.prepWorkDeadlineOutput}</div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Email Event Details:</span></div>
+						<div className="small-10 columns"><textarea value={this.state.emailEventDetails} onChange={this.onTextboxChange.bind(this, "emailEventDetails")}></textarea></div>
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Start Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
