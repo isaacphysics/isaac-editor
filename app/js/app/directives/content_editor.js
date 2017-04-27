@@ -585,11 +585,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			if (this.props.doc.type == "isaacEventPage") {
 				var eventMetadata = [
 					<div className="row">
-						<div className="small-2 columns text-right"><span className="metadataLabel">Prep Work Deadline<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
-						<div className="small-5 columns"><input type="text" value={this.state.prepWorkDeadlineInput} onChange={this.onPrepWorkDeadlineChange} /></div>
-						<div className="small-5 columns">{this.state.prepWorkDeadlineOutput}</div>
-					</div>,
-					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Email Event Details:</span></div>
 						<div className="small-10 columns"><textarea value={this.state.emailEventDetails} onChange={this.onTextboxChange.bind(this, "emailEventDetails")}></textarea></div>
 					</div>,
@@ -607,6 +602,11 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<div className="small-2 columns text-right"><span className="metadataLabel">Booking Deadline<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
 						<div className="small-5 columns"><input type="text" value={this.state.bookingDeadlineInput} onChange={this.onBookingDeadlineChange} /></div>
 						<div className="small-5 columns">{this.state.bookingDeadlineOutput}</div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Prep-work Deadline<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
+						<div className="small-5 columns"><input type="text" value={this.state.prepWorkDeadlineInput} onChange={this.onPrepWorkDeadlineChange} /></div>
+						<div className="small-5 columns">{this.state.prepWorkDeadlineOutput}</div>
 					</div>,
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Number of places</span></div>
