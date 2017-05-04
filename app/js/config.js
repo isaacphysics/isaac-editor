@@ -14,7 +14,7 @@ require.config({
         "angulartics-ga": '../../bower_components/angulartics/src/angulartics-ga',
         "codemirror": "codemirror/codemirror",
         "codemirrorJS": "codemirror/mode/javascript/javascript",
-        "mathjax": 'https://cdn.isaacphysics.org/vendor/mathjax/2.6/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+        "mathjax": 'https://cdn.isaacphysics.org/vendor/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
     },
 
     shim: {
