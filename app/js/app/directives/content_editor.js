@@ -1458,7 +1458,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			au = this.props.doc.availableUnits || [];
 			sy = this.props.doc.availableSymbols || [];
 			return {
-				significantFigures: this.props.doc.significantFigures,
+				significantFiguresMin: this.props.doc.significantFiguresMin,
+				significantFiguresMax: this.props.doc.significantFiguresMax,
 				title: this.props.doc.title,
 				availableUnits: au.join(" | "),
 				availableSymbols: sy.join(" , "),
@@ -1506,18 +1507,33 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.onDocChange(this, oldDoc, newDoc);
 		},
 
-		onSignificantFiguresChange: function(e) {
-
+		onSignificantFiguresMinChange: function(e) {
+			var value = e.target.value;
 			this.setState({
-				significantFigures: e.target.value
+				significantFiguresMin: value,
+				significantFiguresMax: value
 			});
 
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.significantFigures = parseInt(e.target.value);
+			newDoc.significantFiguresMin = newDoc.significantFiguresMax = parseInt(value);
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
+
+		onSignificantFiguresMaxChange: function(e) {
+
+			this.setState({
+				significantFiguresMax: e.target.value
+			});
+
+			var oldDoc = this.props.doc;
+			var newDoc = $.extend({}, oldDoc);
+			newDoc.significantFiguresMax = parseInt(e.target.value);
+
+			this.onDocChange(this, oldDoc, newDoc);
+		},
+
 
 		onTitleChange: function(e) {
 
@@ -1701,8 +1717,17 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 									<div className="small-6 columns text-right">
 										Significant figures:
 									</div>
-									<div className="small-6 columns">
-										<input type="text" value={this.state.significantFigures} onChange={this.onSignificantFiguresChange}/>
+									<div className="small-1 columns text-right">
+										Min
+									</div>
+									<div className="small-2 columns">
+										<input type="text" value={this.state.significantFiguresMin} onChange={this.onSignificantFiguresMinChange}/>
+									</div>
+									<div className="small-1 columns text-right">
+										Max
+									</div>
+									<div className="small-2 columns">
+										<input type="text" value={this.state.significantFiguresMax} onChange={this.onSignificantFiguresMaxChange}/>
 									</div>
 								</div>
 								<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
