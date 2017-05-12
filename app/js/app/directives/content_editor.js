@@ -1595,7 +1595,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			});
 
 			clearTimeout(this.availableSymbolsCommitTimeout);
-			this.availableUnitsCommitTimeout = setTimeout(function() {
+			this.availableSymbolsCommitTimeout = setTimeout(function() {
 				// newVal must be a doc
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
@@ -2392,10 +2392,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		},
 
-		onTabChange: function(c, oldVal, newVal) {
+		onTabChange: function(activeTab, c, oldVal, newVal) {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, this.props.doc);
-			newDoc.children[this.state.activeTab] = newVal;
+			newDoc.children[activeTab] = newVal;
 
 			this.onDocChange(this, oldDoc, newDoc);
 			this.forceUpdate();
@@ -2427,12 +2427,12 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{editTitle}
 						<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
 					</div>
-					<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange} />
+					<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange.bind(this, this.state.activeTab)} />
 				</div>;
 			}
 
 			return 	(
-				<Block type="tabs" blockTypeTitle="Tabs" doc={this.props.doc} onChange={this.onDocChange}>
+				<Block type="tabs" blockTypeTitle="Tabs" doc={this.props.doc} onChange={this.onDocChange.bind(this)}>
 					<div className="row tabs-content">
 						<div className="small-12 columns">
 							{tabButtons} <br/>
@@ -2540,10 +2540,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		},
 
-		onSectionChange: function(c, oldVal, newVal) {
+		onSectionChange: function(activeSection, c, oldVal, newVal) {
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, this.props.doc);
-			newDoc.children[this.state.activeSection] = newVal;
+			newDoc.children[activeSection] = newVal;
 
 			this.onDocChange(this, oldDoc, newDoc);
 			this.forceUpdate();
@@ -2593,7 +2593,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						<button onClick={this.setLevel} className="tiny radius">Edit section level...</button>&nbsp;
 						<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 					</div>
-					<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange} />
+					<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
 				</div>;
 			}
 
