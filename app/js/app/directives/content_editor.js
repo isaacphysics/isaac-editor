@@ -1508,15 +1508,14 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 		},
 
 		onSignificantFiguresMinChange: function(e) {
-			var value = e.target.value;
+
 			this.setState({
-				significantFiguresMin: value,
-				significantFiguresMax: value
+				significantFiguresMin: e.target.value
 			});
 
 			var oldDoc = this.props.doc;
 			var newDoc = $.extend({}, oldDoc);
-			newDoc.significantFiguresMin = newDoc.significantFiguresMax = parseInt(value);
+			newDoc.significantFiguresMin = parseInt(e.target.value);
 
 			this.onDocChange(this, oldDoc, newDoc);
 		},
