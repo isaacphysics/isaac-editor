@@ -307,8 +307,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
 		},
 
-		onListChange: function(key, e) {},
-
 		onDropdownChange: function(key, e) {
 			var newState = {};
 			newState[key] = e.target.value;
