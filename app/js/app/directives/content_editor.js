@@ -230,7 +230,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	});
 
 	var MetaData = React.createClass({
-
 		getInitialState: function() {
 
 			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
@@ -273,9 +272,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
                 isaacGroupToken: this.props.doc.isaacGroupToken,
 				numberOfPlaces: this.props.doc.numberOfPlaces,
 				eventStatus: this.props.doc.eventStatus,
-				emailEventDetails: this.props.doc.emailEventDetails
+				emailEventDetails: this.props.doc.emailEventDetails,
+				preResources: this.props.doc.preResources,
+				postResources: this.props.doc.postResources,
 			};
-
 		},
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -306,6 +306,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			clearTimeout(this.metadataChangeTimeout);
 			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
 		},
+
+		onListChange: function(key, e) {},
 
 		onDropdownChange: function(key, e) {
 			var newState = {};
@@ -530,6 +532,49 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 		},
 
+		onResourceChange: function(resourceType, resources, index, key, e) {
+			var newObjectState = {};
+			resources[index][key] = e.target.value;
+			newObjectState[resourceType] = resources;
+			this.setState(newObjectState);
+
+			clearTimeout(this.metadataChangeTimeout);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+		},
+
+		addResource: function(resourceType) {
+			var newObjectState = {};
+			resources = this.state[resourceType];
+			resources.push({title:"Event Title", url:"somewhere/useful.pdf"});
+			newObjectState[resourceType] = resources;
+			this.setState(newObjectState);
+		},
+
+		removeResource: function(resourceType, index) {
+			var newObjectState = {};
+			resources = this.state[resourceType];
+			resources.splice(index, 1);
+			newObjectState[resourceType] = resources;
+			this.setState(newObjectState);
+		},
+
+		generateResourceElements: function(resourceType, label) {
+			return this.state[resourceType].map(function(resource, index, resources) {
+				return (
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">{label}</span></div><div >
+							<div className="small-1 columns text-right"><span className="metadataLabel">Title</span></div>
+							<div className="small-3 columns"><input type="text" value={resource.title} onChange={this.onResourceChange.bind(this, resourceType, resources, index, "title")} /></div>
+							<div className="small-1 columns text-right"><span className="metadataLabel">URL</span></div>
+							<div className="small-3 columns"><input type="text" value={resource.url} onChange={this.onResourceChange.bind(this, resourceType, resources, index, "url")} /></div>
+							<div className="small-1 columns end"><button onClick={this.addResource.bind(this, resourceType, index)} className="button tiny round">+</button></div>
+							<div className="small-1 columns end"><button onClick={this.removeResource.bind(this, resourceType, index)} className="button tiny round alert">x</button></div>
+						</div>
+					</div>
+				);
+			}.bind(this));
+		},
+
 		render: function() {
 
 			var tagsComponent = <Tags tags={this.props.doc.tags || []} onChange={this.onTagsChange}/>;
@@ -583,6 +628,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			}
 
 			if (this.props.doc.type == "isaacEventPage") {
+				var preResources = this.generateResourceElements('preResources', 'Pre-Resource:');
+				var postResources = this.generateResourceElements('postResources', 'Post-Resource:');
 				var eventMetadata = [
 					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Email Event Details:</span></div>
@@ -714,6 +761,8 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 						{supersededByMeta}
 						{pageMeta}
 						{eventMetadata}
+						{preResources}
+						{postResources}
 						{emailTemplateMeta}
 						{anvilAppMeta}
 					</div>
@@ -2333,7 +2382,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	})
-
 
 	var TabsBlock = React.createClass({
 
