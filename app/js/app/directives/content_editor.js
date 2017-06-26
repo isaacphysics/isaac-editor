@@ -537,22 +537,22 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.setState(newObjectState);
 		},
 
-		removeResource: function(resourceType, index) {
-			var newObjectState = {};
-			resources = this.state[resourceType];
-			resources.splice(index, 1);
-			newObjectState[resourceType] = resources;
-			this.setState(newObjectState);
-		},
-
 		generateResourceElements: function(resourceType) {
+			var removeResource = function(index) {
+				var newObjectState = {};
+				resources = this.state[resourceType];
+				resources.splice(index, 1);
+				newObjectState[resourceType] = resources;
+				this.setState(newObjectState);
+			}
+
 			return this.state[resourceType].map(function(resource, index, resources) {
 				return (
 					<div className="row">
 						<div >
 							<div className="small-5 small-offset-2 columns"><input type="text" value={resource.title} onChange={this.onResourceChange.bind(this, resourceType, resources, index, "title")} /></div>
 							<div className="small-4 columns"><input type="text" value={resource.url} onChange={this.onResourceChange.bind(this, resourceType, resources, index, "url")} /></div>
-							<div className="small-1 columns end"><button onClick={this.removeResource.bind(this, resourceType, index)} className="button tiny round alert">x</button></div>
+							<div className="small-1 columns end"><button onClick={removeResource.bind(this, index)} className="button tiny round alert">x</button></div>
 						</div>
 					</div>
 				);
@@ -682,7 +682,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
                         <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
                         <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
                     </div>,
-                    <div className="row">
+					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Pre-Resources:</span></div>
 						<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
 						<div className="small-5 columns"><span className="metadataLabel">URL</span></div>
@@ -691,7 +691,7 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 					<div className="row">
 						<div className="small-4 small-offset-2 columns end"><button onClick={this.addResource.bind(this, 'preResources')} className="button tiny round">Add Pre-Resource</button></div>
 					</div>,
-                    <div className="row">
+					<div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Post-Resources:</span></div>
 						<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
 						<div className="small-5 columns"><span className="metadataLabel">URL</span></div>
