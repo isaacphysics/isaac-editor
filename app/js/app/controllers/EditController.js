@@ -179,7 +179,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 		            location.url("/edit/" + scope.branch + "/" + scope.dirPath);
 		            $rootScope.$apply();
 		        }).catch(function(e) {
-		        	console.error("Unable to delete file.", e);
+		            window.alert("Unable to delete file.", e);
 		        });
 		    }
 		}
@@ -215,40 +215,34 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 		                    console.error("Could not delete old file.", e);
 		                })
 		            }).catch(function(e) {
-		                console.error("Could not create file. Perhaps it already exists.", e);
+		                window.alert("Could not create file. Perhaps it already exists.", e);
 		            });
 		        }
 		    });
 		}
 
         var saveAs = function() {
-            if (scope.fileIsEdited) {
-                if (!window.confirm("This will save the current contents of this file. Are you sure you want to continue?"))
-                    return;
-            }
-            scope.saveFile().then(function() {
-                var newName = window.prompt("Please type a new name for the file. If no extension is provided, \".json\" will be assumed", scope.file.name);
-                if (newName) {
-                    var oldPath = scope.file.path;
-                    if (newName.indexOf(".") == -1 && oldPath.toLowerCase().endsWith(".json"))
-                        newName += ".json";
-                    var newPath = scope.dirPath + "/" + newName;
-                    var content = scope.file.decodedContent;
-                    try {
-                        var alteredContent = JSON.parse(content);
-                        alteredContent.id = helpers.generateGuid();
-                        content = JSON.stringify(alteredContent);
-                    } catch(e) {/* If not JSON, no need to change id */}
+            var newName = window.prompt("Please type a new name for the file. If no extension is provided, \".json\" will be assumed", scope.file.name);
+            if (newName) {
+                var oldPath = scope.file.path;
+                if (newName.indexOf(".") == -1 && oldPath.toLowerCase().endsWith(".json"))
+                    newName += ".json";
+                var newPath = scope.dirPath + "/" + newName;
+                var content = scope.file.decodedContent;
+                try {
+                    var alteredContent = JSON.parse(content);
+                    alteredContent.id = helpers.generateGuid();
+                    content = JSON.stringify(alteredContent);
+                } catch(e) {/* If not JSON, no need to change id */}
 
-                    console.log("Creating", newPath);
-                    github.createFile(repo.owner, repo.name, newPath, content).then(function(f) {
-                        location.url("/edit/" + scope.branch + "/" + newPath);
-                        $rootScope.$apply();
-                    }).catch(function(e) {
-                        console.error("Could not create file. Perhaps it already exists.", e);
-                    });
-                }
-            });
+                console.log("Creating", newPath);
+                github.createFile(repo.owner, repo.name, newPath, content).then(function(f) {
+                    location.url("/edit/" + scope.branch + "/" + newPath);
+                    $rootScope.$apply();
+                }).catch(function(e) {
+                    window.alert("Could not create file. Perhaps it already exists.", e);
+                });
+            }
         }
 
 		scope.showFileInfo = function() {
