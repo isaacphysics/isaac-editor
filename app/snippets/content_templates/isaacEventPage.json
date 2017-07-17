@@ -27,7 +27,7 @@
       "url": "somewhere/interesting.pdf"
     }
   ],
-  "emailEventDetails": "",
+  "emailEventDetails": "Check the online events page for additional details.",
   "encoding": "markdown",
   "type": "isaacEventPage",
   "children": [

@@ -230,7 +230,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 	});
 
 	var MetaData = React.createClass({
-
 		getInitialState: function() {
 
 			var dip = this.props.doc.date ? ContentEditor.dateFilter(new Date(this.props.doc.date), "yyyy-MM-dd HH:mm", "UTC") : "";
@@ -273,9 +272,10 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
                 isaacGroupToken: this.props.doc.isaacGroupToken,
 				numberOfPlaces: this.props.doc.numberOfPlaces,
 				eventStatus: this.props.doc.eventStatus,
-				emailEventDetails: this.props.doc.emailEventDetails
+				emailEventDetails: this.props.doc.emailEventDetails,
+				preResources: this.props.doc.preResources,
+				postResources: this.props.doc.postResources,
 			};
-
 		},
 
 		onDocChange: function(c, oldDoc, newDoc) {
@@ -519,6 +519,46 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
 		},
 
+		onResourceChange: function(resourceType, resources, index, key, e) {
+			var newObjectState = {};
+			resources[index][key] = e.target.value;
+			newObjectState[resourceType] = resources;
+			this.setState(newObjectState);
+
+			clearTimeout(this.metadataChangeTimeout);
+			this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+		},
+
+		addResource: function(resourceType) {
+			var newObjectState = {};
+			resources = this.state[resourceType];
+			resources.push({title:"Event brochure", url:"somewhere/interesting.pdf"});
+			newObjectState[resourceType] = resources;
+			this.setState(newObjectState);
+		},
+
+		generateResourceElements: function(resourceType) {
+			var removeResource = function(index) {
+				var newObjectState = {};
+				resources = this.state[resourceType];
+				resources.splice(index, 1);
+				newObjectState[resourceType] = resources;
+				this.setState(newObjectState);
+			}
+
+			return this.state[resourceType].map(function(resource, index, resources) {
+				return (
+					<div className="row">
+						<div >
+							<div className="small-5 small-offset-2 columns"><input type="text" value={resource.title} onChange={this.onResourceChange.bind(this, resourceType, resources, index, "title")} /></div>
+							<div className="small-4 columns"><input type="text" value={resource.url} onChange={this.onResourceChange.bind(this, resourceType, resources, index, "url")} /></div>
+							<div className="small-1 columns end"><button onClick={removeResource.bind(this, index)} className="button tiny round alert">x</button></div>
+						</div>
+					</div>
+				);
+			}.bind(this));
+		},
+
 		toggleMetaData_click: function(e) {
 			var n = $(this.refs.metadata.getDOMNode())
 			if (n.is(":visible")) {
@@ -642,6 +682,25 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
                         <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
                         <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
                     </div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Pre-Resources:</span></div>
+						<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
+						<div className="small-5 columns"><span className="metadataLabel">URL</span></div>
+					</div>,
+					this.generateResourceElements('preResources'),
+					<div className="row">
+						<div className="small-4 small-offset-2 columns end"><button onClick={this.addResource.bind(this, 'preResources')} className="button tiny round">Add Pre-Resource</button></div>
+					</div>,
+					<div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Post-Resources:</span></div>
+						<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
+						<div className="small-5 columns"><span className="metadataLabel">URL</span></div>
+					</div>,
+					this.generateResourceElements('postResources'),
+					<div className="row">
+						<div className="small-4 small-offset-2 columns end"><button onClick={this.addResource.bind(this, 'postResources')} className="button tiny round">Add Post-Resource</button></div>
+					</div>,
+
 				];
 			}
 
@@ -2333,7 +2392,6 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			);
 		}
 	})
-
 
 	var TabsBlock = React.createClass({
 
