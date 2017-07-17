@@ -10,6 +10,8 @@ define(["mathjax"], function() {
 	}
 
 	// Allow inline maths with single $s
+	// Specify where to find the official Accessibility extension:
+ 	MathJax.Ajax.config.path["a11y"] = "https://cdn.isaacphysics.org/vendor/mathjax/mathjax-a11y-v1.1.0";
 
 	MathJax.Hub.Config({
 		tex2jax: {
@@ -34,7 +36,7 @@ define(["mathjax"], function() {
 				"units": ["\\rm{#1}",1],
 				"standardstate": ["\\mathbin{\u29B5}",0],
 			},
-			extensions: ["mhchem.js"],
+			extensions: ["mhchem.js", "[a11y]/accessibility-menu.js"],
 
 		},
 	});
@@ -52,6 +54,8 @@ define(["mathjax"], function() {
 			function () {MathJax.OutputJax["HTML-CSS"].FontFaceBug = true}
 		);
 	}
+
+	MathJax.Hub.Configured();
 
 });
 
