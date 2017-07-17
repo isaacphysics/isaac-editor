@@ -379,7 +379,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 				scope.filePath = file.path;
 				scope.file = file;
 
-				scope.dirPath = scope.path.substr(0, scope.path.lastIndexOf("/"));
+				scope.dirPath = scope.filePath.substr(0, scope.filePath.lastIndexOf("/"));
 
 				loadDir = github.listFiles(repo.owner, repo.name, scope.dirPath).then(function(files) {
 					scope.dir = files;
