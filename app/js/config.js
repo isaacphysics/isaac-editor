@@ -14,11 +14,10 @@ require.config({
         "angulartics-ga": '../../bower_components/angulartics/src/angulartics-ga',
         "codemirror": "codemirror/codemirror",
         "codemirrorJS": "codemirror/mode/javascript/javascript",
-        "mathjax": 'https://cdn.isaacphysics.org/vendor/mathjax/2.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured&noContrib',
+        "mathjax": 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured&noContrib',
     },
 
     shim: {
-
         "foundation": ['jquery'],
         "angular-route": ['angular'],
         "angular": ['jquery'],
