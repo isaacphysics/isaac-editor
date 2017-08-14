@@ -89,7 +89,9 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 
 		getInitialState: function() {
 			return {
-				allTags: []
+				allTags: [],
+				searchString: "",
+				results: []
 			};
 		},
 
@@ -105,11 +107,22 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 			$(document).foundation();
 		},
 
-		addNewTag: function() {
-			var newTag = window.prompt("Enter tag:");
-			if (newTag) {
-				this.props.onChange(this, this.props.tags, this.props.tags.concat(newTag.toLowerCase()));
-			}
+        onSearchStringChange: function(e) {
+            this.setState({
+                searchString: e.target.value.toLowerCase()
+            });
+            var self = this;
+            ContentEditor.getTagList().then(function(tags) {
+				var filteredList = tags.filter(function(v) {
+					return v.indexOf(self.state.searchString) != -1;
+				});
+				self.setState({ results: filteredList });
+			});
+        },
+
+		addTagFromList: function(e) {
+            var l = this.props.tags.concat(e.toLowerCase());
+			this.props.onChange(this, this.props.tags, $.unique(l));
 		},
 
 		render: function() {
@@ -126,36 +139,21 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				};
 
 				ts.push(<span className="tag">{t} <i className="general foundicon-remove" onClick={removeTag.bind(this, t)}/></span>);
-			}
 
-			var allTagComponents = [];
-
-			for(var t in this.state.allTags) {
-				t = this.state.allTags[t];
-
-				if (this.props.tags.indexOf(t) > -1)
-					continue;
-
-				var tag_choose = function(t) {
-					this.props.onChange(this, this.props.tags, this.props.tags.concat(t));
+				var foundTags = [];
+				for (var result in this.state.results) {
+					result = this.state.results[result];
+					foundTags.push(<button className={"button tiny tag radius id-result"} onClick={this.addTagFromList.bind(this, result)}> {result} <i className="general foundicon-plus"/></button>);
 				}
-
-				var newT = (
-					<li key={t}>
-						<a href="javascript:void(0)" onClick={tag_choose.bind(this, t)}>{t}</a>
-					</li>
-				);
-
-				allTagComponents.push(newT);
+				if(this.state.searchString != "") {
+                    foundTags.push(<button className={"button tiny success radius id-result"} onClick={this.addTagFromList.bind(this, this.state.searchString)}> Create new tag: {this.state.searchString} <i className="general foundicon-plus"/></button>);
+                }
 			}
 
 			return (<div className="tags-container" ref="container">
 				{ts}
-				<a ref="foo" href="javascript:void(0);" data-dropdown={"tag-dropdown-" + this.props.dropdownId} className="button dropdown tiny success radius">Add tag...</a><br/>
-				<ul ref="bar" id={"tag-dropdown-" + this.props.dropdownId} data-dropdown-content className="f-dropdown">
-					{allTagComponents}
-					<li><a href="javascript:void(0)" onClick={this.addNewTag}>&lt;New tag...&gt;</a></li>
-				</ul>
+				<input type="text" placeholder="Type to add tags..." value={this.state.searchString} onChange={this.onSearchStringChange} />
+				{foundTags}
 			</div>);
 		}
 	});
