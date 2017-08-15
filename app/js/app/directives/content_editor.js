@@ -139,15 +139,15 @@ define(["react", "jquery", "codemirrorJS", "showdown/showdown", "showdown/extens
 				};
 
 				ts.push(<span className="tag">{t} <i className="general foundicon-remove" onClick={removeTag.bind(this, t)}/></span>);
+			}
 
-				var foundTags = [];
-				for (var result in this.state.results) {
-					result = this.state.results[result];
-					foundTags.push(<button className={"button tiny tag radius id-result"} onClick={this.addTagFromList.bind(this, result)}> {result} <i className="general foundicon-plus"/></button>);
-				}
-				if(this.state.searchString != "") {
-                    foundTags.push(<button className={"button tiny success radius id-result"} onClick={this.addTagFromList.bind(this, this.state.searchString)}> Create new tag: {this.state.searchString} <i className="general foundicon-plus"/></button>);
-                }
+			var foundTags = [];
+			for (var result in this.state.results) {
+				result = this.state.results[result];
+				foundTags.push(<button className={"button tiny tag radius id-result"} onClick={this.addTagFromList.bind(this, result)}> {result} <i className="general foundicon-plus"/></button>);
+			}
+			if(this.state.searchString != "") {
+				foundTags.push(<button className={"button tiny success radius id-result"} onClick={this.addTagFromList.bind(this, this.state.searchString)}> Create new tag: {this.state.searchString} <i className="general foundicon-plus"/></button>);
 			}
 
 			return (<div className="tags-container" ref="container">
