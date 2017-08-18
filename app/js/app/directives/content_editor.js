@@ -135,7 +135,9 @@ define([
 
 	var Block = _Block(ContentEditor, typeMap, MetaData, Title, JSONEditor);
 
-	var VariantBlock = _VariantBlock(ContentEditor, typeMap, Block);
+    var UnknownBlock = _UnknownBlock(ContentEditor, Block);
+
+    var VariantBlock = _VariantBlock(ContentEditor, typeMap, UnknownBlock);
 
 	var ContentValue = _ContentValue(ContentEditor);
 
@@ -150,8 +152,6 @@ define([
 	var TabsBlock = _TabsBlock(ContentEditor, Block, VariantBlock);
 
 	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock);
-
-	var UnknownBlock = _UnknownBlock(ContentEditor, Block);
 
 	var EmailTemplateBlock = _EmailTemplateBlock(ContentEditor, Block, ContentValueOrChildren);
 
