@@ -103,10 +103,10 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 							}
 						}
 
-						// Hackery to put the caret at the end of the textbox
 						msg.on("keyup", keyup);
 						msg.focus();
-						var strLength = msg.val().length * 2; // the two is for Opera aparently
+						// Hackery to put the caret at the end of the textbox
+						var strLength = msg.val().length * 2; // the two is for Opera apparently
 						msg[0].setSelectionRange(strLength, strLength);
 					}
 
