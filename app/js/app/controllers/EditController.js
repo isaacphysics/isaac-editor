@@ -103,14 +103,16 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 							}
 						}
 
+						// Hackery to put the caret at the end of the textbox
 						msg.on("keyup", keyup);
 						msg.focus();
-						msg.val(msg.val()); // Hackery to put the caret at the end of the textbox
+						var strLength = msg.val().length * 2; // the two is for Opera aparently
+						msg[0].setSelectionRange(strLength, strLength);
 					}
 
 					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
-
-						github.commitChange(scope.file, scope.file.editedContent, msg.val()).then(function(f) {
+						var commitMessage = JSON.parse(scope.file.editedContent).published ? '* ' + msg.val() : msg.val();
+						github.commitChange(scope.file, scope.file.editedContent, commitMessage).then(function(f) {
 
 				            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
 				            for (var attr in f.content) {
