@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, typeMap, UnknownBlock) {
+	return function(ContentEditor, typeMap, Block, UnknownBlock) {
 		return React.createClass({
 			render: function() {
 				if (this.props.doc.type)

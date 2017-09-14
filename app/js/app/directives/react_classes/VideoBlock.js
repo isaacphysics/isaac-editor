@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block) {
+	return function(ContentEditor, Block, ContentValueOrChildren) {
 		return React.createClass({
 
 			onDocChange: function(c, oldDoc, newDoc) {

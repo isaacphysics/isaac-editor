@@ -137,7 +137,7 @@ define([
 
     var UnknownBlock = _UnknownBlock(ContentEditor, Block);
 
-    var VariantBlock = _VariantBlock(ContentEditor, typeMap, UnknownBlock);
+    var VariantBlock = _VariantBlock(ContentEditor, typeMap, Block, UnknownBlock);
 
 	var ContentValue = _ContentValue(ContentEditor);
 
@@ -157,7 +157,7 @@ define([
 
 	var FigureBlock = _FigureBlock(ContentEditor, Block, ContentValueOrChildren);
 
-	var VideoBlock = _VideoBlock(ContentEditor, Block);
+	var VideoBlock = _VideoBlock(ContentEditor, Block, ContentValueOrChildren);
 
 	var AnvilAppBlock = _AnvilAppBlock(ContentEditor, Block);
 
