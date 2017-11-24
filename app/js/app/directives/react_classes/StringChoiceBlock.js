@@ -12,7 +12,6 @@ define(["react", "jquery"], function(React,$) {
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.value = newVal;
 				newDoc.children = newChildren;
-
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -20,36 +19,29 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.explanation = newVal;
-
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
 			caseInsensitive_toggle: function(e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-
 				newDoc.caseInsensitive = !oldDoc.caseInsensitive;
-
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
 			correct_toggle: function(e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-
 				newDoc.correct = !oldDoc.correct;
-
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
 			render: function() {
-
 				var emptyExplanation = {
 					type: "content",
 					children: [],
 					encoding: "markdown"
 				};
-
 				return (
 					<Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
 						<div className="row">
