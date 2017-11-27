@@ -208,13 +208,15 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "quantity";
 				} else if (this.props.doc.type == "isaacSymbolicQuestion") {
 					var requiredChildType = "formula";
+				} else if (this.props.doc.type == "isaacStringMatchQuestion") {
+					var requiredChildType = "stringChoice";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
 				} else {
 					var requiredChildType = "choice";
 				}
 
-				if (this.props.doc.type == "isaacMultiChoiceQuestion" || this.props.doc.type == "isaacNumericQuestion" || this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion")
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
@@ -294,6 +296,7 @@ define(["react", "jquery"], function(React,$) {
 										<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question<br/>
 										<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question<br/>
 										<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question<br/>
+										<input type="radio" name="question-type" value="isaacStringMatchQuestion" checked={this.props.doc.type == "isaacStringMatchQuestion"} onChange={this.type_Change} /> String Match Quesiton<br />
 										<input type="radio" name="question-type" value="isaacSymbolicChemistryQuestion" checked={this.props.doc.type == "isaacSymbolicChemistryQuestion"} onChange={this.type_Change} /> Chemistry Question<br/>
 									</div>
 								</div>

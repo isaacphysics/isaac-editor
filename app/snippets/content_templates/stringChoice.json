@@ -1,0 +1,11 @@
+{
+	"encoding": "markdown",
+	"value": "_Enter choice here_",
+	"type": "stringChoice",
+	"caseInsensitive": false,
+	"explanation": {
+		"type": "content",
+		"children": [],
+		"encoding": "markdown"
+	}
+}

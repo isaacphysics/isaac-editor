@@ -25,6 +25,7 @@ define([
 	"jsx!./react_classes/EventPageBlock",
 	"jsx!./react_classes/ContentBlock",
 	"jsx!./react_classes/ChoiceBlock",
+	"jsx!./react_classes/StringChoiceBlock",
 	"jsx!./react_classes/QuantityChoiceBlock",
 	"jsx!./react_classes/FormulaChoiceBlock",
 	"jsx!./react_classes/ChemicalFormulaChoiceBlock",
@@ -52,6 +53,7 @@ define([
 		_EventPageBlock,
 		_ContentBlock,
 		_ChoiceBlock,
+		_StringChoiceBlock,
 		_QuantityChoiceBlock,
 		_FormulaChoiceBlock,
 		_ChemicalFormulaChoiceBlock,
@@ -169,6 +171,8 @@ define([
 
 	var ChoiceBlock = _ChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
+	var StringChoiceBlock = _StringChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
+
 	var QuantityChoiceBlock = _QuantityChoiceBlock(ContentEditor, Block, ContentBlock);
 
 	var FormulaChoiceBlock = _FormulaChoiceBlock(ContentEditor, Block, ContentBlock);
@@ -191,6 +195,7 @@ define([
 	typeMap["page"] = ContentBlock;
 	typeMap["isaacPageFragment"] = ContentBlock;
 	typeMap["choice"] = ChoiceBlock;
+	typeMap["stringChoice"] = StringChoiceBlock;
 	typeMap["quantity"] = QuantityChoiceBlock;
 	typeMap["formula"] = FormulaChoiceBlock;
 	typeMap["chemicalFormula"] = ChemicalFormulaChoiceBlock;
@@ -202,6 +207,7 @@ define([
 	typeMap["isaacMultiChoiceQuestion"] = QuestionBlock;
 	typeMap["isaacNumericQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicQuestion"] = QuestionBlock;
+	typeMap["isaacStringMatchQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 
