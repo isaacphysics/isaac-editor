@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock) {
+	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, RelatedContent) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -184,6 +184,14 @@ define(["react", "jquery"], function(React,$) {
 				}.bind(this), 500);
 			},
 
+			onRelatedContentChange: function(c, oldRelatedContent, newRelatedContent) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.relatedContent = newRelatedContent;
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
 			render: function() {
 				if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 					this.props.doc.requireUnits = true;
@@ -256,6 +264,12 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
+				var relatedContent =
+				<div className="row">
+					<div className="small-4 columns text-left">Question Part Related Content:</div>
+					<div className="small-8 columns"><RelatedContent ids={this.props.doc.relatedContent || []} onChange={this.onRelatedContentChange} /> </div>
+				</div>;
+
 				return (
 					<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 						<form>
@@ -317,6 +331,7 @@ define(["react", "jquery"], function(React,$) {
 									{optionalHints}
 							</div>
 						</div>
+						{relatedContent}
 					</Block>
 				);
 			}

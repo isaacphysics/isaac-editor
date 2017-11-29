@@ -163,7 +163,7 @@ define([
 
 	var AnvilAppBlock = _AnvilAppBlock(ContentEditor, Block);
 
-	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock);
+	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, RelatedContent);
 
 	var EventPageBlock = _EventPageBlock(ContentEditor, Block, FigureBlock, ContentValueOrChildren);
 
