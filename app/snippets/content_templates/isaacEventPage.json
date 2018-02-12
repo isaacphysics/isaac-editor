@@ -28,6 +28,8 @@
     }
   ],
   "emailEventDetails": "Check the online events page for additional details.",
+  "emailConfirmedBookingText": "",
+  "emailWaitingListBookingText": "",
   "encoding": "markdown",
   "type": "isaacEventPage",
   "children": [

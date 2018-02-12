@@ -44,6 +44,8 @@ define(["react", "jquery"], function(React,$) {
 					numberOfPlaces: this.props.doc.numberOfPlaces,
 					eventStatus: this.props.doc.eventStatus,
 					emailEventDetails: this.props.doc.emailEventDetails,
+					emailConfirmedBookingText: this.props.doc.emailConfirmedBookingText,
+					emailWaitingListBookingText: this.props.doc.emailWaitingListBookingText,
 					preResources: this.props.doc.preResources,
 					postResources: this.props.doc.postResources,
 				};
@@ -274,6 +276,14 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.emailEventDetails = this.state.emailEventDetails;
 				}
 
+				if (this.state.emailConfirmedBookingText || this.props.doc.emailConfirmedBookingText) {
+					newDoc.emailConfirmedBookingText = this.state.emailConfirmedBookingText;
+				}
+
+				if (this.state.emailWaitingListBookingText || this.props.doc.emailWaitingListBookingText) {
+					newDoc.emailWaitingListBookingText = this.state.emailWaitingListBookingText;
+				}
+
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -400,6 +410,14 @@ define(["react", "jquery"], function(React,$) {
 							<div className="small-10 columns"><textarea value={this.state.emailEventDetails} onChange={this.onTextboxChange.bind(this, "emailEventDetails")}></textarea></div>
 						</div>,
 						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Email Confirmed Booking Text:</span></div>
+							<div className="small-10 columns"><textarea value={this.state.emailConfirmedBookingText} onChange={this.onTextboxChange.bind(this, "emailConfirmedBookingText")}></textarea></div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Email Waiting List Booking Text:</span></div>
+							<div className="small-10 columns"><textarea value={this.state.emailWaitingListBookingText} onChange={this.onTextboxChange.bind(this, "emailWaitingListBookingText")}></textarea></div>
+						</div>,
+						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Start Date<br/><small><code>YYYY-MM-DD HH:mm</code></small></span></div>
 							<div className="small-5 columns"><input type="text" value={this.state.dateInput} onChange={this.onDateChange} /></div>
 							<div className="small-5 columns">{this.state.dateOutput}</div>
@@ -430,6 +448,7 @@ define(["react", "jquery"], function(React,$) {
 									<option value="OPEN">Open</option>
 									<option value="CANCELLED">Cancelled</option>
 									<option value="CLOSED">Closed</option>
+									<option value="WAITING_LIST_ONLY">Waiting List Only</option>
 								</select>
 							</div>
 						</div>,
