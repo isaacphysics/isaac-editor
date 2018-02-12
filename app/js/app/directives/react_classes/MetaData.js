@@ -448,7 +448,7 @@ define(["react", "jquery"], function(React,$) {
 									<option value="OPEN">Open</option>
 									<option value="CANCELLED">Cancelled</option>
 									<option value="CLOSED">Closed</option>
-									<option value="WAITING_LIST_ONLY">Add Only to Waiting List</option>
+									<option value="WAITING_LIST_ONLY">Waiting List Only</option>
 								</select>
 							</div>
 						</div>,
