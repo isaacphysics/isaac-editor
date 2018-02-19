@@ -5,7 +5,6 @@ services:
     container_name: isaac-editor
     restart: always
     volumes:
-      - "/local/data/editor-github-auth-config.js:/usr/share/nginx/html/js/lib/github/github_application.js:ro"
       - "./app:/usr/share/nginx/html"
 networks:
   default:
