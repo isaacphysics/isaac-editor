@@ -26,14 +26,6 @@ define(function() {
                 clientId: "f62f2bd4954bf930bc3f",
                 authCode: "42/IwZuGCfI7TdKKr4KMfUIqYDQcvb5Cc/apZBuyjVnQLInfgkrMuda39OsBunIaQh9B5f2DdYPPsAOhPtJ0HdDpcYkgHPxy1LO/BtpLn1UUxku88hgAndWqmux2x0+A+Q/uZotyNBL8mZaLEALNzghXgoTPaqdbnKO/PytrgNWWvg0IOM3NTL8mz1rT/hz2QNOiuuW5Qndsfjo1RtAp+pDZx07/kvAF"
             },
-            "www.cl.cam.ac.uk": {
-                clientId : "684f073bca20ddf30b76",
-                authCode : "2ad8374cb67c803ee14086be6e7dca1147e659a29da0575417125efb13d699652b3ed9a73fe97ab4b1017ad9e2adfa810d21ee81e39460d8812c33ae15103d866c766b342b6727df169984157d19ab8ffa3794e4e68d10d0455f59410d564aef",
-            },
-            "tealight.github.io": {
-                clientId : "382df8e67b1f810c99a3",
-                authCode : "d42ab912388a8deb41a875310c06b54743e9b90deabd127f88436ab98a9c0b294e4fc75e0a81bce5ee631b4fe74af4c26a9af49f1cfd8e26529b3471f611b11ccace2ec416f827013ec600caae16bf5cde99e5714601835436263411b5795a1c",
-            },
             "editor.isaacphysics.org": {
                 clientId : "012d68f7ffd3a99110ff",
                 authCode : "j4GsAFDYXaxqwN146vTeQ4vbV7ucQtGC8B4AI7EVQPIUTQG/nz9Yfgm1o3d0FLrDlgGyig2YyxA8IMS1wVF+mZ7rCMzOZUXGIn48gDxFGzsWZKhK36kwra5PE3C6mCeRQjXx6cCyl9VRH1VR+RsjIXM6vIdD0g1JqcupsKDNmojZAcuMkPreJfl2h+bbss1DGw3CdvNLF8lwd895OTNwZfGjQxcmywIS3VIC7o6JIq3fcw==",
