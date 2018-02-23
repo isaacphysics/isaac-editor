@@ -19,7 +19,7 @@
 define(function() {
 
     return {
-        authServer: "https://wyzc3qit5mas6b2o.anvilapp.net/_/api/authenticate",//https://editor-auth.isaacphysics.org/authenticate",//"https://www-dyn.cl.cam.ac.uk/~ipd21/tealight-auth-server/",
+        authServer: "https://editor-auth.isaacphysics.org/authenticate",
 
         hosts: {
             "localhost:8000": {
