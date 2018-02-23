@@ -19,7 +19,7 @@
 define(function() {
 
     return {
-        authServer: "https://editor-auth.isaacphysics.org/authenticate",
+        authServer: "https://editor-auth.isaacphysics.org/_/api/authenticate",
 
         hosts: {
             "localhost:8000": {
