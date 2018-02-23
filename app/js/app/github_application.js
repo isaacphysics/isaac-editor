@@ -19,13 +19,13 @@
 define(function() {
 
     return {
-        authServer: "https://www-dyn.cl.cam.ac.uk/~ipd21/tealight-auth-server/",
+        authServer: "https://wyzc3qit5mas6b2o.anvilapp.net/_/api/authenticate",//https://editor-auth.isaacphysics.org/authenticate",//"https://www-dyn.cl.cam.ac.uk/~ipd21/tealight-auth-server/",
 
         hosts: {
-        	"localhost:8000": {
-        		clientId : "f4de972464cb742d3671",
-        		authCode : "6a5b3c00548a75fa03e873e0c2cc5ed39de18f879165164d63d61c0acabf791e9a44567555b0a8f69cb1d1fc65a86376a1653ee601dcced8987e235ad61cbbc4ce98702ac03a0dbc78b81eb182c4562dd436e94a745bf195c423097b275f93af"
-        	},
+            "localhost:8000": {
+                clientId: "f62f2bd4954bf930bc3f",
+                authCode: "42/IwZuGCfI7TdKKr4KMfUIqYDQcvb5Cc/apZBuyjVnQLInfgkrMuda39OsBunIaQh9B5f2DdYPPsAOhPtJ0HdDpcYkgHPxy1LO/BtpLn1UUxku88hgAndWqmux2x0+A+Q/uZotyNBL8mZaLEALNzghXgoTPaqdbnKO/PytrgNWWvg0IOM3NTL8mz1rT/hz2QNOiuuW5Qndsfjo1RtAp+pDZx07/kvAF"
+            },
             "www.cl.cam.ac.uk": {
                 clientId : "684f073bca20ddf30b76",
                 authCode : "2ad8374cb67c803ee14086be6e7dca1147e659a29da0575417125efb13d699652b3ed9a73fe97ab4b1017ad9e2adfa810d21ee81e39460d8812c33ae15103d866c766b342b6727df169984157d19ab8ffa3794e4e68d10d0455f59410d564aef",
@@ -36,7 +36,7 @@ define(function() {
             },
             "editor.isaacphysics.org": {
                 clientId : "012d68f7ffd3a99110ff",
-                authCode : "6e7afcbf0e9eb62888223870af02eab8d726536e426b5151f4101d3e043fc0dfa4c09e6a3aa4d808da274c8e9f1bf0be4efd99fae0d5c7fded9c50cfa6425aec97ab9b62f5329de1f024c693323338cda1e3bcd9175e1a1c7a39585f13436d5f",
+                authCode : "j4GsAFDYXaxqwN146vTeQ4vbV7ucQtGC8B4AI7EVQPIUTQG/nz9Yfgm1o3d0FLrDlgGyig2YyxA8IMS1wVF+mZ7rCMzOZUXGIn48gDxFGzsWZKhK36kwra5PE3C6mCeRQjXx6cCyl9VRH1VR+RsjIXM6vIdD0g1JqcupsKDNmojZAcuMkPreJfl2h+bbss1DGw3CdvNLF8lwd895OTNwZfGjQxcmywIS3VIC7o6JIq3fcw==",
             },
         }
     };

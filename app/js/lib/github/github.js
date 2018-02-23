@@ -33,7 +33,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
 
         this.initWithCode = function(code) {
 
-            return wrapAjax($.ajax(authServer + "?tealight_auth_code=" + authCode + "&client_id=" + clientId + "&github_code=" + code,
+            return wrapAjax($.ajax(authServer + "?auth_code=" + encodeURIComponent(authCode) + "&client_id=" + clientId + "&github_code=" + code,
                    {type: "GET",
                     dataType: "json"})).then(function(r) {
                 if (r.access_token) {
