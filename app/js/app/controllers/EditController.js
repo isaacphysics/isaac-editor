@@ -233,6 +233,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
                 var content = scope.file.decodedContent;
                 try {
                     var alteredContent = JSON.parse(content);
+                    alteredContent.author = repo.owner;
                     alteredContent.id = helpers.generateGuid();
                     content = JSON.stringify(alteredContent);
                 } catch(e) {/* If not JSON, no need to change id */}
