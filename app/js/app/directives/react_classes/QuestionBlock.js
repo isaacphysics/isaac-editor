@@ -159,6 +159,7 @@ define(["react", "jquery"], function(React,$) {
 
 				clearTimeout(this.availableSymbolsCommitTimeout);
 				this.availableSymbolsCommitTimeout = setTimeout(function() {
+				    this.updateAvailableMetaSymbolButtonStatus(this);
 					// newVal must be a doc
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
@@ -167,6 +168,52 @@ define(["react", "jquery"], function(React,$) {
 					this.onDocChange(this, oldDoc, newDoc);
 				}.bind(this), 500);
 			},
+
+            availableMetaSymbols: [
+                ['_trigs',          'Trigs'],
+                ['_1/trigs',        '1/Trigs'],
+                ['_inv_trigs',      'Inv Trigs'],
+                ['_inv_1/trigs',    'Inv 1/Trigs'],
+                ['_hyp_trigs',      'Hyp Trigs'],
+                ['_inv_hyp_trigs',  'Inv Hyp Trigs'],
+                ['_logs',           'Logarithms'],
+                ['_no_alphabet',    'No Alphabet']
+            ],
+
+            onAvailableMetaSymbolsChange: function(e) {
+			    t = jQuery(e.target);
+                let syms = this.state.availableSymbols.split(',').map(s => s.trim());
+                let newSyms = [];
+                if (syms.indexOf(t.data('metasymbol')) > -1) {
+                    // Remove and turn off
+                    newSyms = syms.reduce((a,b) => b === t.data('metasymbol') ? a : a.concat(b), []);
+                    t.removeClass('primary').addClass('secondary');
+                } else {
+                    // Add and turn on
+                    newSyms = syms.concat(t.data('metasymbol'));
+                    t.removeClass('secondary').addClass('primary');
+                }
+                this.setState({
+                    availableSymbols: newSyms.join(' , ')
+                });
+                let oldDoc = this.props.doc;
+                let newDoc = jQuery.extend({}, oldDoc);
+                newDoc.availableSymbols = newSyms;
+
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
+            updateAvailableMetaSymbolButtonStatus: (_this) => {
+                let buttons = jQuery.find('.metasymbolbuttons button');
+                buttons.forEach(b => {
+                    let metasymbol = jQuery(b).data('metasymbol');
+                    if (_this.state.availableSymbols.split(",").map(s => s.trim()).indexOf(metasymbol) > -1) {
+                        jQuery(b).removeClass('secondary').addClass('primary');
+                    } else {
+                        jQuery(b).removeClass('primary').addClass('secondary');
+                    }
+                });
+            },
 
 			onFormulaSeedChange: function(e) {
 				this.setState({
@@ -237,6 +284,16 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion") {
+				    var metasymbolsButtons = this.availableMetaSymbols.map((item) => {
+                        let symbols = this.state.availableSymbols.split(',').map(s => s.trim());
+                        let _class = symbols.indexOf(item[0]) > -1 ? 'primary' : 'secondary';
+                        return <span>&nbsp;
+                            <button key={item[0]} data-metasymbol={item[0]} onClick={this.onAvailableMetaSymbolsChange} className={`button tiny ${_class} radius`}>
+                                {item[1]}
+                            </button>
+                        </span>;
+                    });
+
 					var symbolsList = <div className="row">
 						<div className="small-3 columns text-right">
 							Available symbols:
@@ -244,6 +301,9 @@ define(["react", "jquery"], function(React,$) {
 						<div className="small-9 columns">
 							<input type="text" placeholder="Enter list of symbols here (,-separated)" value={this.state.availableSymbols} onChange={this.onAvailableSymbolsChange} />
 						</div>
+                        <div className="small-12 columns text-right metasymbolbuttons">
+                            {metasymbolsButtons}
+                        </div>
 					</div>;
 
 					var formulaSeed = <div className="row">
