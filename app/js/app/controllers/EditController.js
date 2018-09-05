@@ -77,7 +77,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 		}
 
 
-		scope.saveFile = function(commitMessage) {
+		scope.saveFile = function() {
 			console.log("Saving file", scope.file.path);
 
 			// Do actual saving here.
@@ -88,26 +88,6 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 				if (!scope.fileIsEdited)
 					return resolve();
-
-				var commitChange = function(commitMessage) {
-					github.commitChange(scope.file, scope.file.editedContent, commitMessage).then(function(f) {
-
-						// Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
-						for (var attr in f.content) {
-							scope.file[attr] = f.content[attr];
-						}
-						scope.file.decodedContent = scope.file.editedContent;
-						delete scope.file.editedContent;
-
-						scope.fileIsEdited = false;
-						scope.$apply();
-
-						return resolve();
-					}).catch(function(e) {
-						console.error("Could not save file:", e);
-						return reject();
-					})
-				}
 
 				var doSave = function() {
 
@@ -130,14 +110,27 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 						msg[0].setSelectionRange(strLength, strLength);
 					}
 
-					if (commitMessage === undefined) {
-						$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
-							commitMessage = JSON.parse(scope.file.editedContent).published ? '* ' + msg.val() : msg.val();
-							commitChange(commitMessage);
-						});
-					} else {
-						commitChange(commitMessage);
-					}
+					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
+						var commitMessage = JSON.parse(scope.file.editedContent).published ? '* ' + msg.val() : msg.val();
+						github.commitChange(scope.file, scope.file.editedContent, commitMessage).then(function(f) {
+
+				            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
+				            for (var attr in f.content) {
+				                scope.file[attr] = f.content[attr];
+				            }
+				            scope.file.decodedContent = scope.file.editedContent;
+				            delete scope.file.editedContent;
+
+							scope.fileIsEdited = false;
+							scope.$apply();
+
+							return resolve();
+						}).catch(function(e) {
+							console.error("Could not save file:", e);
+							return reject();
+						})
+
+					});
 				};
 
 				var buttons = [];
@@ -230,54 +223,31 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 		    });
 		}
 
-		var saveAs = function() {
-			var saveNewFile = function(publishNewFile) {
-				var newFilename = window.prompt("Please type a new name for the file. If no extension is provided, \".json\" will be assumed", scope.file.name);
-				if (newFilename) {
-					var oldPath = scope.file.path;
-					if (newFilename.indexOf(".") == -1 && oldPath.toLowerCase().endsWith(".json")) {
-						newFilename += ".json";
-					}
-					var newPath = scope.dirPath + "/" + newFilename;
-					var newContent = scope.file.decodedContent;
-					try {
-						var newContentJSON = JSON.parse(newContent);
-						newContentJSON.author = github.user.login;
-						newContentJSON.id = helpers.generateGuid();
-						newContentJSON.published = !!publishNewFile;
-						newContent = JSON.stringify(newContentJSON);
-					} catch(e) {
-						/* If not JSON, no need to change id */
-					}
-					console.log("Creating", newPath);
-					github.createFile(repo.owner, repo.name, newPath, newContent).then(function(f) {
-						location.url("/edit/" + scope.branch + "/" + newPath);
-						$rootScope.$apply();
-					}).catch(function(e) {
-						window.alert("Could not create file. Perhaps it already exists.", e);
-					});
-				}
-			}
+        var saveAs = function() {
+            var newName = window.prompt("Please type a new name for the file. If no extension is provided, \".json\" will be assumed", scope.file.name);
+            if (newName) {
+                var oldPath = scope.file.path;
+                if (newName.indexOf(".") == -1 && oldPath.toLowerCase().endsWith(".json"))
+                    newName += ".json";
+                var newPath = scope.dirPath + "/" + newName;
+                var content = scope.file.decodedContent;
+                try {
+                    var alteredContent = JSON.parse(content);
+                    alteredContent.author = github.user.login;
+                    alteredContent.id = helpers.generateGuid();
+                    alteredContent.published = false;
+                    content = JSON.stringify(alteredContent);
+                } catch(e) {/* If not JSON, no need to change id */}
 
-			var originalContentJSON = {};
-			try {
-				originalContentJSON = JSON.parse(scope.file.decodedContent);
-			} catch(e) {
-				/* If not JSON, no need to change published property */
-			}
-			if (originalContentJSON.published && window.confirm("Press \"OK\" to unpublish the old document, otherwise continue with \"Cancel\":")) {
-				originalContentJSON.published = false;
-				scope.file.editedContent = JSON.stringify(originalContentJSON);
-				scope.fileIsEdited = true;
-				scope.saveFile("Unpublish file during Save As").then(function() {
-					// file will be unpublished at this point
-					var publishNewFile = true;
-					saveNewFile(publishNewFile);
-				});
-			} else {
-				saveNewFile();
-			}
-		}
+                console.log("Creating", newPath);
+                github.createFile(repo.owner, repo.name, newPath, content).then(function(f) {
+                    location.url("/edit/" + scope.branch + "/" + newPath);
+                    $rootScope.$apply();
+                }).catch(function(e) {
+                    window.alert("Could not create file. Perhaps it already exists.", e);
+                });
+            }
+        }
 
 		scope.showFileInfo = function() {
 			var buttons = [];
