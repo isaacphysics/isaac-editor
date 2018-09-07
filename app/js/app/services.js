@@ -8,7 +8,7 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 
 	.constant('Repo', {
 		owner: "ucam-cl-dtg",
-		name: "rutherford-content"
+		name: "isaac-content-2"
 	})
 
 	.constant('ApiServer', "https://staging.isaacphysics.org/api/any/api")
