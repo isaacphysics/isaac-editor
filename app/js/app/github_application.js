@@ -36,7 +36,7 @@ define(function() {
             },
             "editor-2.isaacphysics.org": {
                 clientId : "f929345390ca5ca6e1ba",
-                authCode : "5WMdisjgJG0pjZdGULeD7uPndfjRuHoFra70qPXlx2EPxfo9ZBSgFoy34ZH7URQINGDw7btOi5yZ9lte/vY1Cqf6pOtB9Bj0FC5inRbi++1gqo2FjsAHRSIzeZSNMyixy6dpbT90H3I+3GWQfMqhL3D87XBTrIUEgA0YNqRm0TWxVibN+/SQJlGmIgYZ2L1zYTHeG3DeNioLSscbbg9Q7E6opER9QHJiqlceDCi7rRFb5c8=",
+                authCode : "SkuWnk0FarpNlL07Pot/zQvK1W1QKTS+cqb0Ybw+KCCgJPJeCLEmwrkdM0M7DULLpH65msTNso+bklJ0N3/wY5X1aGLbx47L2psJ36kz/kj2CxY54eriQC3Pi60d6gEpohSkuKuEwDgtCGWkldOzajcowQkzXN38M4+V1nMvRgTRU53+87G8AMZ5eclkWnjkCeZpxicFrzA2IUNHpFPRJddrg+uru+Z/IgaOY2JKM8LQV6w8",
             },
         }
     };
