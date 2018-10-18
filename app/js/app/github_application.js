@@ -22,7 +22,7 @@ define(function() {
         authServer: "https://editor-auth.isaacphysics.org/_/api/authenticate",
 
         hosts: {
-            "localhost:8000": {
+            "localhost:8421": {
                 clientId: "f62f2bd4954bf930bc3f",
                 authCode: "42/IwZuGCfI7TdKKr4KMfUIqYDQcvb5Cc/apZBuyjVnQLInfgkrMuda39OsBunIaQh9B5f2DdYPPsAOhPtJ0HdDpcYkgHPxy1LO/BtpLn1UUxku88hgAndWqmux2x0+A+Q/uZotyNBL8mZaLEALNzghXgoTPaqdbnKO/PytrgNWWvg0IOM3NTL8mz1rT/hz2QNOiuuW5Qndsfjo1RtAp+pDZx07/kvAF"
             },
