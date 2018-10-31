@@ -394,13 +394,13 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 					if (scope.document.id) {
 						if (scope.document.type == "isaacConceptPage") {
-							scope.previewLink = "https://staging.isaacphysics.org/concepts/" + scope.document.id;
+							scope.previewLink = "https://staging-2.isaacphysics.org/concepts/" + scope.document.id;
 						} else if (scope.document.type == "isaacQuestionPage" || scope.document.type == "isaacFastTrackQuestionPage") {
-							scope.previewLink = "https://staging.isaacphysics.org/questions/" + scope.document.id;
+							scope.previewLink = "https://staging-2.isaacphysics.org/questions/" + scope.document.id;
 						} else if (scope.document.type == "isaacEventPage") {
-							scope.previewLink = "https://staging.isaacphysics.org/events/" + scope.document.id;
+							scope.previewLink = "https://staging-2.isaacphysics.org/events/" + scope.document.id;
 						} else if (scope.document.type == "page") {
-							scope.previewLink = "https://staging.isaacphysics.org/pages/" + scope.document.id;
+							scope.previewLink = "https://staging-2.isaacphysics.org/pages/" + scope.document.id;
 						} else {
 							delete scope.previewLink;
 						}
