@@ -10,14 +10,15 @@ define(["mathjax"], function() {
 	}
 
 	// Allow inline maths with single $s
-	// Specify where to find the official Accessibility extension:
- 	MathJax.Ajax.config.path["a11y"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/extensions/a11y";
-
 	MathJax.Hub.Config({
+
+		config: ["TeX-AMS_HTML.js"],
+		
 		tex2jax: {
 		inlineMath: [ ['$','$'], ["\\(","\\)"] ],
 		displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
 		processEscapes: true,
+		preview: ["---"],
 		},
 		TeX: {
 			Macros: {
@@ -36,7 +37,7 @@ define(["mathjax"], function() {
 				"units": ["\\rm{#1}",1],
 				"standardstate": ["\\mathbin{\u29B5}",0],
 			},
-			extensions: ["mhchem.js", "[a11y]/accessibility-menu.js"],
+			extensions: ["mhchem.js"],
 
 		},
 	});
