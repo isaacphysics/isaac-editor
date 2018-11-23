@@ -24,7 +24,7 @@ define(function() {
         hosts: {
             "localhost:8421": {
                 clientId: "f62f2bd4954bf930bc3f",
-                authCode: "42/IwZuGCfI7TdKKr4KMfUIqYDQcvb5Cc/apZBuyjVnQLInfgkrMuda39OsBunIaQh9B5f2DdYPPsAOhPtJ0HdDpcYkgHPxy1LO/BtpLn1UUxku88hgAndWqmux2x0+A+Q/uZotyNBL8mZaLEALNzghXgoTPaqdbnKO/PytrgNWWvg0IOM3NTL8mz1rT/hz2QNOiuuW5Qndsfjo1RtAp+pDZx07/kvAF"
+                authCode: "/vFaDdbb7id6+cPgsIKTdvwk4lOLBkBpBsXDdBvZsnU0U/PBLxgzxDzmUfE/0OIWWvlxh7SigvVv1JzBffbEc2364W8GPmQt9QeuVW1juAHdvdT7kRrHv8LjEuxJP9ie9+BP3tXNWpVxdg7S3sbZA5ShBFOYxdr3izjn9L+cmzDT9YVKB+Grv8hvLcEFOy7KHeixa29HPY2pqtk6XHFqiwlDP+02AWmY"
             },
             "editor.isaacphysics.org": {
                 clientId : "012d68f7ffd3a99110ff",
