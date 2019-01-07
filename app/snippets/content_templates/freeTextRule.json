@@ -1,0 +1,14 @@
+{
+  "encoding": "markdown",
+  "value": "",
+  "type": "freeTextRule",
+  "caseInsensitive": true,
+  "allowsAnyOrder": false,
+  "allowsExtraWords": true,
+  "allowsMisspelling": false,
+  "explanation": {
+    "type": "content",
+    "children": [],
+    "encoding": "markdown"
+  }
+}
