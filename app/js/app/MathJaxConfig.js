@@ -36,6 +36,9 @@ define(["mathjax"], function() {
 				"e": ["\\textrm{e}",0],
 				"units": ["\\rm{#1}",1],
 				"standardstate": ["\\mathbin{\u29B5}",0],
+				"and": ["{#1} \\wedge {#2}", 2],
+				"or": ["{#1} \\lor {#2}", 2],
+				"not": ["\\lnot{#1}", 1],
 			},
 			extensions: ["mhchem.js"],
 
