@@ -26,7 +26,7 @@ define(["mathjax"], function() {
 				"quantity": ["{#1}\\,{\\rm{#2}}",2],
 				"valuedef": ["{#1}={\\quantity{#2}{#3}}",3],
 				"vtr": ["{\\underline{\\boldsymbol{#1}}}",1],
-				"d": "\\operatorname{d}",
+				"d": "\\mathrm{d}",
 				"vari": ["#1",1],
 				"s": ["_{\\sf{#1}}", 1],
 				"half": ["\\frac{1}{2}",0],
@@ -35,10 +35,16 @@ define(["mathjax"], function() {
 				"eighth": ["\\frac{1}{8}",0],
 				"e": ["\\textrm{e}",0],
 				"units": ["\\rm{#1}",1],
+				// Chemistry:
 				"standardstate": ["\\mathbin{\u29B5}",0],
+				// Boolean Algebra:
+				"true": "\\boldsymbol{\\rm{T}}",
+				"false": "\\boldsymbol{\\rm{F}}",
 				"and": ["{#1} \\wedge {#2}", 2],
 				"or": ["{#1} \\lor {#2}", 2],
 				"not": ["\\lnot{#1}", 1],
+				"xor": ["{#1} \\veebar {#2}", 2],
+				"equivalent": "\\equiv"
 			},
 			extensions: ["mhchem.js"],
 
