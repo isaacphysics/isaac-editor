@@ -91,8 +91,8 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			type_Change: function() {
-				var newType = $(this.refs.questionTypeRadios.getDOMNode()).find('input[name=question-type]:checked').val();
+			type_Change: function(event) {
+				var newType = event.target.value;
 
 				// newVal must be a doc
 				var oldDoc = this.props.doc;
@@ -353,15 +353,15 @@ define(["react", "jquery"], function(React,$) {
 									</div>
 								</div>
 								<div className="small-6 columns">
-									<div ref="questionTypeRadios">
-										<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question<br/>
-										<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question<br/>
-										<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question<br/>
-										<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question<br/>
-										<input type="radio" name="question-type" value="isaacStringMatchQuestion" checked={this.props.doc.type == "isaacStringMatchQuestion"} onChange={this.type_Change} /> String Match Question<br />
-										<input type="radio" name="question-type" value="isaacFreeTextQuestion" checked={this.props.doc.type == "isaacFreeTextQuestion"} onChange={this.type_Change} /> Free Text Question<br />
-										<input type="radio" name="question-type" value="isaacSymbolicChemistryQuestion" checked={this.props.doc.type == "isaacSymbolicChemistryQuestion"} onChange={this.type_Change} /> Chemistry Question<br/>
-									</div>
+									<select value={this.props.doc.type} onChange={this.type_Change}>
+										<option value="isaacQuestion">Quick Question</option>
+										<option value="isaacMultiChoiceQuestion">Multiple Choice Question</option>
+										<option value="isaacNumericQuestion">Numeric Question</option>
+										<option value="isaacSymbolicQuestion">Symbolic Question</option>
+										<option value="isaacStringMatchQuestion">String Match Question</option>
+										<option value="isaacFreeTextQuestion">Free Text Question</option>
+										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
+									</select>
 								</div>
 							</div>
 						</form>
