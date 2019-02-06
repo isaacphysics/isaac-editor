@@ -29,6 +29,7 @@ define([
 	"jsx!./react_classes/FreeTextRuleBlock",
 	"jsx!./react_classes/QuantityChoiceBlock",
 	"jsx!./react_classes/FormulaChoiceBlock",
+	"jsx!./react_classes/LogicExpressionChoiceBlock",
 	"jsx!./react_classes/ChemicalFormulaChoiceBlock",
 	"jsx!./react_classes/TabsBlock",
 	"jsx!./react_classes/AccordionBlock",
@@ -58,6 +59,7 @@ define([
 		_FreeTextRuleBlock,
 		_QuantityChoiceBlock,
 		_FormulaChoiceBlock,
+		_LogicExpressionChoiceBlock,
 		_ChemicalFormulaChoiceBlock,
 		_TabsBlock,
 		_AccordionBlock,
@@ -181,6 +183,8 @@ define([
 
 	var FormulaChoiceBlock = _FormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
+	var LogicExpressionChoiceBlock = _LogicExpressionChoiceBlock(ContentEditor, Block, ContentBlock);
+
 	var ChemicalFormulaChoiceBlock = _ChemicalFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
 /////////////////////////////////
@@ -203,6 +207,7 @@ define([
 	typeMap["freeTextRule"] = FreeTextRuleBlock;
 	typeMap["quantity"] = QuantityChoiceBlock;
 	typeMap["formula"] = FormulaChoiceBlock;
+	typeMap["logicExpression"] = LogicExpressionChoiceBlock;
 	typeMap["chemicalFormula"] = ChemicalFormulaChoiceBlock;
 	typeMap["video"] = VideoBlock;
 	typeMap["anvilApp"] = AnvilAppBlock;
@@ -215,6 +220,7 @@ define([
 	typeMap["isaacStringMatchQuestion"] = QuestionBlock;
 	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
+	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 
 

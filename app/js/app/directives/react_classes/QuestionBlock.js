@@ -259,13 +259,15 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "stringChoice";
 				} else if (this.props.doc.type == "isaacFreeTextQuestion") {
 					var requiredChildType = "freeTextRule";
+				} else if (this.props.doc.type == "isaacSymbolicLogicQuestion") {
+					var requiredChildType = "logicExpression";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
 				} else {
 					var requiredChildType = "choice";
 				}
 
-				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
@@ -307,10 +309,12 @@ define(["react", "jquery"], function(React,$) {
                             {metasymbolsButtons}
                         </div>
 					</div>;
+				}
 
+				if (this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion" || this.props.doc.type == "isaacSymbolicLogicQuestion") {
 					var formulaSeed = <div className="row">
 						<div className="small-3 columns text-right">
-							Equation editor seed:
+							Editor seed:
 						</div>
 						<div className="small-9 columns">
 							<input type="text" placeholder="Enter initial state here" value={this.state.formulaSeed} onChange={this.onFormulaSeedChange} />
@@ -360,6 +364,7 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacSymbolicQuestion">Symbolic Question</option>
 										<option value="isaacStringMatchQuestion">String Match Question</option>
 										<option value="isaacFreeTextQuestion">Free Text Question</option>
+										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
 										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
 									</select>
 								</div>
