@@ -3,7 +3,7 @@
     "value": "",
     "pythonExpression": "",
     "requiresExactMatch": false,
-    "type": "logicExpression",
+    "type": "logicFormula",
     "explanation": {
         "type": "content",
         "children": [],

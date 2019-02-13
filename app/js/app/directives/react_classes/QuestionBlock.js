@@ -260,7 +260,7 @@ define(["react", "jquery"], function(React,$) {
 				} else if (this.props.doc.type == "isaacFreeTextQuestion") {
 					var requiredChildType = "freeTextRule";
 				} else if (this.props.doc.type == "isaacSymbolicLogicQuestion") {
-					var requiredChildType = "logicExpression";
+					var requiredChildType = "logicFormula";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
 				} else {
