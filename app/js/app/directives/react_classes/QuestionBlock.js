@@ -329,9 +329,10 @@ define(["react", "jquery"], function(React,$) {
 					<table className="table table-striped table-bordered">
 						<thead><tr><th>Symbol</th><th>Description</th><th>Rule</th><th>✔️ Match</th><th>❌ Failed Match</th></tr></thead>
 						<tbody>
-							<tr><td style={{"text-align": "center"}}><code>|</code></td><td>Separate an OR list of word choices</td><td><code style={{"white-space": "nowrap"}}>JavaScript|[Java&nbsp;Script]|JS</code></td><td>"JavaScript", "Java Script", "JS"</td><td>"Java"</td></tr>
-							<tr><td style={{"text-align": "center"}}><code>.</code>&nbsp;or&nbsp;<code>#</code></td><td>Match only one character</td><td style={{"text-align": "center"}}><code>.a.b.</code></td><td>"XaXbX"</td><td>"ab", "Xab", "aXb", "abX", "XYZaXYZbXYZ", "XbXaX"</td></tr>
-							<tr><td style={{"text-align": "center"}}><code>*</code>&nbsp;or&nbsp;<code>&amp;</code></td><td>Match zero or more characters</td><td style={{"text-align": "center"}}><code>*a*b*</code></td><td>"ab", "Xab", "aXb", "abX", "XYZaXYZbXYZ"</td><td>"ba", "XbXaX"</td></tr>
+							<tr>  <td style={{"text-align": "center"}}><code>|</code></td>                                  <td>Separate an OR list of word choices</td>  <td style={{"white-space": "nowrap"}}><code>JavaScript|[Java&nbsp;Script]|JS</code></td>  <td>"JavaScript", "Java Script", "JS"</td>         <td>"Java"</td>                                             </tr>
+							<tr>  <td style={{"text-align": "center"}}><code>.</code>&nbsp;or&nbsp;<code>#</code></td>      <td>Match only one character</td>             <td style={{"text-align": "center"}}><code>.a.b.</code></td>                              <td>"XaXbX"</td>                                   <td>"ab", "Xab", "aXb", "abX", "XYZaXYZbXYZ", "XbXaX"</td>  </tr>
+							<tr>  <td style={{"text-align": "center"}}><code>*</code>&nbsp;or&nbsp;<code>&amp;</code></td>  <td>Match zero or more characters</td>        <td style={{"text-align": "center"}}><code>*a*b*</code></td>                              <td>"ab", "Xab", "aXb", "abX", "XYZaXYZbXYZ"</td>  <td>"ba", "XbXaX"</td>                                      </tr>
+							<tr>  <td style={{"text-align": "center"}}><code>\</code></td>                                  <td>Escape character</td>                     <td style={{"text-align": "center"}}><code>\* \. \\ \&amp; \# \|</code></td>              <td>"* . \ &amp; # |"</td>                         <td>"\* \. \\ \&amp; \# \|"</td>                            </tr>
 						</tbody>
 					</table>
 					</div>;
