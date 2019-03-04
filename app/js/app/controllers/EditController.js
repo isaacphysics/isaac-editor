@@ -69,9 +69,6 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			if (scope.file.decodedContent == newContent)
 				return;
 			scope.file.editedContent = newContent;
-			try {
-				scope.updatePreviewLink(JSON.parse(newContent));
-			} catch (e) {/* Probably not a JSON file */}
 			scope.fileIsEdited = true;
 			scope.$apply();
 		}
@@ -110,15 +107,19 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 					}
 
 					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
-						var commitMessage = JSON.parse(scope.file.editedContent).published ? '* ' + msg.val() : msg.val();
+						var editedContentObject;
+						try {
+							editedContentObject = JSON.parse(scope.file.editedContent);
+						} catch (e) { /* File is not a valid JSON document so we can ignore it */ }
+						var commitMessage = editedContentObject && editedContentObject.published ? '* ' + msg.val() : msg.val();
 						github.commitChange(scope.file, scope.file.editedContent, commitMessage).then(function(f) {
-
 				            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
 				            for (var attr in f.content) {
 				                scope.file[attr] = f.content[attr];
 				            }
 				            scope.file.decodedContent = scope.file.editedContent;
 				            delete scope.file.editedContent;
+							scope.updatePreviewLink(editedContentObject);
 
 							scope.fileIsEdited = false;
 							scope.$apply();
@@ -281,7 +282,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 		scope.updatePreviewLink = function(latestDocument) {
 			var previewURL = "https://staging.isaacphysics.org";
-			if (latestDocument.id) {
+			if (latestDocument && latestDocument.id) {
 				if (latestDocument.type == "isaacConceptPage") {
 					scope.previewLink = previewURL + "/concepts/" + latestDocument.id;
 				} else if (latestDocument.type == "isaacQuestionPage" || latestDocument.type == "isaacFastTrackQuestionPage") {
