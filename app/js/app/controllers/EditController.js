@@ -66,16 +66,12 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			location.url("/edit/" + scope.branch + "/" + fullPath);
 		}
 		scope.editedFile = function(newContent) {
-
 			if (scope.file.decodedContent == newContent)
 				return;
-
 			scope.file.editedContent = newContent;
-
 			scope.fileIsEdited = true;
 			scope.$apply();
 		}
-
 
 		scope.saveFile = function() {
 			console.log("Saving file", scope.file.path);
@@ -111,15 +107,19 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 					}
 
 					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
-						var commitMessage = JSON.parse(scope.file.editedContent).published ? '* ' + msg.val() : msg.val();
+						var editedContentObject;
+						try {
+							editedContentObject = JSON.parse(scope.file.editedContent);
+						} catch (e) { /* File is not a valid JSON document so we can ignore it */ }
+						var commitMessage = editedContentObject && editedContentObject.published ? '* ' + msg.val() : msg.val();
 						github.commitChange(scope.file, scope.file.editedContent, commitMessage).then(function(f) {
-
 				            // Merge the new git attributes of the file after save. This includes the updated SHA, so that the next save is correctly based on the new commit.
 				            for (var attr in f.content) {
 				                scope.file[attr] = f.content[attr];
 				            }
 				            scope.file.decodedContent = scope.file.editedContent;
 				            delete scope.file.editedContent;
+							scope.updatePreviewLink(editedContentObject);
 
 							scope.fileIsEdited = false;
 							scope.$apply();
@@ -278,9 +278,24 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			$rootScope.modal.show(scope.file.name, scope.file.path, "", buttons).then(function(r) {
 				r.closedPromise.then(r.value());
 			});
-
-
 		};
+
+		scope.updatePreviewLink = function(latestDocument) {
+			var previewURL = "https://staging-2.isaacphysics.org";
+			if (latestDocument && latestDocument.id) {
+				if (latestDocument.type == "isaacConceptPage") {
+					scope.previewLink = previewURL + "/concepts/" + latestDocument.id;
+				} else if (latestDocument.type == "isaacQuestionPage" || latestDocument.type == "isaacFastTrackQuestionPage") {
+					scope.previewLink = previewURL + "/questions/" + latestDocument.id;
+				} else if (latestDocument.type == "isaacEventPage") {
+					scope.previewLink = previewURL + "/events/" + latestDocument.id;
+				} else if (latestDocument.type == "page") {
+					scope.previewLink = previewURL + "/pages/" + latestDocument.id;
+				} else {
+					delete scope.previewLink;
+				}
+			}
+		}
 
 		var allowNavigation = false;
 		scope.$on('$locationChangeStart', function (event, next, current) {
@@ -343,7 +358,6 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			$(window).off("resize", checkSize);
 		});
 
-
 		function checkSize() {
 			var fileBrowserRight = $(".file-browser").offset().left + $(".file-browser").width() + 20;
 			var contentLeft = $("#content").offset().left;
@@ -391,21 +405,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 				try {
 					scope.document = JSON.parse(file.decodedContent);
-
-					if (scope.document.id) {
-						if (scope.document.type == "isaacConceptPage") {
-							scope.previewLink = "https://staging-2.isaacphysics.org/concepts/" + scope.document.id;
-						} else if (scope.document.type == "isaacQuestionPage" || scope.document.type == "isaacFastTrackQuestionPage") {
-							scope.previewLink = "https://staging-2.isaacphysics.org/questions/" + scope.document.id;
-						} else if (scope.document.type == "isaacEventPage") {
-							scope.previewLink = "https://staging-2.isaacphysics.org/events/" + scope.document.id;
-						} else if (scope.document.type == "page") {
-							scope.previewLink = "https://staging-2.isaacphysics.org/pages/" + scope.document.id;
-						} else {
-							delete scope.previewLink;
-						}
-					}
-
+					scope.updatePreviewLink(scope.document);
 				} catch (e) { /* File is not a valid JSON document. Probably not a big deal, it may not even be a JSON file. */ }
 
 			} else {

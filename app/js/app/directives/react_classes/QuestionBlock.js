@@ -91,8 +91,8 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			type_Change: function() {
-				var newType = $(this.refs.questionTypeRadios.getDOMNode()).find('input[name=question-type]:checked').val();
+			type_Change: function(event) {
+				var newType = event.target.value;
 
 				// newVal must be a doc
 				var oldDoc = this.props.doc;
@@ -257,13 +257,17 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "formula";
 				} else if (this.props.doc.type == "isaacStringMatchQuestion") {
 					var requiredChildType = "stringChoice";
+				} else if (this.props.doc.type == "isaacFreeTextQuestion") {
+					var requiredChildType = "freeTextRule";
+				} else if (this.props.doc.type == "isaacSymbolicLogicQuestion") {
+					var requiredChildType = "logicFormula";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
 				} else {
 					var requiredChildType = "choice";
 				}
 
-				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
@@ -305,14 +309,31 @@ define(["react", "jquery"], function(React,$) {
                             {metasymbolsButtons}
                         </div>
 					</div>;
+				}
 
+				if (this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion" || this.props.doc.type == "isaacSymbolicLogicQuestion") {
 					var formulaSeed = <div className="row">
 						<div className="small-3 columns text-right">
-							Equation editor seed:
+							Editor seed:
 						</div>
 						<div className="small-9 columns">
 							<input type="text" placeholder="Enter initial state here" value={this.state.formulaSeed} onChange={this.onFormulaSeedChange} />
 						</div>
+					</div>;
+				}
+
+				if (this.props.doc.type == "isaacFreeTextQuestion") {
+					var freeTextHelpTable =
+					<div>
+					<h5>Matching Rule Syntax:</h5>
+					<table className="table table-striped table-bordered">
+						<thead><tr><th>Symbol</th><th>Description</th><th>Rule</th><th>✔️ Match</th><th>❌ Failed Match</th></tr></thead>
+						<tbody>
+							<tr>  <td style={{"text-align": "center"}}><code>|</code></td>  <td>Separate an OR list of word choices</td>  <td style={{"white-space": "nowrap"}}><code>JavaScript|[Java&nbsp;Script]|JS</code></td>  <td>"JavaScript", "Java Script", "JS"</td>         <td>"Java"</td>                                             </tr>
+							<tr>  <td style={{"text-align": "center"}}><code>.</code></td>  <td>Match only one character</td>             <td style={{"text-align": "center"}}><code>.a.b.</code></td>                              <td>"XaXbX"</td>                                   <td>"ab", "Xab", "aXb", "abX", "XYZaXYZbXYZ", "XbXaX"</td>  </tr>
+							<tr>  <td style={{"text-align": "center"}}><code>*</code></td>  <td>Match zero or more characters</td>        <td style={{"text-align": "center"}}><code>*a*b*</code></td>                              <td>"ab", "Xab", "aXb", "abX", "XYZaXYZbXYZ"</td>  <td>"ba", "XbXaX"</td>                                      </tr>
+						</tbody>
+					</table>
 					</div>;
 				}
 
@@ -351,14 +372,16 @@ define(["react", "jquery"], function(React,$) {
 									</div>
 								</div>
 								<div className="small-6 columns">
-									<div ref="questionTypeRadios">
-										<input type="radio" name="question-type" value="isaacQuestion" checked={this.props.doc.type == "isaacQuestion"} onChange={this.type_Change} /> Quick Question<br/>
-										<input type="radio" name="question-type" value="isaacMultiChoiceQuestion" checked={this.props.doc.type == "isaacMultiChoiceQuestion"} onChange={this.type_Change} /> Multiple Choice Question<br/>
-										<input type="radio" name="question-type" value="isaacNumericQuestion" checked={this.props.doc.type == "isaacNumericQuestion"} onChange={this.type_Change} /> Numeric Question<br/>
-										<input type="radio" name="question-type" value="isaacSymbolicQuestion" checked={this.props.doc.type == "isaacSymbolicQuestion"} onChange={this.type_Change} /> Symbolic Question<br/>
-										<input type="radio" name="question-type" value="isaacStringMatchQuestion" checked={this.props.doc.type == "isaacStringMatchQuestion"} onChange={this.type_Change} /> String Match Quesiton<br />
-										<input type="radio" name="question-type" value="isaacSymbolicChemistryQuestion" checked={this.props.doc.type == "isaacSymbolicChemistryQuestion"} onChange={this.type_Change} /> Chemistry Question<br/>
-									</div>
+									<select value={this.props.doc.type} onChange={this.type_Change}>
+										<option value="isaacQuestion">Quick Question</option>
+										<option value="isaacMultiChoiceQuestion">Multiple Choice Question</option>
+										<option value="isaacNumericQuestion">Numeric Question</option>
+										<option value="isaacSymbolicQuestion">Symbolic Question</option>
+										<option value="isaacStringMatchQuestion">String Match Question</option>
+										<option value="isaacFreeTextQuestion">Free Text Question</option>
+										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
+										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
+									</select>
 								</div>
 							</div>
 						</form>
@@ -367,6 +390,7 @@ define(["react", "jquery"], function(React,$) {
 						{formulaSeed}
 						{exposition}
 						{choices}
+						{freeTextHelpTable}
 						<div className="row">
 							<div className="large-12 columns">
 								<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>

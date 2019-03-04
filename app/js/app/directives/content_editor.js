@@ -26,8 +26,10 @@ define([
 	"jsx!./react_classes/ContentBlock",
 	"jsx!./react_classes/ChoiceBlock",
 	"jsx!./react_classes/StringChoiceBlock",
+	"jsx!./react_classes/FreeTextRuleBlock",
 	"jsx!./react_classes/QuantityChoiceBlock",
 	"jsx!./react_classes/FormulaChoiceBlock",
+	"jsx!./react_classes/LogicFormulaChoiceBlock",
 	"jsx!./react_classes/ChemicalFormulaChoiceBlock",
 	"jsx!./react_classes/TabsBlock",
 	"jsx!./react_classes/AccordionBlock",
@@ -54,8 +56,10 @@ define([
 		_ContentBlock,
 		_ChoiceBlock,
 		_StringChoiceBlock,
+		_FreeTextRuleBlock,
 		_QuantityChoiceBlock,
 		_FormulaChoiceBlock,
+		_LogicFormulaChoiceBlock,
 		_ChemicalFormulaChoiceBlock,
 		_TabsBlock,
 		_AccordionBlock,
@@ -173,9 +177,13 @@ define([
 
 	var StringChoiceBlock = _StringChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
+	var FreeTextRuleBlock = _FreeTextRuleBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
+
 	var QuantityChoiceBlock = _QuantityChoiceBlock(ContentEditor, Block, ContentBlock);
 
 	var FormulaChoiceBlock = _FormulaChoiceBlock(ContentEditor, Block, ContentBlock);
+
+	var LogicFormulaChoiceBlock = _LogicFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
 	var ChemicalFormulaChoiceBlock = _ChemicalFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
@@ -196,8 +204,10 @@ define([
 	typeMap["isaacPageFragment"] = ContentBlock;
 	typeMap["choice"] = ChoiceBlock;
 	typeMap["stringChoice"] = StringChoiceBlock;
+	typeMap["freeTextRule"] = FreeTextRuleBlock;
 	typeMap["quantity"] = QuantityChoiceBlock;
 	typeMap["formula"] = FormulaChoiceBlock;
+	typeMap["logicFormula"] = LogicFormulaChoiceBlock;
 	typeMap["chemicalFormula"] = ChemicalFormulaChoiceBlock;
 	typeMap["video"] = VideoBlock;
 	typeMap["anvilApp"] = AnvilAppBlock;
@@ -208,7 +218,9 @@ define([
 	typeMap["isaacNumericQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicQuestion"] = QuestionBlock;
 	typeMap["isaacStringMatchQuestion"] = QuestionBlock;
+	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
+	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 
 
