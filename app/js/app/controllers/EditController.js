@@ -66,16 +66,15 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			location.url("/edit/" + scope.branch + "/" + fullPath);
 		}
 		scope.editedFile = function(newContent) {
-
 			if (scope.file.decodedContent == newContent)
 				return;
-
 			scope.file.editedContent = newContent;
-
+			try {
+				scope.updatePreviewLink(JSON.parse(newContent));
+			} catch (e) {/* Probably not a JSON file */}
 			scope.fileIsEdited = true;
 			scope.$apply();
 		}
-
 
 		scope.saveFile = function() {
 			console.log("Saving file", scope.file.path);
@@ -278,9 +277,24 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			$rootScope.modal.show(scope.file.name, scope.file.path, "", buttons).then(function(r) {
 				r.closedPromise.then(r.value());
 			});
-
-
 		};
+
+		scope.updatePreviewLink = function(latestDocument) {
+			var previewURL = "https://staging.isaacphysics.org";
+			if (latestDocument.id) {
+				if (latestDocument.type == "isaacConceptPage") {
+					scope.previewLink = previewURL + "/concepts/" + latestDocument.id;
+				} else if (latestDocument.type == "isaacQuestionPage" || latestDocument.type == "isaacFastTrackQuestionPage") {
+					scope.previewLink = previewURL + "/questions/" + latestDocument.id;
+				} else if (latestDocument.type == "isaacEventPage") {
+					scope.previewLink = previewURL + "/events/" + latestDocument.id;
+				} else if (latestDocument.type == "page") {
+					scope.previewLink = previewURL + "/pages/" + latestDocument.id;
+				} else {
+					delete scope.previewLink;
+				}
+			}
+		}
 
 		var allowNavigation = false;
 		scope.$on('$locationChangeStart', function (event, next, current) {
@@ -343,7 +357,6 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 			$(window).off("resize", checkSize);
 		});
 
-
 		function checkSize() {
 			var fileBrowserRight = $(".file-browser").offset().left + $(".file-browser").width() + 20;
 			var contentLeft = $("#content").offset().left;
@@ -391,21 +404,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 				try {
 					scope.document = JSON.parse(file.decodedContent);
-
-					if (scope.document.id) {
-						if (scope.document.type == "isaacConceptPage") {
-							scope.previewLink = "https://staging.isaacphysics.org/concepts/" + scope.document.id;
-						} else if (scope.document.type == "isaacQuestionPage" || scope.document.type == "isaacFastTrackQuestionPage") {
-							scope.previewLink = "https://staging.isaacphysics.org/questions/" + scope.document.id;
-						} else if (scope.document.type == "isaacEventPage") {
-							scope.previewLink = "https://staging.isaacphysics.org/events/" + scope.document.id;
-						} else if (scope.document.type == "page") {
-							scope.previewLink = "https://staging.isaacphysics.org/pages/" + scope.document.id;
-						} else {
-							delete scope.previewLink;
-						}
-					}
-
+					scope.updatePreviewLink(scope.document);
 				} catch (e) { /* File is not a valid JSON document. Probably not a big deal, it may not even be a JSON file. */ }
 
 			} else {
