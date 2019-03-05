@@ -1,7 +1,13 @@
 {
     "type": "isaacQuestionPage",
     "encoding": "markdown",
-    "title": "New Page",
-    "value": "Add page content here",
-    "level": 0
+    "title": "New Question Page",
+    "level": 0,
+	"children": [
+		{
+			"type": "content",
+			"encoding": "markdown",
+			"value": "Add page content here"
+		}
+	]
 }
