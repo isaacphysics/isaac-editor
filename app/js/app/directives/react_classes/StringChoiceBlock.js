@@ -1,12 +1,12 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, ContentBlock, ContentValueOrChildren) {
+	return function(_ContentEditor, Block, ContentBlock, ContentValueOrChildren) {
 		return React.createClass({
 
-			onDocChange: function(c, oldDoc, newDoc) {
+			onDocChange: function(_c, oldDoc, newDoc) {
 				this.props.onChange(this, oldDoc, newDoc);
 			},
 
-			onContentChange: function(c, oldVal, newVal, oldChildren, newChildren) {
+			onContentChange: function(_c, _oldVal, newVal, _oldChildren, newChildren) {
 				// newVal could be a string or a list.
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
@@ -15,21 +15,21 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			onExplanationChange: function(c, oldVal, newVal) {
+			onExplanationChange: function(_c, _oldVal, newVal) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.explanation = newVal;
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			caseInsensitive_toggle: function(e) {
+			caseInsensitive_toggle: function(_e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.caseInsensitive = !oldDoc.caseInsensitive;
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			correct_toggle: function(e) {
+			correct_toggle: function(_e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.correct = !oldDoc.correct;
