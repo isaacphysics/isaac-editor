@@ -2,5 +2,11 @@
     "type": "page",
     "encoding": "markdown",
     "title": "New General Page",
-    "value": "Add page content here"
+	"children": [
+		{
+			"type": "content",
+			"encoding": "markdown",
+			"value": "Add page content here"
+		}
+	]
 }

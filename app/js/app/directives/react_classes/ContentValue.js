@@ -5,7 +5,7 @@ define(["react", "jquery"], function(React,$) {
 				return { mode: "render" };
 			},
 
-			switchToEdit: function(e) {
+			switchToEdit: function(_e) {
 
 				var hasDefault = (/^_Enter .* Here_$/i).test(this.props.value);
 
@@ -15,7 +15,7 @@ define(["react", "jquery"], function(React,$) {
 				});
 			},
 
-			onDone: function(e) {
+			onDone: function(_e) {
 
 				$(this.getDOMNode()).find(".CodeMirror").remove();
 
@@ -32,7 +32,7 @@ define(["react", "jquery"], function(React,$) {
 				this.setState({editedValue: e.target.value})
 			},
 
-			componentDidUpdate: function(prevProps, prevState) {
+			componentDidUpdate: function(_prevProps, prevState) {
 				if (this.state.mode == "edit" && prevState.mode != "edit") {
 					var cm = app.cm = CodeMirror(this.refs.placeholder.getDOMNode(),
 						{mode: "",
@@ -46,7 +46,7 @@ define(["react", "jquery"], function(React,$) {
 
 					$("body").scrollTop($(this.refs.placeholder.getDOMNode()).offset().top + $(this.refs.placeholder.getDOMNode()).height() - $(window).height() / 2);
 
-					cm.on("change", (function(inst, changeObj) {
+					cm.on("change", (function(inst, _changeObj) {
 						this.setState({editedValue: inst.getValue()});
 					}).bind(this));
 				}
@@ -68,7 +68,6 @@ define(["react", "jquery"], function(React,$) {
 				case "render":
 
 					var renderer = <div onClick={this.switchToEdit} className="content-value"/>;
-
 					switch (this.props.encoding) {
 						case "html":
 							renderer.props.dangerouslySetInnerHTML = {__html: this.props.value};
