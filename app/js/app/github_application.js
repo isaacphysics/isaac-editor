@@ -34,9 +34,9 @@ define(function() {
                 clientId : "012d68f7ffd3a99110ff",
                 authCode : "j4GsAFDYXaxqwN146vTeQ4vbV7ucQtGC8B4AI7EVQPIUTQG/nz9Yfgm1o3d0FLrDlgGyig2YyxA8IMS1wVF+mZ7rCMzOZUXGIn48gDxFGzsWZKhK36kwra5PE3C6mCeRQjXx6cCyl9VRH1VR+RsjIXM6vIdD0g1JqcupsKDNmojZAcuMkPreJfl2h+bbss1DGw3CdvNLF8lwd895OTNwZfGjQxcmywIS3VIC7o6JIq3fcw==",
             },
-            "editor-2.isaacphysics.org": {
+            "editor.isaaccomputerscience.org": {
                 clientId : "f929345390ca5ca6e1ba",
-                authCode : "SkuWnk0FarpNlL07Pot/zQvK1W1QKTS+cqb0Ybw+KCCgJPJeCLEmwrkdM0M7DULLpH65msTNso+bklJ0N3/wY5X1aGLbx47L2psJ36kz/kj2CxY54eriQC3Pi60d6gEpohSkuKuEwDgtCGWkldOzajcowQkzXN38M4+V1nMvRgTRU53+87G8AMZ5eclkWnjkCeZpxicFrzA2IUNHpFPRJddrg+uru+Z/IgaOY2JKM8LQV6w8",
+                authCode : "WD4uGrm2iTFxmvwHjybnCSzIpgFk3r//7twVti62RpnQWyFteaKK11q6wLBQX6bb/yy9NY9t0m79MxokXUVZpRNzczPvBAkW6WGfmdCUa5tNs3UMswWmpITiv/TiGHJKxDRZ9m2KYgly3jqLzEU1EY7KznCCa16x7MLzdcQzyYKYS49RB3V/+B7IsuyDPQLRVffRTe/2MkrZmx98kj9x14eMgteIRQ7aYhi1pDsYE1dVGOMyojgoPsf6",
             },
         }
     };

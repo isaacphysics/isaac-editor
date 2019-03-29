@@ -2,7 +2,7 @@ version: "2"
 services:
   editor-www:
     image: nginx:stable-alpine
-    container_name: isaac-editor
+    container_name: isaac-cs-editor
     restart: always
     volumes:
       - "./app:/usr/share/nginx/html"
