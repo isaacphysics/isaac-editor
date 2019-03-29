@@ -1,188 +1,91 @@
 define([], function() {
-  "use strict";
+    "use strict";
 
-  var B64 = {};
-  /*\
-  |*|
-  |*|  Base64 / binary data / UTF-8 strings utilities
-  |*|
-  |*|  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Base64_encoding_and_decoding
-  |*|
-  \*/
+    // See https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+    // Code inside the //===// section comes from Mozilla:
+    //==================================================================================//
+    var log = Math.log;
+    var LN2 = Math.LN2;
+    var clz32 = Math.clz32 || function(x) {return 31 - log(x >>> 0) / LN2 | 0};
+    var fromCharCode = String.fromCharCode;
+    var originalAtob = atob;
+    var originalBtoa = btoa;
 
-  /* Array of bytes to base64 string decoding */
-
-  var b64ToUint6 = function(nChr) {
-
-    return nChr > 64 && nChr < 91 ?
-        nChr - 65
-      : nChr > 96 && nChr < 123 ?
-        nChr - 71
-      : nChr > 47 && nChr < 58 ?
-        nChr + 4
-      : nChr === 43 ?
-        62
-      : nChr === 47 ?
-        63
-      :
-        0;
-
-  }
-
-  var base64DecToArr = function(sBase64, nBlocksSize) {
-
-    var
-      sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
-      nOutLen = nBlocksSize ? Math.ceil((nInLen * 3 + 1 >> 2) / nBlocksSize) * nBlocksSize : nInLen * 3 + 1 >> 2, taBytes = new Uint8Array(nOutLen);
-
-    for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
-      nMod4 = nInIdx & 3;
-      nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
-      if (nMod4 === 3 || nInLen - nInIdx === 1) {
-        for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
-          taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
+    function btoaReplacer(nonAsciiChars) {
+        // make the UTF string into a binary UTF-8 encoded string
+        var point = nonAsciiChars.charCodeAt(0);
+        if (point >= 0xD800 && point <= 0xDBFF) {
+            var nextcode = nonAsciiChars.charCodeAt(1);
+            if (nextcode !== nextcode) // NaN because string is 1 code point long
+              return fromCharCode(0xef/*11101111*/, 0xbf/*10111111*/, 0xbd/*10111101*/);
+            // https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+            if (nextcode >= 0xDC00 && nextcode <= 0xDFFF) {
+                point = (point - 0xD800) * 0x400 + nextcode - 0xDC00 + 0x10000;
+                if (point > 0xffff)
+                    return fromCharCode(
+                        (0x1e/*0b11110*/<<3) | (point>>>18),
+                        (0x2/*0b10*/<<6) | ((point>>>12)&0x3f/*0b00111111*/),
+                        (0x2/*0b10*/<<6) | ((point>>>6)&0x3f/*0b00111111*/),
+                        (0x2/*0b10*/<<6) | (point&0x3f/*0b00111111*/)
+                    );
+            } else return fromCharCode(0xef, 0xbf, 0xbd);
         }
-        nUint24 = 0;
-
-      }
+        if (point <= 0x007f) return nonAsciiChars;
+        else if (point <= 0x07ff) {
+            return fromCharCode((0x6<<5)|(point>>>6), (0x2<<6)|(point&0x3f));
+        } else return fromCharCode(
+            (0xe/*0b1110*/<<4) | (point>>>12),
+            (0x2/*0b10*/<<6) | ((point>>>6)&0x3f/*0b00111111*/),
+            (0x2/*0b10*/<<6) | (point&0x3f/*0b00111111*/)
+        );
     }
-
-    return taBytes;
-  }
-
-  /* Base64 string to array encoding */
-
-  var uint6ToB64 = function(nUint6) {
-
-    return nUint6 < 26 ?
-        nUint6 + 65
-      : nUint6 < 52 ?
-        nUint6 + 71
-      : nUint6 < 62 ?
-        nUint6 - 4
-      : nUint6 === 62 ?
-        43
-      : nUint6 === 63 ?
-        47
-      :
-        65;
-
-  }
-
-  var base64EncArr = function(aBytes) {
-
-    var nMod3, sB64Enc = "";
-
-    for (var nLen = aBytes.length, nUint24 = 0, nIdx = 0; nIdx < nLen; nIdx++) {
-      nMod3 = nIdx % 3;
-      if (nIdx > 0 && (nIdx * 4 / 3) % 76 === 0) { sB64Enc += "\r\n"; }
-      nUint24 |= aBytes[nIdx] << (16 >>> nMod3 & 24);
-      if (nMod3 === 2 || aBytes.length - nIdx === 1) {
-        sB64Enc += String.fromCharCode(uint6ToB64(nUint24 >>> 18 & 63), uint6ToB64(nUint24 >>> 12 & 63), uint6ToB64(nUint24 >>> 6 & 63), uint6ToB64(nUint24 & 63));
-        nUint24 = 0;
-      }
+    var btoaUTF8 = function(inputString, BOMit){
+        console.log("ENCODE");
+        return originalBtoa((BOMit ? "\xEF\xBB\xBF" : "") + inputString.replace(
+            /[\x80-\uD7ff\uDC00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]?/g, btoaReplacer
+        ));
     }
-
-    return sB64Enc.replace(/A(?=A$|$)/g, "=");
-
-  }
-
-  /* UTF-8 array to DOMString and vice versa */
-
-  var UTF8ArrToStr = function(aBytes) {
-
-    var sView = "";
-
-    for (var nPart, nLen = aBytes.length, nIdx = 0; nIdx < nLen; nIdx++) {
-      nPart = aBytes[nIdx];
-      sView += String.fromCharCode(
-        nPart > 251 && nPart < 254 && nIdx + 5 < nLen ? /* six bytes */
-          /* (nPart - 252 << 32) is not possible in ECMAScript! So...: */
-          (nPart - 252) * 1073741824 + (aBytes[++nIdx] - 128 << 24) + (aBytes[++nIdx] - 128 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
-        : nPart > 247 && nPart < 252 && nIdx + 4 < nLen ? /* five bytes */
-          (nPart - 248 << 24) + (aBytes[++nIdx] - 128 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
-        : nPart > 239 && nPart < 248 && nIdx + 3 < nLen ? /* four bytes */
-          (nPart - 240 << 18) + (aBytes[++nIdx] - 128 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
-        : nPart > 223 && nPart < 240 && nIdx + 2 < nLen ? /* three bytes */
-          (nPart - 224 << 12) + (aBytes[++nIdx] - 128 << 6) + aBytes[++nIdx] - 128
-        : nPart > 191 && nPart < 224 && nIdx + 1 < nLen ? /* two bytes */
-          (nPart - 192 << 6) + aBytes[++nIdx] - 128
-        : /* nPart < 127 ? */ /* one byte */
-          nPart
-      );
+    //////////////////////////////////////////////////////////////////////////////////////
+    function atobReplacer(encoded){
+        var codePoint = encoded.charCodeAt(0) << 24;
+        var leadingOnes = clz32(~codePoint);
+        var endPos = 0, stringLen = encoded.length;
+        var result = "";
+        if (leadingOnes < 5 && stringLen >= leadingOnes) {
+            codePoint = (codePoint<<leadingOnes)>>>(24+leadingOnes);
+            for (endPos = 1; endPos < leadingOnes; ++endPos)
+                codePoint = (codePoint<<6) | (encoded.charCodeAt(endPos)&0x3f/*0b00111111*/);
+            if (codePoint <= 0xFFFF) { // BMP code point
+                result += fromCharCode(codePoint);
+            } else if (codePoint <= 0x10FFFF) {
+                // https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
+                codePoint -= 0x10000;
+                result += fromCharCode(
+                    (codePoint >> 10) + 0xD800,  // highSurrogate
+                    (codePoint & 0x3ff) + 0xDC00 // lowSurrogate
+                );
+            } else endPos = 0; // to fill it in with INVALIDs
+          }
+          for (; endPos < stringLen; ++endPos) result += "\ufffd"; // replacement character
+          return result;
     }
+    var atobUTF8 = function(inputString, keepBOM){
+        console.log("DECODE");
+        if (!keepBOM && inputString.substring(0,3) === "\xEF\xBB\xBF")
+            inputString = inputString.substring(3); // eradicate UTF-8 BOM
+        // 0xc0 => 0b11000000; 0xff => 0b11111111; 0xc0-0xff => 0b11xxxxxx
+        // 0x80 => 0b10000000; 0xbf => 0b10111111; 0x80-0xbf => 0b10xxxxxx
+        return originalAtob(inputString).replace(/[\xc0-\xff][\x80-\xbf]*/g, atobReplacer);
+    };
+    //==================================================================================//
 
-    return sView;
-
-  }
-
-  var strToUTF8Arr = function(sDOMStr) {
-
-    var aBytes, nChr, nStrLen = sDOMStr.length, nArrLen = 0;
-
-    /* mapping... */
-
-    for (var nMapIdx = 0; nMapIdx < nStrLen; nMapIdx++) {
-      nChr = sDOMStr.charCodeAt(nMapIdx);
-      nArrLen += nChr < 0x80 ? 1 : nChr < 0x800 ? 2 : nChr < 0x10000 ? 3 : nChr < 0x200000 ? 4 : nChr < 0x4000000 ? 5 : 6;
+    // To ensure compatibility, do not allow accidental passing of second argument, and
+    // provide two methods called 'atob' and 'btoa' as older versions of this code did:
+    var atobUTF8_ignoreBOM = function(inputString) {
+        return atobUTF8(inputString, false);
     }
-
-    aBytes = new Uint8Array(nArrLen);
-
-    /* transcription... */
-
-    for (var nIdx = 0, nChrIdx = 0; nIdx < nArrLen; nChrIdx++) {
-      nChr = sDOMStr.charCodeAt(nChrIdx);
-      if (nChr < 128) {
-        /* one byte */
-        aBytes[nIdx++] = nChr;
-      } else if (nChr < 0x800) {
-        /* two bytes */
-        aBytes[nIdx++] = 192 + (nChr >>> 6);
-        aBytes[nIdx++] = 128 + (nChr & 63);
-      } else if (nChr < 0x10000) {
-        /* three bytes */
-        aBytes[nIdx++] = 224 + (nChr >>> 12);
-        aBytes[nIdx++] = 128 + (nChr >>> 6 & 63);
-        aBytes[nIdx++] = 128 + (nChr & 63);
-      } else if (nChr < 0x200000) {
-        /* four bytes */
-        aBytes[nIdx++] = 240 + (nChr >>> 18);
-        aBytes[nIdx++] = 128 + (nChr >>> 12 & 63);
-        aBytes[nIdx++] = 128 + (nChr >>> 6 & 63);
-        aBytes[nIdx++] = 128 + (nChr & 63);
-      } else if (nChr < 0x4000000) {
-        /* five bytes */
-        aBytes[nIdx++] = 248 + (nChr >>> 24);
-        aBytes[nIdx++] = 128 + (nChr >>> 18 & 63);
-        aBytes[nIdx++] = 128 + (nChr >>> 12 & 63);
-        aBytes[nIdx++] = 128 + (nChr >>> 6 & 63);
-        aBytes[nIdx++] = 128 + (nChr & 63);
-      } else /* if (nChr <= 0x7fffffff) */ {
-        /* six bytes */
-        aBytes[nIdx++] = 252 + /* (nChr >>> 32) is not possible in ECMAScript! So...: */ (nChr / 1073741824);
-        aBytes[nIdx++] = 128 + (nChr >>> 24 & 63);
-        aBytes[nIdx++] = 128 + (nChr >>> 18 & 63);
-        aBytes[nIdx++] = 128 + (nChr >>> 12 & 63);
-        aBytes[nIdx++] = 128 + (nChr >>> 6 & 63);
-        aBytes[nIdx++] = 128 + (nChr & 63);
-      }
+    var btoaUTF8_ignoreBOM = function(inputString) {
+        return btoaUTF8(inputString, false);
     }
-
-    return aBytes;
-
-  }
-
-
-  return {
-    atob: function(str) {
-      var strArr = base64DecToArr(str);
-      return UTF8ArrToStr(strArr);
-    },
-
-    btoa: function(str) {
-      var strArr = strToUTF8Arr(str);
-      return base64EncArr(strArr).replace(/\s/g, '');
-    }
-  };
+    return {atob: atobUTF8_ignoreBOM, btoa: btoaUTF8_ignoreBOM};
 });
