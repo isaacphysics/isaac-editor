@@ -240,6 +240,31 @@ define(["react", "jquery"], function(React,$) {
 				}.bind(this), 500);
 			},
 
+			addParsonsItem: function() {
+				if (this.props.doc.items) {
+					var oldDoc = this.props.doc;
+					var newDoc = $.extend({}, oldDoc);
+					newDoc.items.push({
+						"type": "parsonsItem",
+						"indentation": 0,
+						"value": "",
+						"id": (""+(parseInt((newDoc.items[newDoc.items.length-1] || { id: "000" }).id)+1)).padStart(3, 0),
+					});
+
+					this.onDocChange(this, oldDoc, newDoc);
+				}
+			},
+
+			removeParsonsItemAtIndex: function(index) {
+				if (this.props.doc.items.hasOwnProperty(index)) {
+					var oldDoc = this.props.doc;
+					var newDoc = $.extend({}, oldDoc);
+					newDoc.items.splice(index, 1);
+
+					this.onDocChange(this, oldDoc, newDoc);
+				}
+			},
+
 			render: function() {
 				if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 					this.props.doc.requireUnits = true;
@@ -354,28 +379,12 @@ define(["react", "jquery"], function(React,$) {
 						const element = this.props.doc.items[index];
 						const div = (<div>
 							<Block key={index}>
-								<ParsonsItemBlock doc={element} key={index} onChange={this.onParsonsItemsChange} />
+								<ParsonsItemBlock doc={element} key={index} onChange={this.onParsonsItemsChange} onRemoveClicked={this.removeParsonsItemAtIndex} />
 							</Block>
 						</div>);
 						parsonsItemsListItems.push(div);
 					}
-					// this.props.doc.items.forEach(function(item, index) {
-					// 	parsonsItemsListItems.push(<div>
-		            //         <div className="row">
-					// 			<div className="column">
-					// 				<div className="row">
-					// 					<div className="small-1 column">ID</div>
-					// 					<div className="small-8 columns end">Value</div>
-					// 				</div>
-					// 			</div>
-					// 		</div>
 
-					// 		<Block key={index}>
-					// 			<ParsonsItemBlock doc={item} onChange={this.onDocChange} />
-					// 		</Block>
-					// 	</div>
-					// 	)
-					// })
 					var parsonsItemsList = <div>
 						<div className="row">
 							<div className="small-1 column">ID</div>
@@ -388,7 +397,7 @@ define(["react", "jquery"], function(React,$) {
 							<div className="small-1 column">&nbsp;</div>
 							<div className="small-8 columns">&nbsp;</div>
 							<div className="small-1 column end">
-								<button className={"button tiny tag radius success"}><i className="foundicon-plus" /></button>	
+								<button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>	
 							</div>
 						</div>
 					</div>

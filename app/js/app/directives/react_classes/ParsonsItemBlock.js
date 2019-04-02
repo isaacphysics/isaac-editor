@@ -29,6 +29,11 @@ define(["react", "jquery"], function(React,$) {
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
+            onRemoveClicked: function(e) {
+                var index = this.props.key;
+                this.props.onRemoveClicked(index);
+            },
+
             render: function() {
                 return (
                     <div className="row">
@@ -39,7 +44,7 @@ define(["react", "jquery"], function(React,$) {
                             <input value={this.props.doc.value} onChange={this.onValueChange} placeholder="e.g., x = 1" />
                         </div>
                         <div className="small-1 column end">
-                            <button className={"button tiny tag radius alert"} onClick={console.log}><i className="foundicon-remove"/></button>
+                            <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
                         </div>
                     </div>
                 )
