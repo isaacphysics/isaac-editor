@@ -248,6 +248,7 @@ define(["react", "jquery"], function(React,$) {
 						"type": "parsonsItem",
 						"indentation": 0,
 						"value": "",
+						// FIXME: This way of generating IDs could lead to problems if people start using non-numeric IDs.
 						"id": (""+(parseInt((newDoc.items[newDoc.items.length-1] || { id: "000" }).id)+1)).padStart(3, 0),
 					});
 
@@ -303,10 +304,16 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "choice";
 				}
 
-				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacParsonsQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type)) {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
+				} else if (["isaacParsonsQuestion"].includes(this.props.doc.type)) {
+					debugger;
+					var choices = <Block type="choices" blockTypeTitle="Choices">
+						<ContentChildren items={this.props.doc.choices || []} parsonsItems={this.props.doc.items} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
+					</Block>
+				}
 
 				if (!this.props.doc.answer) {
 					console.error("Attempting to render question with no answer. This will fail. Content:", this.props.doc);
@@ -379,7 +386,7 @@ define(["react", "jquery"], function(React,$) {
 						const element = this.props.doc.items[index];
 						const div = (<div>
 							<Block key={index}>
-								<ParsonsItemBlock doc={element} key={index} onChange={this.onParsonsItemsChange} onRemoveClicked={this.removeParsonsItemAtIndex} />
+								<ParsonsItemBlock doc={element} key={index} mode="item" onChange={this.onParsonsItemsChange} onRemoveClicked={this.removeParsonsItemAtIndex} />
 							</Block>
 						</div>);
 						parsonsItemsListItems.push(div);

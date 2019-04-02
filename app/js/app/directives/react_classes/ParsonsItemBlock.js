@@ -21,6 +21,14 @@ define(["react", "jquery"], function(React,$) {
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
+            onIndentationChange: function(e) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+                newDoc.indentation = e.target.value;
+
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
             onValueChange: function(e) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
@@ -35,8 +43,20 @@ define(["react", "jquery"], function(React,$) {
             },
 
             render: function() {
-                return (
-                    <div className="row">
+                var element;
+
+                if (this.props.mode === "choice") {
+                    element = <div className="row">
+                        <div className="small-2 column">
+                            <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
+                        </div>
+                        <div className="small-2 column">
+                            <input value={this.props.doc.indentation} onChange={this.onIndentationChange} placeholder="Indentation" />
+                        </div>
+                        <div className="small-6 column end">{"\u2001\u2001".repeat(this.props.doc.indentation) + this.props.doc.value}</div>
+                    </div>;
+                } else if (this.props.mode === "item") {
+                    element = <div className="row">
                         <div className="small-1 column">
                             <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
                         </div>
@@ -46,8 +66,9 @@ define(["react", "jquery"], function(React,$) {
                         <div className="small-1 column end">
                             <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
                         </div>
-                    </div>
-                )
+                    </div>;
+                }
+                return element;
             }
         });
     }

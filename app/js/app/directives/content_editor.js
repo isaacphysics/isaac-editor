@@ -187,9 +187,9 @@ define([
 
 	var LogicFormulaChoiceBlock = _LogicFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
-	var ParsonsChoiceBlock = _ParsonsChoiceBlock(ContentEditor, Block, ContentBlock);
-
 	var ParsonsItemBlock = _ParsonsItemBlock(ContentEditor, Block, ContentBlock);
+
+	var ParsonsChoiceBlock = _ParsonsChoiceBlock(ContentEditor, Block, ContentBlock, ParsonsItemBlock);
 
 	var ChemicalFormulaChoiceBlock = _ChemicalFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
