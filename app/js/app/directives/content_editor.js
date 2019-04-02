@@ -30,6 +30,8 @@ define([
 	"jsx!./react_classes/QuantityChoiceBlock",
 	"jsx!./react_classes/FormulaChoiceBlock",
 	"jsx!./react_classes/LogicFormulaChoiceBlock",
+	"jsx!./react_classes/ParsonsChoiceBlock",
+	"jsx!./react_classes/ParsonsItemBlock",
 	"jsx!./react_classes/ChemicalFormulaChoiceBlock",
 	"jsx!./react_classes/TabsBlock",
 	"jsx!./react_classes/AccordionBlock",
@@ -60,6 +62,8 @@ define([
 		_QuantityChoiceBlock,
 		_FormulaChoiceBlock,
 		_LogicFormulaChoiceBlock,
+		_ParsonsChoiceBlock,
+		_ParsonsItemBlock,
 		_ChemicalFormulaChoiceBlock,
 		_TabsBlock,
 		_AccordionBlock,
@@ -167,8 +171,6 @@ define([
 
 	var AnvilAppBlock = _AnvilAppBlock(ContentEditor, Block);
 
-	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock);
-
 	var EventPageBlock = _EventPageBlock(ContentEditor, Block, FigureBlock, ContentValueOrChildren);
 
 	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren);
@@ -185,7 +187,13 @@ define([
 
 	var LogicFormulaChoiceBlock = _LogicFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
+	var ParsonsChoiceBlock = _ParsonsChoiceBlock(ContentEditor, Block, ContentBlock);
+
+	var ParsonsItemBlock = _ParsonsItemBlock(ContentEditor, Block, ContentBlock);
+
 	var ChemicalFormulaChoiceBlock = _ChemicalFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
+
+	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock);
 
 /////////////////////////////////
 // Register Types
@@ -207,8 +215,10 @@ define([
 	typeMap["freeTextRule"] = FreeTextRuleBlock;
 	typeMap["quantity"] = QuantityChoiceBlock;
 	typeMap["formula"] = FormulaChoiceBlock;
-	typeMap["logicFormula"] = LogicFormulaChoiceBlock;
 	typeMap["chemicalFormula"] = ChemicalFormulaChoiceBlock;
+	typeMap["logicFormula"] = LogicFormulaChoiceBlock;
+	typeMap["parsonsChoice"] = ParsonsChoiceBlock;
+	typeMap["parsonsItem"] = ParsonsItemBlock;
 	typeMap["video"] = VideoBlock;
 	typeMap["anvilApp"] = AnvilAppBlock;
 	typeMap["question"] = QuestionBlock;
@@ -221,6 +231,7 @@ define([
 	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
+	typeMap["isaacParsonsQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 
 

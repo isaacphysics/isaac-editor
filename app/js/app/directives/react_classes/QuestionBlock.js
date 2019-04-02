@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock) {
+	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -35,6 +35,15 @@ define(["react", "jquery"], function(React,$) {
 				newDoc.hints = newHintsDoc.children;
 
 				this.onDocChange(this, oldDoc, newDoc);
+			},
+
+			onParsonsItemsChange: function(c, oldChildren, newChildren) {
+				// newVal must be a list
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.items[c.props.key] = newChildren;
+
+				this.onDocChange(this, oldDoc, newDoc)
 			},
 
 			onChoicesChange: function(c, oldChildren, newChildren) {
@@ -261,13 +270,15 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "freeTextRule";
 				} else if (this.props.doc.type == "isaacSymbolicLogicQuestion") {
 					var requiredChildType = "logicFormula";
+				} else if (this.props.doc.type == "isaacParsonsQuestion") {
+					var requiredChildType = "parsonsChoice";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
 				} else {
 					var requiredChildType = "choice";
 				}
 
-				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacParsonsQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type))
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
@@ -337,6 +348,52 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
+				if (this.props.doc.type == "isaacParsonsQuestion") {
+					var parsonsItemsListItems = [];
+					for (const index in this.props.doc.items) {
+						const element = this.props.doc.items[index];
+						const div = (<div>
+							<Block key={index}>
+								<ParsonsItemBlock doc={element} key={index} onChange={this.onParsonsItemsChange} />
+							</Block>
+						</div>);
+						parsonsItemsListItems.push(div);
+					}
+					// this.props.doc.items.forEach(function(item, index) {
+					// 	parsonsItemsListItems.push(<div>
+		            //         <div className="row">
+					// 			<div className="column">
+					// 				<div className="row">
+					// 					<div className="small-1 column">ID</div>
+					// 					<div className="small-8 columns end">Value</div>
+					// 				</div>
+					// 			</div>
+					// 		</div>
+
+					// 		<Block key={index}>
+					// 			<ParsonsItemBlock doc={item} onChange={this.onDocChange} />
+					// 		</Block>
+					// 	</div>
+					// 	)
+					// })
+					var parsonsItemsList = <div>
+						<div className="row">
+							<div className="small-1 column">ID</div>
+							<div className="small-8 columns end">Value</div>
+						</div>
+
+						{parsonsItemsListItems}
+
+						<div className="row">
+							<div className="small-1 column">&nbsp;</div>
+							<div className="small-8 columns">&nbsp;</div>
+							<div className="small-1 column end">
+								<button className={"button tiny tag radius success"}><i className="foundicon-plus" /></button>	
+							</div>
+						</div>
+					</div>
+				}
+
 				return (
 					<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 						<form>
@@ -385,6 +442,7 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacStringMatchQuestion">String Match Question</option>
 										<option value="isaacFreeTextQuestion">Free Text Question</option>
 										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
+										<option value="isaacParsonsQuestion">Parsons Question</option>
 										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
 									</select>
 								</div>
@@ -394,6 +452,7 @@ define(["react", "jquery"], function(React,$) {
 						{symbolsList}
 						{formulaSeed}
 						{exposition}
+						{parsonsItemsList}
 						{choices}
 						{freeTextHelpTable}
 						<div className="row">
