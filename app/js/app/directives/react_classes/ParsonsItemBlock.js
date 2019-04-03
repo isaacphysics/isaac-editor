@@ -47,13 +47,16 @@ define(["react", "jquery"], function(React,$) {
 
                 if (this.props.mode === "choice") {
                     element = <div className="row">
-                        <div className="small-2 column">
+                        <div className="small-2 column">{/* FIXME This could be a dropdown select thing maybe. */}
                             <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
                         </div>
                         <div className="small-2 column">
                             <input value={this.props.doc.indentation} onChange={this.onIndentationChange} placeholder="Indentation" />
                         </div>
-                        <div className="small-6 column end">{"\u2001\u2001".repeat(this.props.doc.indentation) + this.props.doc.value}</div>
+                        <div className="small-6 column">{"\u2001\u2001".repeat(this.props.doc.indentation) + this.props.value}</div>
+                        <div className="small-1 column end">
+                            <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
+                        </div>
                     </div>;
                 } else if (this.props.mode === "item") {
                     element = <div className="row">

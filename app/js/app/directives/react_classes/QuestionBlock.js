@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock) {
+	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -266,6 +266,17 @@ define(["react", "jquery"], function(React,$) {
 				}
 			},
 
+			onParsonsChoicesChange: function(c, oldChildren, newChildren) {
+				// newVal must be a list
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				
+				newDoc.choices[c.props.key] = newChildren;
+
+				this.onDocChange(this, oldDoc, newDoc)
+			},
+
+
 			render: function() {
 				if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 					this.props.doc.requireUnits = true;
@@ -308,10 +319,16 @@ define(["react", "jquery"], function(React,$) {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
-				} else if (["isaacParsonsQuestion"].includes(this.props.doc.type)) {
-					debugger;
+				} else if (this.props.doc.type === "isaacParsonsQuestion") {
+					var choicesBlocks = [];
+					for (const choiceIdx in this.props.doc.choices) {
+						const choice = this.props.doc.choices[choiceIdx];
+						choicesBlocks.push(
+							<ParsonsChoiceBlock doc={choice} items={this.props.doc.items || []} key={choiceIdx} encoding={this.encoding} onChange={this.onParsonsChoicesChange} requiredChildType={requiredChildType} />
+						);
+					}
 					var choices = <Block type="choices" blockTypeTitle="Choices">
-						<ContentChildren items={this.props.doc.choices || []} parsonsItems={this.props.doc.items} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
+						{choicesBlocks}
 					</Block>
 				}
 

@@ -5,8 +5,8 @@ define(["react", "jquery"], function(React,$) {
             getInitialState: function() {
                 return {
                     editing: false,
-                    editedValue: this.props.doc.value,
-                    editedPythonExpression: this.props.doc.pythonExpression
+                    // editedValue: this.props.doc.value,
+                    // editedPythonExpression: this.props.doc.pythonExpression
                 };
             },
 
@@ -33,7 +33,6 @@ define(["react", "jquery"], function(React,$) {
             },
 
             correct_toggle: function(e) {
-
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
 
@@ -41,6 +40,38 @@ define(["react", "jquery"], function(React,$) {
 
                 this.onDocChange(this, oldDoc, newDoc);
             },
+
+            onParsonsChoiceChange: function(c, oldVal, newVal) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+                
+                newDoc.items[c.props.key] = newVal;
+
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
+            removeParsonsChoiceItemAtIndex: function(index) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+
+                newDoc.items.splice(index, 1);
+
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
+            addParsonsChoiceItem: function() {
+				if (this.props.doc.items) {
+					var oldDoc = this.props.doc;
+					var newDoc = $.extend({}, oldDoc);
+					newDoc.items.push({
+						"type": "parsonsItem",
+						"indentation": 0,
+						"id": "000",
+					});
+
+					this.onDocChange(this, oldDoc, newDoc);
+				}
+			},
 
             render: function() {
 
@@ -50,20 +81,21 @@ define(["react", "jquery"], function(React,$) {
                     encoding: "markdown"
                 };
 
-                var parsonsItemsListItems = [];
-                for (const index in this.props.doc.items) {
-                    const element = this.props.doc.items[index];
-                    const div = (<div>
-                        <Block key={index}>
-                            <ParsonsItemBlock doc={element} key={index} mode="choice" onChange={this.onParsonsItemsChange} onRemoveClicked={this.removeParsonsItemAtIndex} />
-                        </Block>
-                    </div>);
-                    parsonsItemsListItems.push(div);
+                const itemsIdToValue = [];
+                for (const item of this.props.items) {
+                    itemsIdToValue[item.id] = item.value;
                 }
-                debugger;
+
+                var parsonsChoiceItems = [];
+                const choice = this.props.doc;
+                for (const choiceItemIdx in choice.items) {
+                    const item = choice.items[choiceItemIdx];
+                    const block = (<ParsonsItemBlock doc={item} key={choiceItemIdx} mode="choice" value={itemsIdToValue[item.id]} onChange={this.onParsonsChoiceChange} onRemoveClicked={this.removeParsonsChoiceItemAtIndex} />);
+                    parsonsChoiceItems.push(block);
+                }
 
                 var content = <div ref="content">
-                    {parsonsItemsListItems}
+                    {parsonsChoiceItems}
                 </div>
 
                 return (
@@ -76,6 +108,13 @@ define(["react", "jquery"], function(React,$) {
                             </div>
                             <div className="small-7 columns" >
                                 {content}
+                                <div className="row">
+                                    <div className="small-10 columns">&nbsp;</div>
+                                    <div className="small-1 column end">
+                                        <button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>	
+                                    </div>
+                                </div>
+
                             </div>
                             <div className="small-4 columns" >
                                 <ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />

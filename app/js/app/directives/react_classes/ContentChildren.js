@@ -150,6 +150,7 @@ define(["react", "jquery"], function(React,$) {
 			},
 
 			render: function() {
+				console.log(this.props);
 				var children = this.props.items.map(this.getItemComponent, this);
 
 				// Add a dummy child if there are no children, allowing a final insert op to be added.
