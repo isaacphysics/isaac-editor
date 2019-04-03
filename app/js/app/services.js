@@ -2,28 +2,35 @@
 
 define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader", "app/services/SnippetLoader", "app/services/TagLoader", "app/services/IdLoader"], function() {
 
-	/* Services */
+    /* Services */
 
-	angular.module('scooter.services', [])
+    angular.module('scooter.services', [])
 
-	.constant('Repo', {
-		owner: "isaacphysics",
-		name: "isaac-content-2"
-	})
+    // Which repo is edited depends on the hostname:
+    .constant('Repo', {
+        "localhost:8421": {owner: "isaacphysics", name: "rutherford-content"},
+        "editor.isaacphysics.org": {owner: "isaacphysics", name: "rutherford-content"},
+        "editor.isaaccomputerscience.org": {owner: "isaacphysics", name: "isaac-content-2"}
+    }[document.location.host])
 
-	.constant('ApiServer', "https://staging-2.isaacphysics.org/api/any/api")
+    // Where to preview content also depends on hostname:
+    .constant('StagingServer', {
+        "localhost:8421": "https://staging.isaacphysics.org",
+        "editor.isaacphysics.org": "https://staging.isaacphysics.org",
+        "editor.isaaccomputerscience.org": "https://staging-2.isaacphysics.org"
+    }[document.location.host])
 
-	.service('LoginChecker', require("app/services/LoginChecker"))
+    .service('LoginChecker', require("app/services/LoginChecker"))
 
-	.factory('FileLoader', require("app/services/FileLoader"))
+    .factory('FileLoader', require("app/services/FileLoader"))
 
-	.factory('FigureUploader', require("app/services/FigureUploader"))
+    .factory('FigureUploader', require("app/services/FigureUploader"))
 
-	.service('SnippetLoader', require("app/services/SnippetLoader"))
+    .service('SnippetLoader', require("app/services/SnippetLoader"))
 
-	.factory('TagLoader', require("app/services/TagLoader"))
+    .factory('TagLoader', require("app/services/TagLoader"))
 
-	.factory('IdLoader', require("app/services/IdLoader"))
+    .factory('IdLoader', require("app/services/IdLoader"))
 
 
 });
