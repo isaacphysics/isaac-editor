@@ -1,18 +1,22 @@
 /*
- *  To deploy tealight:
+ *  To authenticate to GitHub, we use a standard OAuth app. But isaac-editor runs entirely
+ *  in the browser, and so a server somewhere is needed to protect the app secrets.
  *
- *  1) Deploy the static tealight directory to your web server
+ *  The authentication server must accept GET requests, containing three URL parameters:
+ *  an encrypted 'authCode', the OAuth client ID and a temporary code from GitHub. It should
+ *  decrypt the 'authCode' which contains the client secret, and make a request to GitHub for
+ *  the user's access token, which it should return in the JSON response body.
+ * 
+ *  A functional server exists below, and can be used to configure further host names.
  *
- *  2) Register your tealight URL as an application on Github: https://github.com/settings/applications/new
+ *  1) Either implement a login server of your own, or use that specified below.
  *
- *  3) Visit the tealight auth server (currently http://www-dyn.cl.cam.ac.uk/~ipd21/tealight-auth-server/ )
- *     and exchange your client_id and client_secret for your tealight_auth_code
+ *  2) Register your URL as an application on GitHub: https://github.com/settings/applications/new
  *
- *  4) Fill in the placeholders below with your actual client_id and tealight_auth_code
+ *  3) Visit your authServer (or https://editor-auth.isaacphysics.org) and exchange your 
+ *     OAuth app client_id, client_secret and origin for your authCode.
  *
- *  5) Rename this file to "github_application.js"
- *
- *  6) Enjoy using tealight!
+ *  4) Fill in the placeholders below with your actual client_id and authCode.
  *
  */
 
