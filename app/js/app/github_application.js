@@ -28,11 +28,7 @@ define(function() {
         hosts: {
             "localhost:8421": {
                 clientId: "f62f2bd4954bf930bc3f",
-                authCode: "/vFaDdbb7id6+cPgsIKTdvwk4lOLBkBpBsXDdBvZsnU0U/PBLxgzxDzmUfE/0OIWWvlxh7SigvVv1JzBffbEc2364W8GPmQt9QeuVW1juAHdvdT7kRrHv8LjEuxJP9ie9+BP3tXNWpVxdg7S3sbZA5ShBFOYxdr3izjn9L+cmzDT9YVKB+Grv8hvLcEFOy7KHeixa29HPY2pqtk6XHFqiwlDP+02AWmY"
-            },
-            "localhost:8001": {
-                clientId: "9f116929fbccfc311e1c",
-                authCode: "eGpwSEepHckY9T4tHG7Ej2yVP+ALt3vToIy9BIbXP/vI79SrzHZha/AY5MZSHTRClcErY7fxsVG3K6k4kXmeD1j4AtoYz3lwTio53zMF//3I/3Nc5nDFMygdelk5oL74w+/+CFTqmuat8GRWqJVe+MBXUo5VzrPpgAn3VginSjj6XvFOhWH9qw0TsS/T1KICZQL+nJD8BYyWj5dX8QilSGhY+gMpJ0T6"
+                authCode: "/vFaDdbb7id6+cPgsIKTdvwk4lOLBkBpBsXDdBvZsnU0U/PBLxgzxDzmUfE/0OIWWvlxh7SigvVv1JzBffbEc2364W8GPmQt9QeuVW1juAHdvdT7kRrHv8LjEuxJP9ie9+BP3tXNWpVxdg7S3sbZA5ShBFOYxdr3izjn9L+cmzDT9YVKB+Grv8hvLcEFOy7KHeixa29HPY2pqtk6XHFqiwlDP+02AWmY",
             },
             "editor.isaacphysics.org": {
                 clientId : "012d68f7ffd3a99110ff",
