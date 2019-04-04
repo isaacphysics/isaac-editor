@@ -99,7 +99,7 @@ define(["react", "jquery"], function(React,$) {
                 </div>
 
                 return (
-                    <Block type="content" blockTypeTitle="Choice" doc={this.props.doc} onChange={this.onDocChange}>
+                    <Block type="content" doc={this.props.doc} onChange={this.onDocChange}>
                         <div className="row">
                             <div className="small-1 column text-right">
                                 {this.props.doc.correct ?

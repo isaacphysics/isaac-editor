@@ -327,7 +327,7 @@ define(["react", "jquery"], function(React,$) {
 							<ParsonsChoiceBlock doc={choice} items={this.props.doc.items || []} key={choiceIdx} encoding={this.encoding} onChange={this.onParsonsChoicesChange} requiredChildType={requiredChildType} />
 						);
 					}
-					var choices = <Block type="choices" blockTypeTitle="Choices">
+					var choices = <Block type="choices" blockTypeTitle="Choices" doc={this.props.doc.choices} onChange={this.onChoicesChange}>
 						{choicesBlocks}
 					</Block>
 				}
