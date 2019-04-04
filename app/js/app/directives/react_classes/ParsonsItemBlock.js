@@ -47,11 +47,15 @@ define(["react", "jquery"], function(React,$) {
 
                 if (this.props.mode === "choice") {
                     element = <div className="row">
-                        <div className="small-2 column">{/* FIXME This could be a dropdown select thing maybe. */}
-                            <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
+                        <div className="small-2 column">
+                            <select value={this.props.doc.id} onChange={this.onIDChange}>
+                                {this.props.itemIDs.map(function(id, idx) {
+                                    return <option value={id} key={idx}>{id}</option>
+                                })}
+                            </select>
                         </div>
                         <div className="small-2 column">
-                            <input value={this.props.doc.indentation} onChange={this.onIndentationChange} placeholder="Indentation" />
+                            <input value={this.props.doc.indentation} type="number" min="0" max="3" onChange={this.onIndentationChange} placeholder="0-3" />
                         </div>
                         <div className="small-6 column">{"\u2001\u2001".repeat(this.props.doc.indentation) + this.props.value}</div>
                         <div className="small-1 column end">

@@ -60,15 +60,14 @@ define(["react", "jquery"], function(React,$) {
             },
 
             addParsonsChoiceItem: function() {
-				if (this.props.doc.items) {
+				if (this.props.items) {
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
 					newDoc.items.push({
 						"type": "parsonsItem",
 						"indentation": 0,
-						"id": "000",
+						"id": this.props.items[0].id,
 					});
-
 					this.onDocChange(this, oldDoc, newDoc);
 				}
 			},
@@ -85,12 +84,13 @@ define(["react", "jquery"], function(React,$) {
                 for (const item of this.props.items) {
                     itemsIdToValue[item.id] = item.value;
                 }
+                const itemIDs = this.props.items.map(function(item) { return item.id });
 
                 var parsonsChoiceItems = [];
                 const choice = this.props.doc;
                 for (const choiceItemIdx in choice.items) {
                     const item = choice.items[choiceItemIdx];
-                    const block = (<ParsonsItemBlock doc={item} key={choiceItemIdx} mode="choice" value={itemsIdToValue[item.id]} onChange={this.onParsonsChoiceChange} onRemoveClicked={this.removeParsonsChoiceItemAtIndex} />);
+                    const block = (<ParsonsItemBlock doc={item} key={choiceItemIdx} mode="choice" value={itemsIdToValue[item.id]} itemIDs={itemIDs} onChange={this.onParsonsChoiceChange} onRemoveClicked={this.removeParsonsChoiceItemAtIndex} />);
                     parsonsChoiceItems.push(block);
                 }
 
@@ -111,7 +111,7 @@ define(["react", "jquery"], function(React,$) {
                                 <div className="row">
                                     <div className="small-10 columns">&nbsp;</div>
                                     <div className="small-1 column end">
-                                        <button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>	
+                                        <button className={"button tiny tag radius success"} onClick={this.addParsonsChoiceItem}><i className="foundicon-plus" /></button>	
                                     </div>
                                 </div>
 
