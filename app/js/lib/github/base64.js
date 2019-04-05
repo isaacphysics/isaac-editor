@@ -40,7 +40,6 @@ define([], function() {
         );
     }
     var btoaUTF8 = function(inputString, BOMit){
-        console.log("ENCODE");
         return originalBtoa((BOMit ? "\xEF\xBB\xBF" : "") + inputString.replace(
             /[\x80-\uD7ff\uDC00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]?/g, btoaReplacer
         ));
@@ -70,7 +69,6 @@ define([], function() {
           return result;
     }
     var atobUTF8 = function(inputString, keepBOM){
-        console.log("DECODE");
         if (!keepBOM && inputString.substring(0,3) === "\xEF\xBB\xBF")
             inputString = inputString.substring(3); // eradicate UTF-8 BOM
         // 0xc0 => 0b11000000; 0xff => 0b11111111; 0xc0-0xff => 0b11xxxxxx
