@@ -8,7 +8,7 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
 
     // Which repo is edited depends on the hostname:
     .constant('Repo', {
-        "localhost:8421": {owner: "isaacphysics", name: "rutherford-content"},
+        "localhost:8421": {owner: "Morpheu5", name: "rutherford-content"},
         "editor.isaacphysics.org": {owner: "isaacphysics", name: "rutherford-content"},
         "editor.isaaccomputerscience.org": {owner: "isaacphysics", name: "isaac-content-2"}
     }[document.location.host])

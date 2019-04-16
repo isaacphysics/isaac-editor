@@ -21,6 +21,7 @@ define(["react", "jquery"], function(React,$) {
 					altText: this.props.doc.altText,
 					attribution: this.props.doc.attribution,
 					level: this.props.doc.level,
+					difficulty: this.props.doc.difficulty,
 					published: this.props.doc.published,
 					url: this.props.doc.url,
 					description: this.props.doc.description,
@@ -218,6 +219,10 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.level || this.props.doc.level) {
 					newDoc.level = parseInt(this.state.level);
+				}
+
+				if (this.state.difficulty || this.props.doc.difficulty) {
+					newDoc.difficulty = parseInt(this.state.difficulty);
 				}
 
 				if (this.state.description || this.props.doc.description) {
@@ -505,6 +510,11 @@ define(["react", "jquery"], function(React,$) {
 						<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
 					</div>;
 
+					var difficultyMeta = <div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Difficulty:</span></div>
+						<div className="small-10 columns"><input type="text" value={this.state.difficulty} onChange={this.onTextboxChange.bind(this, "difficulty")} /></div>
+					</div>;
+
 					var supersededByMeta = <div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Superseded by:</span></div>
 						<div className="small-10 columns"><input type="text" value={this.state.supersededBy} onChange={this.onTextboxChange.bind(this, "supersededBy")} /></div>
@@ -560,6 +570,7 @@ define(["react", "jquery"], function(React,$) {
 							{figureMeta}
 							{questionPageMeta}
 							{levelMeta}
+							{difficultyMeta}
 							{supersededByMeta}
 							{pageMeta}
 							{eventMetadata}
