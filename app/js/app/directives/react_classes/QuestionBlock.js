@@ -326,6 +326,7 @@ define(["react", "jquery"], function(React,$) {
 					var freeTextHelpTable =
 					<div>
 					<h5>Matching Rule Syntax:</h5>
+					<p>⚠️ A fuller set of instructions can be found <a href="https://github.com/isaacphysics/rutherford-content/wiki/Editor-Notes#free-text-questions" target="_">here</a>.</p>
 					<table className="table table-striped table-bordered">
 						<thead><tr><th>Symbol</th><th>Description</th><th>Rule</th><th>✔️ Match</th><th>❌ Failed Match</th></tr></thead>
 						<tbody>
