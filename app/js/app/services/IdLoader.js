@@ -1,6 +1,8 @@
 define([], function(helpers) {
 	
-	return ["$http", "ApiServer", function($http, api) {
+	return ["$http", "StagingServer", function($http, staging) {
+
+		var api = staging + "/api/any/api"
 
 		return function(searchText) {
 			return new Promise(function(resolve, reject) {

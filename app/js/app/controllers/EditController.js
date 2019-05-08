@@ -2,7 +2,7 @@
 
 define(["github/github", "app/helpers", "angulartics"], function(github, helpers, angulartics) {
 
-	return ['$scope', '$routeParams', 'Repo', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', 'SnippetLoader', '$analytics', function(scope, routeParams, repo, github, location, $rootScope, fileLoader, figureUploader, snippetLoader, $analytics) {
+	return ['$scope', '$routeParams', 'Repo', 'StagingServer', 'github', '$location', '$rootScope', 'FileLoader', 'FigureUploader', 'SnippetLoader', '$analytics', function(scope, routeParams, repo, previewURL, github, location, $rootScope, fileLoader, figureUploader, snippetLoader, $analytics) {
 
 		scope.createFile = function(relativePath) {
 			console.log("Creating file", relativePath);
@@ -281,7 +281,6 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 		};
 
 		scope.updatePreviewLink = function(latestDocument) {
-			var previewURL = "https://staging.isaacphysics.org";
 			if (latestDocument && latestDocument.id) {
 				if (latestDocument.type == "isaacConceptPage") {
 					scope.previewLink = previewURL + "/concepts/" + latestDocument.id;
