@@ -266,17 +266,6 @@ define(["react", "jquery"], function(React,$) {
 				}
 			},
 
-			onParsonsChoicesChange: function(c, oldChildren, newChildren) {
-				// newVal must be a list
-				var oldDoc = this.props.doc;
-				var newDoc = $.extend({}, oldDoc);
-				
-				newDoc.choices[c.props.key] = newChildren;
-
-				this.onDocChange(this, oldDoc, newDoc)
-			},
-
-
 			render: function() {
 				if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 					this.props.doc.requireUnits = true;
@@ -320,15 +309,8 @@ define(["react", "jquery"], function(React,$) {
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
 				} else if (this.props.doc.type === "isaacParsonsQuestion") {
-					var choicesBlocks = [];
-					for (const choiceIdx in this.props.doc.choices) {
-						const choice = this.props.doc.choices[choiceIdx];
-						choicesBlocks.push(
-							<ParsonsChoiceBlock doc={choice} items={this.props.doc.items || []} key={choiceIdx} encoding={this.encoding} onChange={this.onParsonsChoicesChange} requiredChildType={requiredChildType} />
-						);
-					}
-					var choices = <Block type="choices" blockTypeTitle="Choices" doc={this.props.doc.choices} onChange={this.onChoicesChange}>
-						{choicesBlocks}
+					var choices = <Block type="choices" blockTypeTitle="Choices">
+						<ContentChildren globalItems={this.props.doc.items || []} items={this.props.doc.choices || []} encoding={this.encoding}  onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
 				}
 

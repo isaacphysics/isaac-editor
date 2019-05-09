@@ -60,15 +60,17 @@ define(["react", "jquery"], function(React,$) {
             },
 
             addParsonsChoiceItem: function() {
-				if (this.props.items) {
+				if (this.props.globalItems) {
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
 					newDoc.items.push({
 						"type": "parsonsItem",
 						"indentation": 0,
-						"id": this.props.items[0].id,
+						"id": this.props.globalItems[0].id,
 					});
 					this.onDocChange(this, oldDoc, newDoc);
+				} else {
+					console.log("No global Parson's items present")
 				}
 			},
 
@@ -80,26 +82,30 @@ define(["react", "jquery"], function(React,$) {
                     encoding: "markdown"
                 };
 
-                const itemsIdToValue = [];
-                for (const item of this.props.items) {
-                    itemsIdToValue[item.id] = item.value;
+                const globalItemsIdToValue = [];
+                for (const item of this.props.globalItems) {
+                    globalItemsIdToValue[item.id] = item.value;
                 }
-                const itemIDs = this.props.items.map(function(item) { return item.id });
+                const globalItemIDs = this.props.globalItems.map(function(item) { return item.id });
 
                 var parsonsChoiceItems = [];
                 const choice = this.props.doc;
                 for (const choiceItemIdx in choice.items) {
                     const item = choice.items[choiceItemIdx];
-                    const block = (<ParsonsItemBlock doc={item} key={choiceItemIdx} mode="choice" value={itemsIdToValue[item.id]} itemIDs={itemIDs} onChange={this.onParsonsChoiceChange} onRemoveClicked={this.removeParsonsChoiceItemAtIndex} />);
+                    const block = <ParsonsItemBlock
+                        doc={item} key={choiceItemIdx} mode="choice" value={globalItemsIdToValue[item.id]}
+                        itemIDs={globalItemIDs} onChange={this.onParsonsChoiceChange}
+                        onRemoveClicked={this.removeParsonsChoiceItemAtIndex}
+                    />;
                     parsonsChoiceItems.push(block);
                 }
 
                 var content = <div ref="content">
                     {parsonsChoiceItems}
-                </div>
+                </div>;
 
                 return (
-                    <Block type="content" doc={this.props.doc} onChange={this.onDocChange}>
+                    <Block type="content" blockTypeTitle={this.props.blockTypeTitle} doc={this.props.doc} onChange={this.onDocChange}>
                         <div className="row">
                             <div className="small-1 column text-right">
                                 {this.props.doc.correct ?
@@ -114,7 +120,6 @@ define(["react", "jquery"], function(React,$) {
                                         <button className={"button tiny tag radius success"} onClick={this.addParsonsChoiceItem}><i className="foundicon-plus" /></button>	
                                     </div>
                                 </div>
-
                             </div>
                             <div className="small-4 columns" >
                                 <ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />

@@ -96,9 +96,10 @@ define(["react", "jquery"], function(React,$) {
 							          ref={"insertBefore" + index}/>
 
 		           			<VariantBlock doc={item}
-		           			              disableListOps
-		           			              onChange={this.onItemChange.bind(this, index)}
-		           			              ref={"item" + index}/>
+							              globalItems={this.props.globalItems}
+							              disableListOps
+							              onChange={this.onItemChange.bind(this, index)}
+							              ref={"item" + index}/>
 
 
 							<DeleteOp onClick={this.onItemDelete.bind(this, index)}
@@ -150,7 +151,6 @@ define(["react", "jquery"], function(React,$) {
 			},
 
 			render: function() {
-				console.log(this.props);
 				var children = this.props.items.map(this.getItemComponent, this);
 
 				// Add a dummy child if there are no children, allowing a final insert op to be added.
