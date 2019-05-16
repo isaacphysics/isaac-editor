@@ -371,7 +371,7 @@ define(["react", "jquery"], function(React,$) {
 					]
 				}
 
-				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment" || this.props.doc.type == "isaacEventPage") {
+				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "isaacTopicSummaryPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment" || this.props.doc.type == "isaacEventPage") {
 					var pageMeta = [
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
