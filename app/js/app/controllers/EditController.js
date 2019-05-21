@@ -291,7 +291,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 				} else if (latestDocument.type == "isaacQuestionPage" || latestDocument.type == "isaacFastTrackQuestionPage") {
 					scope.previewLink = previewURL + "/questions/" + latestDocument.id;
 				} else if (latestDocument.type == "isaacTopicSummaryPage") {
-					scope.previewLink = previewURL + "/topics/" + latestDocument.id.splice("topic_summary_".length, -1);
+					scope.previewLink = previewURL + "/topics/" + latestDocument.id.slice("topic_summary_".length);
 				} else if (latestDocument.type == "isaacEventPage") {
 					scope.previewLink = previewURL + "/events/" + latestDocument.id;
 				} else if (latestDocument.type == "page") {
