@@ -33,6 +33,10 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 						value: "isaacConceptPage"
 					},
 					{
+						caption: "Topic Summary",
+						value: "isaacTopicSummaryPage"
+					},
+					{
 						caption: "General",
 						value: "page"
 					},
@@ -286,6 +290,8 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 					scope.previewLink = previewURL + "/concepts/" + latestDocument.id;
 				} else if (latestDocument.type == "isaacQuestionPage" || latestDocument.type == "isaacFastTrackQuestionPage") {
 					scope.previewLink = previewURL + "/questions/" + latestDocument.id;
+				} else if (latestDocument.type == "isaacTopicSummaryPage") {
+					scope.previewLink = previewURL + "/topics/" + latestDocument.id.slice("topic_summary_".length);
 				} else if (latestDocument.type == "isaacEventPage") {
 					scope.previewLink = previewURL + "/events/" + latestDocument.id;
 				} else if (latestDocument.type == "page") {

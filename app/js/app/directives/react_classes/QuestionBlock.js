@@ -241,7 +241,7 @@ define(["react", "jquery"], function(React,$) {
 			},
 
 			addParsonsItem: function() {
-				if (this.props.doc.items) {
+				if (this.props.doc.items !== undefined) {
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
 					newDoc.items.push({
@@ -251,7 +251,6 @@ define(["react", "jquery"], function(React,$) {
 						// FIXME: This way of generating IDs could lead to problems if people start using non-numeric IDs.
 						"id": (""+(parseInt((newDoc.items[newDoc.items.length-1] || { id: "000" }).id)+1)).padStart(3, 0),
 					});
-
 					this.onDocChange(this, oldDoc, newDoc);
 				}
 			},
@@ -271,6 +270,8 @@ define(["react", "jquery"], function(React,$) {
 					this.props.doc.requireUnits = true;
 				} else if (this.props.doc.type == "isaacMultiChoiceQuestion" && !this.props.doc.hasOwnProperty("randomiseChoices")) {
 					this.props.doc.randomiseChoices = true;
+				} else if (this.props.doc.type == "isaacParsonsQuestion" && !this.props.doc.items) {
+					this.props.doc.items = [];
 				}
 
 				var hints = {

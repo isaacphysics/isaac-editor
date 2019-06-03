@@ -1,10 +1,10 @@
 /** @jsx React.DOM */
 define([
-	"react", 
-	"jquery", 
-	"codemirrorJS", 
-	"showdown/showdown", 
-	"showdown/extensions/table", 
+	"react",
+	"jquery",
+	"codemirrorJS",
+	"showdown/showdown",
+	"showdown/extensions/table",
 	"app/MathJaxConfig",
 	"jsx!./react_classes/Title",
 	"jsx!./react_classes/Tags",
@@ -206,6 +206,7 @@ define([
 	typeMap["isaacQuestionPage"] = ContentBlock;
 	typeMap["isaacFastTrackQuestionPage"] = ContentBlock;
 	typeMap["isaacConceptPage"] = ContentBlock;
+	typeMap["isaacTopicSummaryPage"] = ContentBlock;
 	typeMap["isaacEventPage"] = EventPageBlock;
 	typeMap["isaacWildcard"] = ContentBlock;
 	typeMap["page"] = ContentBlock;

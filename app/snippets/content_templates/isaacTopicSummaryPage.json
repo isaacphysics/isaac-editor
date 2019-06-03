@@ -1,0 +1,15 @@
+{
+  "type": "isaacTopicSummaryPage",
+  "encoding": "markdown",
+  "title": "New Topic Summary",
+  "relatedContent": [
+    "__\uD83D\uDE42_DELETE_ME_AND_REPLACE_WITH_IDS_\uD83D\uDE42__"
+  ],
+  "children": [
+    {
+      "type": "content",
+      "encoding": "markdown",
+      "value": "This is a summary of a topic. You should write something sensible here!"
+    }
+  ]
+}

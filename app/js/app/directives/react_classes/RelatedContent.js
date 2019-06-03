@@ -58,6 +58,9 @@ define(["react", "jquery"], function(React,$) {
 					if (type == "isaacConceptPage")
 						type = "Concept";
 
+					if (type == "isaacTopicSummaryPage")
+						type = "TopicSummary";
+
 					results.push(<button className={"button tiny " + (type == 'Question' ? 'success' : '') + " radius id-result"} onClick={addId.bind(this,result.id)}>{result.title} ({type})<br/>{result.id} <i className="general foundicon-plus"/></button>)
 				}
 
