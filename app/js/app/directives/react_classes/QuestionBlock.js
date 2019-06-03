@@ -329,7 +329,7 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
-				if (this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion") {
+				if (this.props.doc.type == "isaacSymbolicQuestion" || this.props.doc.type == "isaacSymbolicChemistryQuestion" || this.props.doc.type == 'isaacSymbolicLogicQuestion') {
 				    var metasymbolsButtons = this.availableMetaSymbols.map((item) => {
                         let symbols = this.state.availableSymbols.split(',').map(s => s.trim());
                         let _class = symbols.indexOf(item[0]) > -1 ? 'primary' : 'secondary';
@@ -347,9 +347,9 @@ define(["react", "jquery"], function(React,$) {
 						<div className="small-9 columns">
 							<input type="text" placeholder="Enter list of symbols here (,-separated)" value={this.state.availableSymbols} onChange={this.onAvailableSymbolsChange} />
 						</div>
-                        <div className="small-12 columns text-right metasymbolbuttons">
+                        {this.props.doc.type != 'isaacSymbolicLogicQuestion' && <div className="small-12 columns text-right metasymbolbuttons">
                             {metasymbolsButtons}
-                        </div>
+                        </div>}
 					</div>;
 				}
 
