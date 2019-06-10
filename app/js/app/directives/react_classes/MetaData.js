@@ -494,7 +494,8 @@ define(["react", "jquery"], function(React,$) {
 					];
 				}
 
-				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage") {
+				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" ||
+					this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page") { // FIXME Needs refactoring
 					var questionPageMeta = <div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Attribution:</span></div>
 						<div className="small-10 columns"><input type="text" value={this.state.attribution} onChange={this.onTextboxChange.bind(this, "attribution")} /></div>
