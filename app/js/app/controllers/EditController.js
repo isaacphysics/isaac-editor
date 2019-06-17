@@ -29,6 +29,10 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 						value: "isaacQuestionPage"
 					},
 					{
+						caption: "FastTrack Question",
+						value: "isaacFastTrackQuestionPage"
+					},
+					{
 						caption: "Concept",
 						value: "isaacConceptPage"
 					},
