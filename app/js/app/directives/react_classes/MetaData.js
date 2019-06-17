@@ -1,5 +1,7 @@
 define(["react", "jquery"], function(React,$) {
 	return function(ContentEditor, Tags, RelatedContent) {
+		var TITLE_MAX_LENGTH = 32;
+
 		return React.createClass({
 			getInitialState: function() {
 
@@ -531,6 +533,8 @@ define(["react", "jquery"], function(React,$) {
 					</div>];
 				}
 
+				var titleGreaterThanMaxLength = this.props.doc.title && this.props.doc.title.length > TITLE_MAX_LENGTH;
+
 				return (
 					<div className="metadata-container">
 						<button onClick={this.toggleMetaData_click} className="button tiny round" ref="toggleButton">Show MetaData</button>
@@ -544,8 +548,9 @@ define(["react", "jquery"], function(React,$) {
 								<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} /></div>
 							</div>
 							<div className="row">
+								{titleGreaterThanMaxLength && <div className="columns text-right">This title is a little long, consider rephrasing 🙂</div>}
 								<div className="small-2 columns text-right"><span className="metadataLabel">Title: </span></div>
-								<div className="small-10 columns"><input type="text" value={this.state.title} onChange={this.onTextboxChange.bind(this, "title")} /></div>
+								<div className="small-10 columns"><input type="text" value={this.state.title} onChange={this.onTextboxChange.bind(this, "title")} style={{color: titleGreaterThanMaxLength ? "red" : "black"}} /></div>
 							</div>
 							<div className="row">
 								<div className="small-2 columns text-right"><span className="metadataLabel">Subtitle: </span></div>
