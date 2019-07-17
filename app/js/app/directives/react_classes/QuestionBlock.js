@@ -301,11 +301,13 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "parsonsChoice";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
+                } else if (this.props.doc.type == "isaacGraphSketcherQuestion") {
+					var requiredChildType = "graphChoice";
 				} else {
 					var requiredChildType = "choice";
 				}
 
-				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type)) {
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacFreeTextQuestion", "isaacGraphSketcherQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type)) {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
@@ -405,7 +407,7 @@ define(["react", "jquery"], function(React,$) {
 							<div className="small-1 column">&nbsp;</div>
 							<div className="small-8 columns">&nbsp;</div>
 							<div className="small-1 column end">
-								<button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>	
+								<button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>
 							</div>
 						</div>
 					</div>
@@ -461,6 +463,7 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
 										<option value="isaacParsonsQuestion">Parsons Question</option>
 										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
+                    					<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
 									</select>
 								</div>
 							</div>
