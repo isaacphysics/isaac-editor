@@ -17,7 +17,7 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
     .constant('StagingServer', {
         "localhost:8421": "https://staging.isaacphysics.org",
         "editor.isaacphysics.org": "https://staging.isaacphysics.org",
-        "editor.isaaccomputerscience.org": "https://staging-2.isaacphysics.org"
+        "editor.isaaccomputerscience.org": "https://staging.isaaccomputerscience.org"
     }[document.location.host])
 
     .service('LoginChecker', require("app/services/LoginChecker"))
