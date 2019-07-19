@@ -83,7 +83,7 @@ define(["react", "jquery"], function(React,$) {
                         <button onClick={this.done} className="button tiny">Done</button>
                     </div>;
                 } else {
-                    var html =(this.props.doc.value || "") + " <pre style=\"background:#fff;margin-top:0.5em;\">PYTHON: " + (this.props.doc.graphSpec || "") + "</pre>";
+                    var html =(this.props.doc.value || "") + " <pre style=\"background:#fff;margin-top:0.5em;\">Graph Choice: " + (this.props.doc.graphSpec || "") + "</pre>";
 
                     if (this.props.doc.graphSpec) {
                         var content = <span onClick={this.edit} ref="content" dangerouslySetInnerHTML={{__html: html}}></span>;
