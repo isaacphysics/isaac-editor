@@ -248,8 +248,7 @@ define(["react", "jquery"], function(React,$) {
 						"type": "parsonsItem",
 						"indentation": 0,
 						"value": "",
-						// FIXME: This way of generating IDs could lead to problems if people start using non-numeric IDs.
-						"id": (""+(parseInt((newDoc.items[newDoc.items.length-1] || { id: "000" }).id)+1)).padStart(3, 0),
+						"id": Math.random().toString(16).toLowerCase().slice(-4)
 					});
 					this.onDocChange(this, oldDoc, newDoc);
 				}
