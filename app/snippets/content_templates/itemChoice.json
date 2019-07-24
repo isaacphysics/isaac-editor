@@ -1,0 +1,10 @@
+{
+  "type": "itemChoice",
+  "items": [],
+  "correct": true,
+  "explanation": {
+    "type": "content",
+    "children": [],
+    "encoding": "markdown"
+  }
+}
