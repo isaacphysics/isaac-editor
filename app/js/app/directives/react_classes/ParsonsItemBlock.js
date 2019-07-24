@@ -78,7 +78,7 @@ define(["react", "jquery"], function(React,$) {
                     </div>;
                 } else if (this.props.mode === "item") {
                     element = <div className="row">
-                        <div className="small-1 column">
+                        <div className="small-2 column">
                             <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
                         </div>
                         <div className="small-8 columns">

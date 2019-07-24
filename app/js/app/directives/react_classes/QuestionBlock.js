@@ -399,14 +399,14 @@ define(["react", "jquery"], function(React,$) {
 
 					var parsonsItemsList = <div>
 						<div className="row">
-							<div className="small-1 column">ID</div>
+							<div className="small-2 column">ID</div>
 							<div className="small-8 columns end">Value</div>
 						</div>
 
 						{parsonsItemsListItems}
 
 						<div className="row">
-							<div className="small-1 column">&nbsp;</div>
+							<div className="small-2 column">&nbsp;</div>
 							<div className="small-8 columns">&nbsp;</div>
 							<div className="small-1 column end">
 								<button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>	
