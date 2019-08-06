@@ -18,7 +18,6 @@ define(["react", "jquery"], function(React,$) {
 
 			render: function() {
 				if (typeMap[this.props.doc.type] != ContentBlock) {
-					// debugger;
 					return <div className="block type-unknown">[Block of unknown content type: '{this.props.doc.type}']</div>;
 				}
 

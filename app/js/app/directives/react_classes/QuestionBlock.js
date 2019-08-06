@@ -244,13 +244,15 @@ define(["react", "jquery"], function(React,$) {
 				if (this.props.doc.items !== undefined) {
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
-					newDoc.items.push({
-						"type": "parsonsItem",
-						"indentation": 0,
+					var newItem = {
+						"type": { "isaacParsonsQuestion": "parsonsItem", "isaacItemQuestion" : "item" }[this.props.doc.type],
 						"value": "",
-						// FIXME: This way of generating IDs could lead to problems if people start using non-numeric IDs.
-						"id": (""+(parseInt((newDoc.items[newDoc.items.length-1] || { id: "000" }).id)+1)).padStart(3, 0),
-					});
+						"id": Math.random().toString(16).toLowerCase().slice(-4)
+					};
+					if (this.props.doc.type === "isaacParsonsQuestion") {
+						newItem["indentation"] = 0;
+					}
+					newDoc.items.push(newItem);
 					this.onDocChange(this, oldDoc, newDoc);
 				}
 			},
@@ -270,7 +272,7 @@ define(["react", "jquery"], function(React,$) {
 					this.props.doc.requireUnits = true;
 				} else if (this.props.doc.type == "isaacMultiChoiceQuestion" && !this.props.doc.hasOwnProperty("randomiseChoices")) {
 					this.props.doc.randomiseChoices = true;
-				} else if (this.props.doc.type == "isaacParsonsQuestion" && !this.props.doc.items) {
+				} else if ((this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacItemQuestion") && !this.props.doc.items) {
 					this.props.doc.items = [];
 				}
 
@@ -297,6 +299,8 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "freeTextRule";
 				} else if (this.props.doc.type == "isaacSymbolicLogicQuestion") {
 					var requiredChildType = "logicFormula";
+				} else if (this.props.doc.type == "isaacItemQuestion") {
+					var requiredChildType = "itemChoice";
 				} else if (this.props.doc.type == "isaacParsonsQuestion") {
 					var requiredChildType = "parsonsChoice";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
@@ -309,9 +313,9 @@ define(["react", "jquery"], function(React,$) {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
-				} else if (this.props.doc.type === "isaacParsonsQuestion") {
+				} else if (this.props.doc.type === "isaacParsonsQuestion" || this.props.doc.type === "isaacItemQuestion") {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
-						<ContentChildren globalItems={this.props.doc.items || []} items={this.props.doc.choices || []} encoding={this.encoding}  onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
+						<ContentChildren globalItems={this.props.doc.items || []} items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
 				}
 
@@ -381,7 +385,7 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
-				if (this.props.doc.type == "isaacParsonsQuestion") {
+				if (this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacItemQuestion") {
 					var parsonsItemsListItems = [];
 					for (const index in this.props.doc.items) {
 						const element = this.props.doc.items[index];
@@ -395,14 +399,14 @@ define(["react", "jquery"], function(React,$) {
 
 					var parsonsItemsList = <div>
 						<div className="row">
-							<div className="small-1 column">ID</div>
+							<div className="small-2 column">ID</div>
 							<div className="small-8 columns end">Value</div>
 						</div>
 
 						{parsonsItemsListItems}
 
 						<div className="row">
-							<div className="small-1 column">&nbsp;</div>
+							<div className="small-2 column">&nbsp;</div>
 							<div className="small-8 columns">&nbsp;</div>
 							<div className="small-1 column end">
 								<button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>	
@@ -459,6 +463,7 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacStringMatchQuestion">String Match Question</option>
 										<option value="isaacFreeTextQuestion">Free Text Question</option>
 										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
+										<option value="isaacItemQuestion">Item Question</option>
 										<option value="isaacParsonsQuestion">Parsons Question</option>
 										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
 									</select>

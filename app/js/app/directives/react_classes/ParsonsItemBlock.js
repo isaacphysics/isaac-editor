@@ -45,7 +45,7 @@ define(["react", "jquery"], function(React,$) {
             render: function() {
                 var element;
 
-                if (this.props.mode === "choice") {
+                if (this.props.mode === "parsonschoice") {
                     element = <div className="row">
                         <div className="small-2 column">
                             <select value={this.props.doc.id} onChange={this.onIDChange}>
@@ -62,9 +62,23 @@ define(["react", "jquery"], function(React,$) {
                             <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
                         </div>
                     </div>;
+                } else if (this.props.mode === "itemchoice") {
+                    element = <div className="row">
+                        <div className="small-2 column">
+                            <select value={this.props.doc.id} onChange={this.onIDChange}>
+                                {this.props.itemIDs.map(function(id, idx) {
+                                    return <option value={id} key={idx}>{id}</option>
+                                })}
+                            </select>
+                        </div>
+                        <div className="small-8 column">{this.props.value}</div>
+                        <div className="small-1 column end">
+                            <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
+                        </div>
+                    </div>;
                 } else if (this.props.mode === "item") {
                     element = <div className="row">
-                        <div className="small-1 column">
+                        <div className="small-2 column">
                             <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
                         </div>
                         <div className="small-8 columns">

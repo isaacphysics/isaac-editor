@@ -62,12 +62,15 @@ define(["react", "jquery"], function(React,$) {
             addParsonsChoiceItem: function() {
 				if (this.props.globalItems) {
 					var oldDoc = this.props.doc;
-					var newDoc = $.extend({}, oldDoc);
-					newDoc.items.push({
-						"type": "parsonsItem",
-						"indentation": 0,
+                    var newDoc = $.extend({}, oldDoc);
+                    var newItem = {
+						"type": { "parsonsChoice": "parsonsItem", "itemChoice" : "item" }[this.props.doc.type],
 						"id": this.props.globalItems[0].id,
-					});
+                    }
+                    if (this.props.doc.type === "parsonsChoice") {
+						newItem["indentation"] = 0;
+					}
+					newDoc.items.push(newItem);
 					this.onDocChange(this, oldDoc, newDoc);
 				} else {
 					console.log("No global Parson's items present")
@@ -93,7 +96,7 @@ define(["react", "jquery"], function(React,$) {
                 for (const choiceItemIdx in choice.items) {
                     const item = choice.items[choiceItemIdx];
                     const block = <ParsonsItemBlock
-                        doc={item} key={choiceItemIdx} mode="choice" value={globalItemsIdToValue[item.id]}
+                        doc={item} key={choiceItemIdx} mode={this.props.doc.type.toLowerCase()} value={globalItemsIdToValue[item.id]}
                         itemIDs={globalItemIDs} onChange={this.onParsonsChoiceChange}
                         onRemoveClicked={this.removeParsonsChoiceItemAtIndex}
                     />;

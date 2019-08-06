@@ -219,6 +219,7 @@ define([
 	typeMap["chemicalFormula"] = ChemicalFormulaChoiceBlock;
 	typeMap["logicFormula"] = LogicFormulaChoiceBlock;
 	typeMap["parsonsChoice"] = ParsonsChoiceBlock;
+	typeMap["itemChoice"] = ParsonsChoiceBlock;
 	typeMap["parsonsItem"] = ParsonsItemBlock;
 	typeMap["video"] = VideoBlock;
 	typeMap["anvilApp"] = AnvilAppBlock;
@@ -232,6 +233,7 @@ define([
 	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
+	typeMap["isaacItemQuestion"] = QuestionBlock;
 	typeMap["isaacParsonsQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 
