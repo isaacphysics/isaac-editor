@@ -45,7 +45,13 @@ define(["mathjax"], function() {
 				"not": ["\\lnot{#1}", 1],
 				"bracketnot": ["\\lnot{(#1)}", 1],
 				"xor": ["{#1} \\veebar {#2}", 2],
-				"equivalent": "\\equiv"
+				"equivalent": "\\equiv",
+				// Set Theories:
+				"N": "\\mathbb{N}",
+				"Z": "\\mathbb{Z}",
+				"Q": "\\mathbb{Q}",
+				"R": "\\mathbb{R}",
+				"C": "\\mathbb{C}"
 			},
 			extensions: ["mhchem.js"],
 
