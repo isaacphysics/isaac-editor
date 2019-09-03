@@ -18,7 +18,7 @@ define(["react", "jquery"], function(React,$) {
                 // newVal could be a string or a list.
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
-                // newDoc.value = newVal;
+                newDoc.value = newVal;
                 newDoc.graphSpec = newGraphSpec;
 
                 this.onDocChange(this, oldDoc, newDoc);
@@ -77,7 +77,7 @@ define(["react", "jquery"], function(React,$) {
                         <table>
                             <tr>
                                 <td className="text-right">Graph Specification:</td>
-                                <td><input type="text" style={{display: "inline-block", fontFamily: "monospace", fontSize: "1.5em"}} onChange={this.setEditedGraphSpec} value={this.state.editedGraphSpec} /></td>
+                                <td><textarea type="input" style={{display: "inline-block", fontFamily: "monospace", fontSize: "1.5em"}} onChange={this.setEditedGraphSpec} value={this.state.editedGraphSpec} /></td>
                             </tr>
                         </table>
                         <button onClick={this.done} className="button tiny">Done</button>
