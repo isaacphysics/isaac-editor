@@ -109,12 +109,6 @@ define(["react", "jquery"], function(React,$) {
 								{optionalCaption}
 							</div>
 						</div>
-						<div className="row">
-							<div className="small-12 columns">
-								<br /> {/* SORRY could not find how to space this via foundation */}
-								<label>Attribution:</label><input type="text" value={this.props.doc.attribution} onChange={this.onAttributionChange} />
-							</div>
-						</div>
 					</Block>
 				);
 			}
