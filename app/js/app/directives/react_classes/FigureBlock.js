@@ -86,14 +86,6 @@ define(["react", "jquery"], function(React,$) {
 				this.selectFile(e.target.files[0]);
 			},
 
-			onAttributionChange: function(e) {
-				var oldDoc = this.props.doc;
-				var newDoc = $.extend({}, oldDoc);
-				newDoc.attribution = e.target.value;
-
-				this.onDocChange(this, oldDoc, newDoc);
-			},
-
 			render: function() {
 
 				var optionalCaption = !this.props.doc || this.props.doc.type == "image" ? null : <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
