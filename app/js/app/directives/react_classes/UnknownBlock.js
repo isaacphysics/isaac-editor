@@ -41,6 +41,7 @@ define(["react", "jquery"], function(React,$) {
 								Please choose a block type: <br/>
 								<a onClick={this.chooseType} data-chosen-type="content">content</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseQuestion} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp;
+								<a onClick={this.chooseType} data-chosen-type="glossaryTerm">glossary term</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="figure">figure</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="video">video</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="tabs">tabs</a>&nbsp; | &nbsp;
