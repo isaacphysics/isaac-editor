@@ -74,7 +74,8 @@ define(["react", "jquery"], function(React,$) {
 							break;
 						case "markdown":
 							var converter = new Showdown.converter({
-								extensions: ["table"]
+								extensions: ["table"],
+								requireSpaceBeforeHeadingText: true
 							});
 							var html = converter.makeHtml(this.props.value);
 							renderer.props.dangerouslySetInnerHTML = {__html: html};
