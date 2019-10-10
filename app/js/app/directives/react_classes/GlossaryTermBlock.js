@@ -10,6 +10,9 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.value = e.target.value;
+                if (newDoc.autoId) {
+                    newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-');
+                }
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -17,6 +20,23 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.explanation = newVal;
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
+            onAutoIdToggle: function(c, oldVal, newVal) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+                newDoc.autoId = !newDoc.autoId;
+                if (newDoc.autoId) {
+                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-');
+                }
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
+            onIdChange: function(c, oldVal, newVal) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+                newDoc.id = c.target.value.toLowerCase().replace(/[^\w]/g, '-');
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -30,6 +50,9 @@ define(["react", "jquery"], function(React,$) {
             },
 
             render: function() {
+                if (typeof this.props.doc.autoId == 'undefined') {
+                    this.props.doc.autoId = true;
+                }
                 var emptyExplanation = {
                     type: "content",
                     children: [],
@@ -39,7 +62,10 @@ define(["react", "jquery"], function(React,$) {
                     <Block type="glossaryTerm" blockTypeTitle="Glossary term" doc={this.props.doc} onChange={this.onDocChange}>
                         <div className="small-3 columns">
                             <div className="row">
-                                <input type="text" value={this.props.doc.value} onChange={this.onContentChange} placeholder="Glossary term"/>
+                                <input type="text" value={this.props.doc.value} onChange={this.onContentChange} placeholder="Glossary term" />
+                                <input type="checkbox" checked={this.props.doc.autoId} onChange={this.onAutoIdToggle} /><label>Automatic IDs</label>
+                                {this.props.doc.autoId && <p>ID: {this.props.doc.id}</p>}
+                                {!this.props.doc.autoId && <input type="text" value={this.props.doc.id} onChange={this.onIdChange} placeholder="ID" />}
                             </div>
                         </div>
                         <div className="small-9 columns" >
