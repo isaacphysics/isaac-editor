@@ -16,10 +16,10 @@ define(["react", "jquery"], function(React,$) {
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
-            onExplanationChange: function(c, oldVal, newVal) {
+            onExplanationChange: function(e) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
-                newDoc.explanation = newVal;
+                newDoc.explanation.value = e.target.value;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -53,11 +53,6 @@ define(["react", "jquery"], function(React,$) {
                 if (typeof this.props.doc.autoId == 'undefined') {
                     this.props.doc.autoId = true;
                 }
-                var emptyExplanation = {
-                    type: "content",
-                    children: [],
-                    encoding: "markdown"
-                };
                 return (
                     <Block type="glossaryTerm" blockTypeTitle="Glossary term" doc={this.props.doc} onChange={this.onDocChange}>
                         <div className="small-3 columns">
@@ -69,7 +64,7 @@ define(["react", "jquery"], function(React,$) {
                             </div>
                         </div>
                         <div className="small-9 columns" >
-                            <ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />
+                            <textarea value={this.props.doc.explanation.value || ''} rows="6" onChange={this.onExplanationChange}></textarea>
                         </div>
                     </Block>
                 );
