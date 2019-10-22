@@ -33,6 +33,7 @@ define([
 	"jsx!./react_classes/ParsonsChoiceBlock",
 	"jsx!./react_classes/ParsonsItemBlock",
 	"jsx!./react_classes/ChemicalFormulaChoiceBlock",
+    "jsx!./react_classes/GraphSketcherChoiceBlock",
 	"jsx!./react_classes/TabsBlock",
 	"jsx!./react_classes/AccordionBlock",
 	"jsx!./react_classes/UnknownBlock",
@@ -65,6 +66,7 @@ define([
 		_ParsonsChoiceBlock,
 		_ParsonsItemBlock,
 		_ChemicalFormulaChoiceBlock,
+		_GraphSketcherChoiceBlock,
 		_TabsBlock,
 		_AccordionBlock,
 		_UnknownBlock,
@@ -187,6 +189,8 @@ define([
 
 	var LogicFormulaChoiceBlock = _LogicFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
+	var GraphSketcherChoiceBlock = _GraphSketcherChoiceBlock(ContentEditor, Block, ContentBlock);
+
 	var ParsonsItemBlock = _ParsonsItemBlock(ContentEditor, Block, ContentBlock);
 
 	var ParsonsChoiceBlock = _ParsonsChoiceBlock(ContentEditor, Block, ContentBlock, ParsonsItemBlock);
@@ -218,6 +222,7 @@ define([
 	typeMap["formula"] = FormulaChoiceBlock;
 	typeMap["chemicalFormula"] = ChemicalFormulaChoiceBlock;
 	typeMap["logicFormula"] = LogicFormulaChoiceBlock;
+	typeMap["graphChoice"] = GraphSketcherChoiceBlock;
 	typeMap["parsonsChoice"] = ParsonsChoiceBlock;
 	typeMap["itemChoice"] = ParsonsChoiceBlock;
 	typeMap["parsonsItem"] = ParsonsItemBlock;
@@ -229,6 +234,7 @@ define([
 	typeMap["isaacMultiChoiceQuestion"] = QuestionBlock;
 	typeMap["isaacNumericQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicQuestion"] = QuestionBlock;
+	typeMap["isaacGraphSketcherQuestion"] = QuestionBlock;
 	typeMap["isaacStringMatchQuestion"] = QuestionBlock;
 	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
