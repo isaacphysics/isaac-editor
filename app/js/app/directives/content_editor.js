@@ -37,7 +37,8 @@ define([
 	"jsx!./react_classes/TabsBlock",
 	"jsx!./react_classes/AccordionBlock",
 	"jsx!./react_classes/UnknownBlock",
-	"jsx!./react_classes/Block"
+	"jsx!./react_classes/Block",
+	"jsx!./react_classes/GlossaryTermBlock"
 	], function(React, $, cmjs, sd, sdt, mjc,
 		_Title,
 		_Tags,
@@ -70,7 +71,8 @@ define([
 		_TabsBlock,
 		_AccordionBlock,
 		_UnknownBlock,
-		_Block
+		_Block,
+		_GlossaryTermBlock
 	) {
 
 /////////////////////////////////
@@ -199,6 +201,8 @@ define([
 
 	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock);
 
+	var GlossaryTermBlock = _GlossaryTermBlock(ContentEditor, Block, ContentBlock);
+
 /////////////////////////////////
 // Register Types
 /////////////////////////////////
@@ -242,6 +246,7 @@ define([
 	typeMap["isaacItemQuestion"] = QuestionBlock;
 	typeMap["isaacParsonsQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
+	typeMap["glossaryTerm"] = GlossaryTermBlock;
 
 
 /////////////////////////////////
