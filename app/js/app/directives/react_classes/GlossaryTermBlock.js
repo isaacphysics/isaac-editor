@@ -11,7 +11,8 @@ define(["react", "jquery"], function(React,$) {
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.value = e.target.value;
                 if (newDoc.autoId) {
-                    newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-');
+                    var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
+                    newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
                 }
                 this.onDocChange(this, oldDoc, newDoc);
             },
@@ -28,7 +29,8 @@ define(["react", "jquery"], function(React,$) {
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.autoId = !newDoc.autoId;
                 if (newDoc.autoId) {
-                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-');
+                    var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
+                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
                 }
                 this.onDocChange(this, oldDoc, newDoc);
             },
@@ -44,6 +46,10 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.examBoard = c.target.value;
+                if (newDoc.autoId) {
+                    var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
+                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
+                }
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
