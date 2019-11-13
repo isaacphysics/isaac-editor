@@ -33,7 +33,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
 
         this.initWithCode = function(code) {
 
-            return wrapAjax($.ajax(authServer + "?auth_code=" + encodeURIComponent(authCode) + "&client_id=" + clientId + "&github_code=" + code,
+            return wrapAjax($.ajax(authServer + "?auth_code=" + encodeURIComponent(authCode) + "&client_id=" + clientId + "&github_code=" + code + "&origin=" + document.location.origin,
                    {type: "GET",
                     dataType: "json"})).then(function(r) {
                 if (r.access_token) {
@@ -48,7 +48,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
             return getUser(token).then(function(u) {
                 this.user = u;
                 this.token = token;
-                this.branch = "master";
+                this.branch = "rename-test";
             }.bind(this));
         };
         
@@ -163,7 +163,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
                 }
             });
         }
-        
+        /*
         this.getTree = function(repoOwner, repoName, rootPath)
         {
             var gh = this;
@@ -178,7 +178,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
                                        }));
             });
         };
-
+*/
         this.getOrCreateFile = function(repoOwner, repoName, path)
         {
             gh = this;
@@ -231,6 +231,38 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
                                        dataType: "json",
                                        //cache: false
                                    }));
+        };
+
+        this.getBranch = function(repoOwner, repoName) {
+            return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/branches/" + this.branch,
+                {
+                    data: {"access_token": this.token},
+                    type: "GET",
+                    daype: "json",
+                }));
+        };
+
+        this.getTree = function(repoOwner, repoName, treeSha) {
+            return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/git/trees/" + treeSha, // + "?recursive=1",
+                {
+                    data: {"access_token": this.token},
+                    type: "GET",
+                    dataType: "json",
+                }));
+        };
+
+        this.createTree = function(repoOwner, repoName, tree, baseTree) {
+            return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/git/trees",
+                {
+                    type: "POST",
+                    headers: {"Authorization": "token " + this.token},
+                    dataType: "json",
+                    data: JSON.stringify(
+                        {
+                            tree: tree,
+                            base_tree: baseTree
+                        })
+                }));
         };
 
         this.getRepo = function(repoOwner, repoName) {

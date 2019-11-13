@@ -214,6 +214,38 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 		            var newPath = scope.dirPath + "/" + newName;
 
+
+
+		            github.getBranch(repo.owner, repo.name).then(function(branch) {
+		            	var treeSha = branch.commit.commit.tree.sha;
+		            	return github.getTree(repo.owner, repo.name, treeSha);
+					}).then(function(tree) {
+
+						console.log(oldPath);
+						console.log(newPath);
+
+						debugger;
+						return;
+
+						for(var i = 0; i < tree.tree.length; i++) {
+							var entry = tree.tree[i];
+							if (entry.path === oldPath) {
+								entry.path = newPath;
+							}
+						}
+
+						return github.createTree(repo.owner, repo.name, tree.tree, tree.sha);
+					}).then(function(newTree) {
+						debugger;
+						console.log(newTree);
+					}).catch(function(e) {
+						console.error(e);
+						debugger;
+					});
+
+
+		            /*
+
 		            console.log("Creating", newPath);
 
 		            github.createFile(repo.owner, repo.name, newPath, scope.file.decodedContent).then(function(f) {
@@ -227,6 +259,8 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 		            }).catch(function(e) {
 		                window.alert("Could not create file. Perhaps it already exists.", e);
 		            });
+
+		             */
 		        }
 		    });
 		}
