@@ -259,6 +259,10 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.numberOfPlaces = this.state.numberOfPlaces;
 				}
 
+				if (this.state.groupReservationLimit || this.props.doc.groupReservationLimit) {
+					newDoc.groupReservationLimit = this.state.groupReservationLimit;
+				}
+
 				if (this.state.eventStatus || this.props.doc.eventStatus) {
 					newDoc.eventStatus = this.state.eventStatus;
 				}
@@ -449,6 +453,10 @@ define(["react", "jquery"], function(React,$) {
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Number of places</span></div>
 							<div className="small-5 columns end"><input type="text" value={this.state.numberOfPlaces} onChange={this.onTextboxChange.bind(this, "numberOfPlaces")} /></div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Group reservation limit per teacher</span></div>
+							<div className="small-5 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
 						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Status</span></div>
