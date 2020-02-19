@@ -295,6 +295,10 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.emailWaitingListBookingText = this.state.emailWaitingListBookingText;
 				}
 
+				if (this.state.allowGroupReservations || this.props.doc.allowGroupReservations) {
+					newDoc.allowGroupReservations = this.state.allowGroupReservations;
+				}
+
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -457,6 +461,10 @@ define(["react", "jquery"], function(React,$) {
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Group reservation limit per teacher</span></div>
 							<div className="small-5 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Allow group reservations?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.allowGroupReservations} onChange={this.onCheckboxChange.bind(this, "allowGroupReservations")} /> </div>
 						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Status</span></div>
