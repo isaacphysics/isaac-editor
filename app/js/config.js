@@ -2,6 +2,8 @@ require.config({
 
     baseUrl: 'js/lib',
 
+    waitSeconds : 0,
+
     paths: {
         "app": '../app',
         "jquery": '../../bower_components/jquery/dist/jquery',
