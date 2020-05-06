@@ -41,7 +41,7 @@ define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github
 
 		$routeProvider.when("/compare/:old/:new", {redirectTo: function(routeParams) {
 			// Redirect route that shows diff between old and new versions using GitHub:
-			var githubCompareURL = "https://github.com/" + Repo.owner + "/" + Repo.name + "/compare/" + routeParams.old + ".." + routeParams.new;
+			var githubCompareURL = "https://github.com/" + Repo.owner + "/" + Repo.name + "/compare/" + routeParams.old + "..." + routeParams.new;
 			console.log("Redirecting to GitHub: " + githubCompareURL);
 			window.location = githubCompareURL;
 		}});
