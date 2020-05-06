@@ -21,7 +21,7 @@ define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github
 		'angulartics.google.analytics'
 	])
 
-	.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+	.config(['$routeProvider', '$locationProvider', 'Repo', function($routeProvider, $locationProvider, Repo) {
 
 	 
 		function loginResolver(LoginChecker) {
@@ -38,6 +38,13 @@ define(["rsvp", "app/helpers", "foundation", "angular", "angular-route", "github
 		$routeProvider.when("/login", {template: "", controller: "LoginController"});
 		$routeProvider.when("/login_progress", {template: "Logging in..."});
 		$routeProvider.when("/logout", {template: "", controller: "LogoutController"});
+
+		$routeProvider.when("/compare/:old/:new", {redirectTo: function(routeParams) {
+			// Redirect route that shows diff between old and new versions using GitHub:
+			var githubCompareURL = "https://github.com/" + Repo.owner + "/" + Repo.name + "/compare/" + routeParams.old + ".." + routeParams.new;
+			console.log("Redirecting to GitHub: " + githubCompareURL);
+			window.location = githubCompareURL;
+		}});
 
 		$routeProvider.otherwise({redirectTo: '/home'});
 
