@@ -95,7 +95,13 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 
 				var doSave = function() {
 
+					var alteredId = JSON.parse(scope.file.editedContent).id;
+					var idInvalid = alteredId && !alteredId.match(/^[a-z0-9_-]+$/);
+
 					$analytics.eventTrack("save", {category: "git", label: scope.file.path});
+
+					var saveText = idInvalid ? "Please alter the page ID before saving, as it does not match our recommended style":
+						"Enter commit message, or accept default suggestion.";
 
 					var msg = $('<input type="text" value="' + "Edited " + scope.file.name + '" />');
 
@@ -114,7 +120,7 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 						msg[0].setSelectionRange(strLength, strLength);
 					}
 
-					$rootScope.modal.show("Enter commit message", "Enter commit message, or accept default suggestion.", msg, [{caption: "Save", value: "save"}], onShow).then(function() {
+					$rootScope.modal.show("Enter commit message", saveText, msg, [{caption: "Save", value: "save"}], onShow).then(function() {
 						var editedContentObject;
 						try {
 							editedContentObject = JSON.parse(scope.file.editedContent);
