@@ -4,7 +4,7 @@ define(["react", "jquery"], function(React,$) {
 
             getInitialState: function() {
                 return {
-                    subject: this.props.doc.value,
+                    value: this.props.doc.value,
                 }
             },
 
