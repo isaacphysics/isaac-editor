@@ -3,11 +3,13 @@ define(["react", "jquery"], function(React,$) {
         return React.createClass({
 
             getInitialState: function() {
-                this.props.doc.tags = {
-                    "localhost:8421": ["physics"],
-                    "editor.isaacphysics.org": ["physics"],
-                    "editor.isaaccomputerscience.org": ["news"]
-                }[document.location.host];
+                if (!this.props.doc.tags || this.props.doc.tags === []) {
+                    this.props.doc.tags = {
+                        "localhost:8421": ["physics"],
+                        "editor.isaacphysics.org": ["physics"],
+                        "editor.isaaccomputerscience.org": ["news"]
+                    }[document.location.host];
+                }
                 return {
                     value: this.props.doc.value,
                     tags: this.props.doc.tags
