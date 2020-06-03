@@ -371,8 +371,8 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
-				if (this.props.doc.type == "emailTemplate") {
-					var emailTemplateMeta = [
+				if (this.props.doc.type == "emailTemplate" || this.props.doc.type == "isaacPod") {
+					var published = [
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
 							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
@@ -582,7 +582,7 @@ define(["react", "jquery"], function(React,$) {
 							{supersededByMeta}
 							{pageMeta}
 							{eventMetadata}
-							{emailTemplateMeta}
+							{published}
 							{anvilAppMeta}
 						</div>
 					</div>

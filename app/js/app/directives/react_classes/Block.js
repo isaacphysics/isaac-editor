@@ -1,7 +1,7 @@
 define(["react", "jquery"], function(React,$) {
 	return function(ContentEditor, typeMap, MetaData, Title, JSONEditor) {
 
-		var displayMetadataForTypes = ["page", "emailTemplate", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacTopicSummaryPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment", "anvilApp"];
+		var displayMetadataForTypes = ["page", "isaacPod", "emailTemplate", "isaacQuestionPage", "isaacFastTrackQuestionPage", "isaacConceptPage", "isaacTopicSummaryPage", "isaacWildcard", "figure", "isaacEventPage", "isaacPageFragment", "anvilApp"];
 
 		return React.createClass({
 

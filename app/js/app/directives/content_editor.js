@@ -17,6 +17,7 @@ define([
 	"jsx!./react_classes/DeleteOp",
 	"jsx!./react_classes/VariantBlock",
 	"jsx!./react_classes/EmailTemplateBlock",
+	"jsx!./react_classes/PodBlock",
 	"jsx!./react_classes/FigureBlock",
 	"jsx!./react_classes/VideoBlock",
 	"jsx!./react_classes/AnvilAppBlock",
@@ -51,6 +52,7 @@ define([
 		_DeleteOp,
 		_VariantBlock,
 		_EmailTemplateBlock,
+		_PodBlock,
 		_FigureBlock,
 		_VideoBlock,
 		_AnvilAppBlock,
@@ -170,6 +172,8 @@ define([
 
 	var FigureBlock = _FigureBlock(ContentEditor, Block, ContentValueOrChildren);
 
+	var PodBlock = _PodBlock(ContentEditor, Block, FigureBlock);
+
 	var VideoBlock = _VideoBlock(ContentEditor, Block, ContentValueOrChildren);
 
 	var AnvilAppBlock = _AnvilAppBlock(ContentEditor, Block);
@@ -245,6 +249,7 @@ define([
 	typeMap["isaacItemQuestion"] = QuestionBlock;
 	typeMap["isaacParsonsQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
+	typeMap["isaacPod"] = PodBlock;
 	typeMap["glossaryTerm"] = GlossaryTermBlock;
 
 
