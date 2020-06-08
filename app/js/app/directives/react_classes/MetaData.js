@@ -44,6 +44,8 @@ define(["react", "jquery"], function(React,$) {
 					location: this.props.doc.location || {},
 					supersededBy: this.props.doc.supersededBy,
 	                isaacGroupToken: this.props.doc.isaacGroupToken,
+					allowGroupReservations: this.props.doc.allowGroupReservations,
+					groupReservationLimit: this.props.doc.groupReservationLimit,
 					numberOfPlaces: this.props.doc.numberOfPlaces,
 					eventStatus: this.props.doc.eventStatus,
 					emailEventDetails: this.props.doc.emailEventDetails,
@@ -253,6 +255,14 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.isaacGroupToken || this.props.doc.isaacGroupToken) {
 					newDoc.isaacGroupToken = this.state.isaacGroupToken;
+				}
+
+				if (this.state.allowGroupReservations || this.props.doc.allowGroupReservations) {
+					newDoc.allowGroupReservations = this.state.allowGroupReservations;
+				}
+
+				if (this.state.groupReservationLimit || this.props.doc.groupReservationLimit) {
+					newDoc.groupReservationLimit = this.state.groupReservationLimit;
 				}
 
 				if (this.state.numberOfPlaces || this.props.doc.numberOfPlaces) {
@@ -482,6 +492,13 @@ define(["react", "jquery"], function(React,$) {
 	                        <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
 	                    </div>,
 						<div className="row">
+							<div className="small-2 columns text-right">Reservations</div>
+							<div className="small-1 columns text-right"><span className="metadataLabel">Enabled:</span></div>
+							<div className="small-1 columns"><input type="checkbox" checked={!!this.state.allowGroupReservations} onChange={this.onCheckboxChange.bind(this, "allowGroupReservations")} /></div>
+							<div className="small-2 columns text-right"><span className="metadataLabel">Override Limit:</span></div>
+							<div className="small-1 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
+						</div>,
+						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Pre-Resources:</span></div>
 							<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
 							<div className="small-5 columns"><span className="metadataLabel">URL</span></div>
@@ -499,7 +516,6 @@ define(["react", "jquery"], function(React,$) {
 						<div className="row">
 							<div className="small-4 small-offset-2 columns end"><button onClick={this.addResource.bind(this, 'postResources')} className="button tiny round">Add Post-Resource</button></div>
 						</div>,
-
 					];
 				}
 
