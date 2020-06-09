@@ -557,7 +557,7 @@ define(["react", "jquery"], function(React,$) {
 								<div className="small-10 columns">{tagsComponent}</div>
 							</div>
 							<div className="row">
-								{idInvalid && <div className="columns text-right">Please alter this ID, as it does not match our recommended style</div>}
+								{idInvalid && <div className="columns text-right">Please alter this ID, as it does not match our required style</div>}
 								<div className="small-2 columns text-right"><span className="metadataLabel">ID: </span></div>
 								<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} style={{color: idInvalid ? "red" : "black"}} /></div>
 							</div>
