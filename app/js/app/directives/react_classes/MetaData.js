@@ -562,6 +562,7 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				var titleGreaterThanMaxLength = this.props.doc.title && this.props.doc.title.length > TITLE_MAX_LENGTH;
+				var idInvalid = this.props.doc.id && !this.props.doc.id.match(/^[a-z0-9_-]+$/);
 
 				return (
 					<div className="metadata-container">
@@ -572,8 +573,9 @@ define(["react", "jquery"], function(React,$) {
 								<div className="small-10 columns">{tagsComponent}</div>
 							</div>
 							<div className="row">
+								{idInvalid && <div className="columns text-right">Please alter this ID, as it does not match our required style</div>}
 								<div className="small-2 columns text-right"><span className="metadataLabel">ID: </span></div>
-								<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} /></div>
+								<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} style={{color: idInvalid ? "red" : "black"}} /></div>
 							</div>
 							<div className="row">
 								{titleGreaterThanMaxLength && <div className="columns text-right">This title is a little long, consider rephrasing 🙂</div>}
