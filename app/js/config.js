@@ -2,6 +2,8 @@ require.config({
 
     baseUrl: 'js/lib',
 
+    waitSeconds : 0,
+
     paths: {
         "app": '../app',
         "jquery": '../../bower_components/jquery/dist/jquery',
@@ -12,8 +14,6 @@ require.config({
         "JSXTransformer": '../../bower_components/react/JSXTransformer',
         "angulartics": '../../bower_components/angulartics/src/angulartics',
         "angulartics-ga": '../../bower_components/angulartics/src/angulartics-ga',
-        "codemirror": "codemirror/codemirror",
-        "codemirrorJS": "codemirror/mode/javascript/javascript",
         "mathjax": 'https://cdn.isaacphysics.org/vendor/mathjax/2.7.5/MathJax.js?delayStartupUntil=configured',
     },
 
@@ -21,7 +21,6 @@ require.config({
         "foundation": ['jquery'],
         "angular-route": ['angular'],
         "angular": ['jquery'],
-        "codemirrorJS": ["codemirror"],
         "angulartics-ga": ["angulartics"],
         "angulartics": ["angular"],
         "showdown/extensions/table": ["showdown/showdown"],

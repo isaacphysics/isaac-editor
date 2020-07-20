@@ -44,6 +44,8 @@ define(["react", "jquery"], function(React,$) {
 					location: this.props.doc.location || {},
 					supersededBy: this.props.doc.supersededBy,
 	                isaacGroupToken: this.props.doc.isaacGroupToken,
+					allowGroupReservations: this.props.doc.allowGroupReservations,
+					groupReservationLimit: this.props.doc.groupReservationLimit,
 					numberOfPlaces: this.props.doc.numberOfPlaces,
 					eventStatus: this.props.doc.eventStatus,
 					emailEventDetails: this.props.doc.emailEventDetails,
@@ -255,6 +257,14 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.isaacGroupToken = this.state.isaacGroupToken;
 				}
 
+				if (this.state.allowGroupReservations || this.props.doc.allowGroupReservations) {
+					newDoc.allowGroupReservations = this.state.allowGroupReservations;
+				}
+
+				if (this.state.groupReservationLimit || this.props.doc.groupReservationLimit) {
+					newDoc.groupReservationLimit = this.state.groupReservationLimit;
+				}
+
 				if (this.state.numberOfPlaces || this.props.doc.numberOfPlaces) {
 					newDoc.numberOfPlaces = this.state.numberOfPlaces;
 				}
@@ -371,8 +381,8 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
-				if (this.props.doc.type == "emailTemplate") {
-					var emailTemplateMeta = [
+				if (this.props.doc.type == "emailTemplate" || this.props.doc.type == "isaacPod") {
+					var published = [
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
 							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
@@ -481,6 +491,14 @@ define(["react", "jquery"], function(React,$) {
 	                        <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
 	                        <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
 	                    </div>,
+						// Group reservations - temporarily removed while ETL does not know how to handle it
+						// <div className="row">
+						// 	<div className="small-2 columns text-right">Reservations</div>
+						// 	<div className="small-1 columns text-right"><span className="metadataLabel">Enabled:</span></div>
+						// 	<div className="small-1 columns"><input type="checkbox" checked={!!this.state.allowGroupReservations} onChange={this.onCheckboxChange.bind(this, "allowGroupReservations")} /></div>
+						// 	<div className="small-2 columns text-right"><span className="metadataLabel">Override Limit:</span></div>
+						// 	<div className="small-1 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
+						// </div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Pre-Resources:</span></div>
 							<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
@@ -499,7 +517,6 @@ define(["react", "jquery"], function(React,$) {
 						<div className="row">
 							<div className="small-4 small-offset-2 columns end"><button onClick={this.addResource.bind(this, 'postResources')} className="button tiny round">Add Post-Resource</button></div>
 						</div>,
-
 					];
 				}
 
@@ -546,6 +563,7 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				var titleGreaterThanMaxLength = this.props.doc.title && this.props.doc.title.length > TITLE_MAX_LENGTH;
+				var idInvalid = this.props.doc.id && !this.props.doc.id.match(/^[a-z0-9_-]+$/);
 
 				return (
 					<div className="metadata-container">
@@ -556,8 +574,9 @@ define(["react", "jquery"], function(React,$) {
 								<div className="small-10 columns">{tagsComponent}</div>
 							</div>
 							<div className="row">
+								{idInvalid && <div className="columns text-right">Please alter this ID, as it does not match our required style</div>}
 								<div className="small-2 columns text-right"><span className="metadataLabel">ID: </span></div>
-								<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} /></div>
+								<div className="small-10 columns"><input type="text" value={this.state.id} onChange={this.onTextboxChange.bind(this, "id")} style={{color: idInvalid ? "red" : "black"}} /></div>
 							</div>
 							<div className="row">
 								{titleGreaterThanMaxLength && <div className="columns text-right">This title is a little long, consider rephrasing 🙂</div>}
@@ -582,7 +601,7 @@ define(["react", "jquery"], function(React,$) {
 							{supersededByMeta}
 							{pageMeta}
 							{eventMetadata}
-							{emailTemplateMeta}
+							{published}
 							{anvilAppMeta}
 						</div>
 					</div>

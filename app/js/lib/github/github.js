@@ -16,7 +16,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         function getUser(token)
         {
             return wrapAjax($.ajax("https://api.github.com/user",
-                                   {data: {"access_token": token},
+                                   {headers: {"Authorization": "token " + token},
                                     type: "GET",
                                     dataType: "json"}));
         }
@@ -55,7 +55,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         this.getRepo = function(user, repoName)
         {
             return wrapAjax($.ajax("https://api.github.com/repos/" + user + "/" + repoName,
-                                   {data: {"access_token": this.token}, dataType: "json"}));
+                                   {headers: {"Authorization": "token " + this.token}, dataType: "json"}));
         };
 
         this.forkRepo = function(repoOwner, repoName)
@@ -135,9 +135,8 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         this.getFile = function(repoOwner, repoName, path)
         {
             return wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/contents/" + path,
-                                   {
-                                       data: {"access_token": this.token,
-                                              "ref": this.branch},
+                                   {   headers: {"Authorization": "token " + this.token},
+                                       data: {"ref": this.branch},
                                        dataType: "json",
                                        type: "GET",
                                        cache: false
@@ -171,7 +170,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
             return gh.getFolder(repoOwner, repoName, rootPath).then(function(f) {
                 return wrapAjax($.ajax("https://api.github.com/repos/"+ repoOwner +"/"+ repoName + "/git/trees/" + f.sha + "?recursive=1",
                                        {
-                                           data: {"access_token": gh.token},
+                                           headers: {"Authorization": "token " + gh.token},
                                            dataType: "json",
                                            type: "GET",
                                            cache: true
@@ -226,7 +225,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         {
             return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/branches",
                                    {
-                                       data: {"access_token": this.token},
+                                       headers: {"Authorization": "token " + this.token},
                                        type: "GET",
                                        dataType: "json",
                                        //cache: false
@@ -236,7 +235,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         this.getRepo = function(repoOwner, repoName) {
             return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName,
                                    {
-                                        data: {"access_token": this.token},
+                                        headers: {"Authorization": "token " + this.token},
                                         type: "GET",
                                         dataType: "json",
                                    }));
@@ -245,7 +244,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         this.getForks = function(repoOwner, repoName) {
             return wrapAjax($.ajax("https://api.github.com/repos/" + repoOwner + "/" + repoName + "/forks",
                                    {
-                                        data: {"access_token": this.token},
+                                        headers: {"Authorization": "token " + this.token},
                                         type: "GET",
                                         dataType: "json",
                                    }));
@@ -254,7 +253,7 @@ define(["github/base64", "app/github_application", "jquery"], function(B64, app,
         this.getMyRepos = function() {
             return wrapAjax($.ajax("https://api.github.com/user/repos",
                                    {
-                                        data: {"access_token": this.token},
+                                        headers: {"Authorization": "token " + this.token},
                                         type: "GET",
                                         dataType: "json",
                                    }));
