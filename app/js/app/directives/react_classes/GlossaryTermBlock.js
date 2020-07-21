@@ -10,11 +10,9 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.value = e.target.value;
-                if (newDoc.autoId) {
-                    var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
-                    var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
-                    newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
-                }
+                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
+                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
+                newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -29,18 +27,9 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.autoId = !newDoc.autoId;
-                if (newDoc.autoId) {
-                    var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
-                    var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
-                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
-                }
-                this.onDocChange(this, oldDoc, newDoc);
-            },
-
-            onIdChange: function(c, oldVal, newVal) {
-                var oldDoc = this.props.doc;
-                var newDoc = $.extend({}, oldDoc);
-                newDoc.id = c.target.value.toLowerCase().replace(/[^\w]/g, '-');
+                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
+                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
+                newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -48,10 +37,9 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.examBoard = c.target.value;
-                if (newDoc.autoId) {
-                    var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
-                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
-                }
+                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
+                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
+                newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -68,7 +56,9 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.tags = newTags;
-
+                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
+                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
+                newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -84,14 +74,11 @@ define(["react", "jquery"], function(React,$) {
                     <Block type="glossaryTerm" blockTypeTitle="Glossary term" doc={this.props.doc} onChange={this.onDocChange}>
                         <div className="small-5 columns">
                             <div className="row">
-                                <input type="text" value={this.props.doc.value} onChange={this.onContentChange} placeholder="Glossary term" />
+                                <div className="small-12 columns">
+                                    <input type="text" value={this.props.doc.value} onChange={this.onContentChange} placeholder="Glossary term" />
+                                </div>
                             </div>
                             <div className="row">
-                                <div className="small-7 columns">
-                                    <input type="checkbox" checked={this.props.doc.autoId} onChange={this.onAutoIdToggle} /><label>Automatic IDs</label>
-                                    {this.props.doc.autoId && <p>ID: {this.props.doc.id}</p>}
-                                    {!this.props.doc.autoId && <input type="text" value={this.props.doc.id} onChange={this.onIdChange} placeholder="ID" />}
-                                </div>
                                 <div className="small-5 columns">
                                     <label>Exam board:</label>
                                     <select value={this.props.doc.examBoard} onChange={this.onExamBoardChange}>
@@ -107,8 +94,10 @@ define(["react", "jquery"], function(React,$) {
                         </div>
                         <div className="small-12 columns">
                             <div className="row">
-                                <div className="small-2 columns text-right"><span className="metadataLabel">Tags: </span></div>
-                                <div className="small-10 columns">{tagsComponent}</div>
+                                <div className="small-12 columns">
+                                    <label>Tags:</label>
+                                    {tagsComponent}
+                                </div>
 							</div>
                         </div>
                     </Block>
