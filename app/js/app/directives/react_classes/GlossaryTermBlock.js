@@ -12,6 +12,7 @@ define(["react", "jquery"], function(React,$) {
                 newDoc.value = e.target.value;
                 if (newDoc.autoId) {
                     var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
+                    var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
                     newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
                 }
                 this.onDocChange(this, oldDoc, newDoc);
@@ -29,8 +30,9 @@ define(["react", "jquery"], function(React,$) {
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.autoId = !newDoc.autoId;
                 if (newDoc.autoId) {
-                    var examBoard = newDoc.examBoard ? '-' + newDoc.examBoard.toLowerCase() : '';
-                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard;
+                    var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
+                    var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
+                    newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
                 }
                 this.onDocChange(this, oldDoc, newDoc);
             },
