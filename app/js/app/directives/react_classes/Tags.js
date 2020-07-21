@@ -14,7 +14,8 @@ define(["react", "jquery"], function(React,$) {
 				return {
 					allTags: [],
 					searchString: "",
-					results: []
+					results: [],
+					hidden: false,
 				};
 			},
 
@@ -64,7 +65,7 @@ define(["react", "jquery"], function(React,$) {
 					ts.push(<span className="tag">{t} <i className="general foundicon-remove" onClick={removeTag.bind(this, t)}/></span>);
 				}
 
-                var foundTags = [];
+				var foundTags = [];
                 for (var result in this.state.results) {
                     result = this.state.results[result];
                     foundTags.push(<button className={"button tiny tag radius id-result"} onClick={this.addTagFromList.bind(this, result)}> {result} <i className="general foundicon-plus"/></button>);
@@ -76,7 +77,8 @@ define(["react", "jquery"], function(React,$) {
 				return (<div className="tags-container" ref="container">
 					{ts}
 					<input type="text" placeholder="Type to add tags..." value={this.state.searchString} onChange={this.onSearchStringChange} />
-					{foundTags}
+					{foundTags.length > 0 && <button className={"button tiny secondary tag radius id-result"} onClick={() => this.setState({ hidden: !this.state.hidden })}>{this.state.hidden ? 'Show available' : 'Hide'} tags</button>}
+					{!this.state.hidden && foundTags}
 				</div>);
 			}
 		});

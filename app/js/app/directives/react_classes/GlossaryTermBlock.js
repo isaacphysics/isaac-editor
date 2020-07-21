@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-    return function(ContentEditor, Block, ContentBlock) {
+    return function(ContentEditor, Block, Tags, ContentBlock) {
         return React.createClass({
 
             onDocChange: function(c, oldDoc, newDoc) {
@@ -62,6 +62,14 @@ define(["react", "jquery"], function(React,$) {
                 }.bind(this);
             },
 
+			onTagsChange: function(c, oldTags, newTags) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.tags = newTags;
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
             render: function() {
                 if (typeof this.props.doc.autoId == 'undefined') {
                     this.props.doc.autoId = true;
@@ -69,6 +77,7 @@ define(["react", "jquery"], function(React,$) {
                 if (typeof this.props.doc.examBoard == 'undefined') {
                     this.props.doc.examBoard = '';
                 }
+                var tagsComponent = <Tags tags={this.props.doc.tags || []} onChange={this.onTagsChange}/>;
                 return (
                     <Block type="glossaryTerm" blockTypeTitle="Glossary term" doc={this.props.doc} onChange={this.onDocChange}>
                         <div className="small-5 columns">
@@ -90,11 +99,15 @@ define(["react", "jquery"], function(React,$) {
                                     </select>
                                 </div>
                             </div>
-                            <div className="row">
-                            </div>
                         </div>
-                        <div className="small-7 columns" >
+                        <div className="small-7 columns">
                             <textarea value={this.props.doc.explanation.value || ''} rows="6" onChange={this.onExplanationChange}></textarea>
+                        </div>
+                        <div className="small-12 columns">
+                            <div className="row">
+                                <div className="small-2 columns text-right"><span className="metadataLabel">Tags: </span></div>
+                                <div className="small-10 columns">{tagsComponent}</div>
+							</div>
                         </div>
                     </Block>
                 );

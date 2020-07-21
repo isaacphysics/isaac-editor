@@ -204,7 +204,7 @@ define([
 
 	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock);
 
-	var GlossaryTermBlock = _GlossaryTermBlock(ContentEditor, Block, ContentBlock);
+	var GlossaryTermBlock = _GlossaryTermBlock(ContentEditor, Block, Tags, ContentBlock);
 
 /////////////////////////////////
 // Register Types
