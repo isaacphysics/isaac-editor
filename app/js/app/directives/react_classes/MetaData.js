@@ -491,14 +491,13 @@ define(["react", "jquery"], function(React,$) {
 	                        <div className="small-2 columns text-right"><span className="metadataLabel">Isaac Group Token:</span></div>
 	                        <div className="small-5 columns end"><input type="text" value={this.state.isaacGroupToken} onChange={this.onTextboxChange.bind(this, "isaacGroupToken")} /></div>
 	                    </div>,
-						// Group reservations - temporarily removed while ETL does not know how to handle it
-						// <div className="row">
-						// 	<div className="small-2 columns text-right">Reservations</div>
-						// 	<div className="small-1 columns text-right"><span className="metadataLabel">Enabled:</span></div>
-						// 	<div className="small-1 columns"><input type="checkbox" checked={!!this.state.allowGroupReservations} onChange={this.onCheckboxChange.bind(this, "allowGroupReservations")} /></div>
-						// 	<div className="small-2 columns text-right"><span className="metadataLabel">Override Limit:</span></div>
-						// 	<div className="small-1 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
-						// </div>,
+						<div className="row">
+							<div className="small-2 columns text-right">Reservations</div>
+							<div className="small-1 columns text-right"><span className="metadataLabel">Enabled:</span></div>
+							<div className="small-1 columns"><input type="checkbox" checked={!!this.state.allowGroupReservations} onChange={this.onCheckboxChange.bind(this, "allowGroupReservations")} /></div>
+							<div className="small-2 columns text-right"><span className="metadataLabel">Override Limit:</span></div>
+							<div className="small-1 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
+						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Pre-Resources:</span></div>
 							<div className="small-5 columns"><span className="metadataLabel">Title</span></div>
