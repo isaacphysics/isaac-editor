@@ -495,8 +495,8 @@ define(["react", "jquery"], function(React,$) {
 							<div className="small-2 columns text-right">Reservations</div>
 							<div className="small-1 columns text-right"><span className="metadataLabel">Enabled:</span></div>
 							<div className="small-1 columns"><input type="checkbox" checked={!!this.state.allowGroupReservations} onChange={this.onCheckboxChange.bind(this, "allowGroupReservations")} /></div>
-							<div className="small-2 columns text-right"><span className="metadataLabel">Override Limit:</span></div>
-							<div className="small-1 columns end"><input type="text" value={this.state.groupReservationLimit} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
+							<div className="small-2 columns text-right"><span className="metadataLabel">Per-teacher Limit:</span></div>
+							<div className="small-1 columns end"><input type="text" value={this.state.groupReservationLimit || 10} onChange={this.onTextboxChange.bind(this, "groupReservationLimit")} /></div>
 						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Pre-Resources:</span></div>
