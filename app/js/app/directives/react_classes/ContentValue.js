@@ -73,11 +73,11 @@ define(["react", "jquery"], function(React,$) {
 							renderer.props.dangerouslySetInnerHTML = {__html: this.props.value};
 							break;
 						case "markdown":
-							var converter = new Showdown.converter({
-								extensions: ["table"],
-								requireSpaceBeforeHeadingText: true
+							var converter = new remarkable.Remarkable({
+								linkify: true,
+								html: true,
 							});
-							var html = converter.makeHtml(this.props.value);
+							var html = converter.render(this.props.value);
 							renderer.props.dangerouslySetInnerHTML = {__html: html};
 							break;
 						case "plain":

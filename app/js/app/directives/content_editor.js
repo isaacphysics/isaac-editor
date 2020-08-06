@@ -2,8 +2,6 @@
 define([
 	"react",
 	"jquery",
-	"showdown/showdown",
-	"showdown/extensions/table",
 	"app/MathJaxConfig",
 	"jsx!./react_classes/Title",
 	"jsx!./react_classes/Tags",
@@ -39,7 +37,7 @@ define([
 	"jsx!./react_classes/UnknownBlock",
 	"jsx!./react_classes/Block",
 	"jsx!./react_classes/GlossaryTermBlock"
-	], function(React, $, sd, sdt, mjc,
+	], function(React, $, mjc,
 		_Title,
 		_Tags,
 		_RelatedContent,
