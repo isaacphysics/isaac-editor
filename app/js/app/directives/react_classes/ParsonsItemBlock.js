@@ -57,7 +57,7 @@ define(["react", "jquery"], function(React,$) {
                         <div className="small-2 column">
                             <input value={this.props.doc.indentation} type="number" min="0" max="3" onChange={this.onIndentationChange} placeholder="0-3" />
                         </div>
-                        <div className="small-6 column">{"\u2001\u2001".repeat(this.props.doc.indentation) + this.props.value}</div>
+                        <div className="small-6 column"><pre>{"\u2001\u2001".repeat(this.props.doc.indentation) + this.props.value}</pre></div>
                         <div className="small-1 column end">
                             <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
                         </div>
@@ -82,7 +82,7 @@ define(["react", "jquery"], function(React,$) {
                             <input value={this.props.doc.id} onChange={this.onIDChange} placeholder="Item ID" />
                         </div>
                         <div className="small-8 columns">
-                            <input value={this.props.doc.value} onChange={this.onValueChange} placeholder="e.g., x = 1" />
+                            <textarea value={this.props.doc.value} onChange={this.onValueChange} placeholder="e.g., x = 1"></textarea>
                         </div>
                         <div className="small-1 column end">
                             <button className={"button tiny tag radius alert"} onClick={this.onRemoveClicked}><i className="foundicon-remove"/></button>
