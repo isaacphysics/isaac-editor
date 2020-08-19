@@ -82,7 +82,9 @@ define([
 
 	function ContentEditor(container, document) {
 		console.log("Loading doc into JSON editor:", document);
-
+		if (document.id) {
+			window.document.title = document.id + " - Isaac Content Editor";
+		}
 		this.editor = <VariantBlock doc={document}  blockTypeTitle="Content Object"/>;
 		this.editor.props.onChange = docChanged.bind(this);
 
@@ -261,6 +263,9 @@ define([
 	function docChanged(c, oldDoc, newDoc) {
 		console.log("Document changed:", newDoc);
 
+		if (oldDoc.id !== newDoc.id) {
+			window.document.title = newDoc.id + " - Isaac Content Editor";
+		}
 		this.history.push(oldDoc);
 		this.editor.setProps({doc: newDoc});
 		$(this.editor.getDOMNode()).trigger("docChanged", [oldDoc, newDoc]);
