@@ -1,4 +1,4 @@
-define(["react", "jquery"], function(React,$) {
+define(["react", "jquery", "remarkable"], function(React, $, remarkable) {
 	return function(ContentEditor) {
 		return React.createClass({
 			getInitialState: function() {
