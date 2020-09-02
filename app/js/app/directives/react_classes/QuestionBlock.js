@@ -9,8 +9,8 @@ define(["react", "jquery"], function(React,$) {
 					significantFiguresMin: this.props.doc.significantFiguresMin,
 					significantFiguresMax: this.props.doc.significantFiguresMax,
 					title: this.props.doc.title,
-					availableUnits: au.join(" | "),
-					availableSymbols: sy.join(" , "),
+					availableUnits: au.map(u => u.trim()).join(" | "),
+					availableSymbols: sy.map(s => s.trim()).join(" , "),
 					formulaSeed: this.props.doc.formulaSeed,
 				}
 			},
@@ -203,7 +203,7 @@ define(["react", "jquery"], function(React,$) {
                     t.removeClass('secondary').addClass('primary');
                 }
                 this.setState({
-                    availableSymbols: newSyms.join(' , ')
+                    availableSymbols: newSyms.map(s => s.trim()).join(' , ')
                 });
                 let oldDoc = this.props.doc;
                 let newDoc = jQuery.extend({}, oldDoc);
