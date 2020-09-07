@@ -17,6 +17,7 @@ define([
 	"jsx!./react_classes/EmailTemplateBlock",
 	"jsx!./react_classes/PodBlock",
 	"jsx!./react_classes/CardBlock",
+	"jsx!./react_classes/CardDeckBlock",
 	"jsx!./react_classes/FigureBlock",
 	"jsx!./react_classes/VideoBlock",
 	"jsx!./react_classes/AnvilAppBlock",
@@ -53,6 +54,7 @@ define([
 		_EmailTemplateBlock,
 		_PodBlock,
 		_CardBlock,
+		_CardDeckBlock,
 		_FigureBlock,
 		_VideoBlock,
 		_AnvilAppBlock,
@@ -178,6 +180,8 @@ define([
 
 	var CardBlock = _CardBlock(ContentEditor, Block, FigureBlock);
 
+	var CardDeckBlock = _CardDeckBlock(ContentEditor, Block, ContentChildren);
+
 	var VideoBlock = _VideoBlock(ContentEditor, Block, ContentValueOrChildren);
 
 	var AnvilAppBlock = _AnvilAppBlock(ContentEditor, Block);
@@ -255,6 +259,7 @@ define([
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 	typeMap["isaacPod"] = PodBlock;
 	typeMap["isaacCard"] = CardBlock;
+	typeMap["isaacCardDeck"] = CardDeckBlock;
 	typeMap["glossaryTerm"] = GlossaryTermBlock;
 
 

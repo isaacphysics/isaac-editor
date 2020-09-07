@@ -20,18 +20,6 @@ define(["react", "jquery"], function(React,$) {
                 this.props.onChange(this, oldDoc, newDoc);
             },
 
-            onValueChange: function(e) {
-                this.setState({
-                    value: e.target.value,
-                });
-
-                var oldDoc = this.props.doc;
-                var newDoc = $.extend({}, oldDoc);
-                newDoc.value = e.target.value;
-
-                this.onDocChange(this, oldDoc, newDoc);
-            },
-
             onVerticalContentChange: function(e) {
                 this.setState({
                     verticalContent: e.target.checked,
@@ -81,9 +69,6 @@ define(["react", "jquery"], function(React,$) {
                     <Block type="card" blockTypeTitle="Card" doc={this.props.doc} onChange={this.onDocChange}>
                     <form>
                     <div className="row">
-                        <div className="small-12 columns plain-text-content">
-                        <label for="valueTextBox">Card Text: </label><input id="valueTextBox" type="text" value={this.props.doc.value} onChange={this.onValueChange} placeholder="Card Text"/>
-                    </div>
                     <div className="small-12 columns">
                         <label for="urlTextBox">Url: </label><input id="urlTextBox" type="text" value={this.props.doc.url} onChange={this.onUrlChange} placeholder="Card Link Url"/>
                     </div>

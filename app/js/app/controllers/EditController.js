@@ -59,6 +59,10 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 					{
 						caption: "Card",
 						value: "isaacCard"
+					},
+					{
+						caption: "Card deck",
+						value: "isaacCardDeck"
 					}
 				]).then(function(r) {
 
