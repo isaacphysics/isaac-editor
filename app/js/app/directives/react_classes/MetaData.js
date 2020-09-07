@@ -381,7 +381,7 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
-				if (this.props.doc.type == "emailTemplate" || this.props.doc.type == "isaacPod") {
+				if (this.props.doc.type == "emailTemplate" || this.props.doc.type == "isaacPod" || this.props.doc.type == "isaacCard") {
 					var published = [
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>

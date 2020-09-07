@@ -16,6 +16,7 @@ define([
 	"jsx!./react_classes/VariantBlock",
 	"jsx!./react_classes/EmailTemplateBlock",
 	"jsx!./react_classes/PodBlock",
+	"jsx!./react_classes/CardBlock",
 	"jsx!./react_classes/FigureBlock",
 	"jsx!./react_classes/VideoBlock",
 	"jsx!./react_classes/AnvilAppBlock",
@@ -51,6 +52,7 @@ define([
 		_VariantBlock,
 		_EmailTemplateBlock,
 		_PodBlock,
+		_CardBlock,
 		_FigureBlock,
 		_VideoBlock,
 		_AnvilAppBlock,
@@ -174,6 +176,8 @@ define([
 
 	var PodBlock = _PodBlock(ContentEditor, Block, FigureBlock);
 
+	var CardBlock = _CardBlock(ContentEditor, Block, FigureBlock);
+
 	var VideoBlock = _VideoBlock(ContentEditor, Block, ContentValueOrChildren);
 
 	var AnvilAppBlock = _AnvilAppBlock(ContentEditor, Block);
@@ -250,6 +254,7 @@ define([
 	typeMap["isaacParsonsQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 	typeMap["isaacPod"] = PodBlock;
+	typeMap["isaacCard"] = CardBlock;
 	typeMap["glossaryTerm"] = GlossaryTermBlock;
 
 
