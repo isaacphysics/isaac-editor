@@ -393,7 +393,7 @@ define(["react", "jquery"], function(React,$) {
 				if (this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "isaacTopicSummaryPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment") {
 					var summary = <div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Summary:</span></div>
-					<div className="small-10 columns"><input type="text" value={this.state.summary} onChange={this.onTextboxChange.bind(this, "summary")} /> </div>
+						<div className="small-10 columns"><input type="text" value={this.state.summary} onChange={this.onTextboxChange.bind(this, "summary")} /> </div>
 					</div>
 				}
 
