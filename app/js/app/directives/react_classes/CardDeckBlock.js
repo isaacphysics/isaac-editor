@@ -32,13 +32,13 @@ define(["react", "jquery"], function(React,$) {
             render: function() {
                 return (
                     <Block type="cardDeck" blockTypeTitle="Card Deck" doc={this.props.doc} onChange={this.onDocChange}>
-                    <form>
-                    <div className="row">
-                    <div className="small-12 columns plain-text-content">
-                    <ContentChildren items={this.props.doc.cards} encoding={this.encoding} onChange={this.onCardsChange} requiredChildType={"isaacCard"}/>
-                    </div>
-                    </div>
-                    </form>
+                        <form>
+                            <div className="row">
+                                <div className="small-12 columns plain-text-content">
+                                    <ContentChildren items={this.props.doc.cards} encoding={this.encoding} onChange={this.onCardsChange} requiredChildType={"isaacCard"}/>
+                                </div>
+                            </div>
+                        </form>
                     </Block>
             );
             }

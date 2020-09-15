@@ -67,22 +67,22 @@ define(["react", "jquery"], function(React,$) {
             render: function() {
                 return (
                     <Block type="card" blockTypeTitle="Card" doc={this.props.doc} onChange={this.onDocChange}>
-                    <form>
-                    <div className="row">
-                    <div className="small-12 columns">
-                        <label for="urlTextBox">Url: </label><input id="urlTextBox" type="text" value={this.props.doc.url} onChange={this.onUrlChange} placeholder="Card Link Url"/>
-                    </div>
-                    <div className="small-6 columns">
-                        <label for="verticalContentCheckbox">Vertical: </label><input id="verticalContentCheckbox" type="checkbox" value={this.props.doc.verticalContent} onChange={this.onVerticalContentChange}/>
-                    </div>
-                    <div className="small-6 columns">
-                        <label for="isDisabledCheckbox">Disabled: </label><input id="isDisabledCheckbox" type="checkbox" value={this.props.doc.disabled} onChange={this.onDisabledChange}/>
-                    </div>
-                    <div className="small-12 columns">
-                    <FigureBlock doc={this.props.doc.image} onChange={this.onImageChange} />
-                    </div>
-                    </div>
-                    </form>
+                        <form>
+                            <div className="row">
+                                <div className="small-12 columns">
+                                    <label for="urlTextBox">Url: </label><input id="urlTextBox" type="text" value={this.props.doc.url} onChange={this.onUrlChange} placeholder="Card Link Url"/>
+                                </div>
+                                <div className="small-6 columns">
+                                    <label for="verticalContentCheckbox">Vertical: </label><input id="verticalContentCheckbox" type="checkbox" value={this.props.doc.verticalContent} onChange={this.onVerticalContentChange}/>
+                                </div>
+                                <div className="small-6 columns">
+                                    <label for="isDisabledCheckbox">Disabled: </label><input id="isDisabledCheckbox" type="checkbox" value={this.props.doc.disabled} onChange={this.onDisabledChange}/>
+                                </div>
+                                <div className="small-12 columns">
+                                    <FigureBlock doc={this.props.doc.image} onChange={this.onImageChange} />
+                                </div>
+                            </div>
+                        </form>
                     </Block>
             );
             }
