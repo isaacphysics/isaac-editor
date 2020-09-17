@@ -13,5 +13,6 @@ Files can be browsed from the menu on the left, and edited by clicking on them. 
 #### Developing the Content Editor
 
 To develop the content editor: check out this repo, run `npm start`, and then visit `localhost:8421` in a web browser.
+To update the css run `npx grunt`.
 
 You may find it useful to edit [`github_application.js`](app/js/app/github_application.js) to change the OAuth settings, or to alter the remote repository the editor connects to in [`services.js`](app/js/app/services.js). Both of these are configured on a per-hostname basis.
