@@ -12,5 +12,6 @@ RUN npm run sass
 
 FROM nginx:stable-alpine
 
-COPY --from=build /editor /usr/share/nginx/html
+COPY --from=build /editor/app /usr/share/nginx/html
+COPY --from=build /editor/node_modules /usr/share/nginx/html/node_modules
 COPY .git/refs/heads/master /usr/share/nginx/html/.git/refs/heads/master
