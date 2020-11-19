@@ -2,12 +2,15 @@ $fontFileName: "../fonts/general_foundicons";
 $fontName: "GeneralFoundicons";
 $classPrefix: "foundicon-";
 
-@mixin i-class($name,$pua) {
-  .#{$classPrefix}#{$name}:before { 
-    content: "\f#{$pua}";
-  }
+@function unicode($str) {
+  @return unquote("\"")+unquote(str-insert($str, "\\", 1))+unquote("\"")
 }
 
+@mixin i-class($name,$pua) {
+  .#{$classPrefix}#{$name}:before { 
+    content: unicode("f#{$pua}");
+  }
+}
 
 @mixin face {
   @font-face { 

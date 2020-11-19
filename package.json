@@ -6,16 +6,22 @@
     "repository": "github:isaacphysics/isaac-editor",
     "license": "MIT",
     "devDependencies": {
-        "bower": "^1.8.8",
-        "grunt": "1.2.1",
-        "grunt-contrib-watch": "1.1.0",
-        "grunt-sass": "3.1.0",
         "http-server": "^0.12.3",
-        "node-sass": "^4.14.1"
+        "node-sass": "^4.14.1",
+        "angular": "1.2.x",
+        "angular-route": "1.2.x",
+        "angular-loader": "1.2.x",
+        "angular-mocks": "~1.2.x",
+        "foundation-sites": "5.5.3",
+        "react": "0.10.0",
+        "angulartics": "0.15.17",
+        "jquery": "2.1.4",
+        "remarkable": "^2.0.1"
     },
     "scripts": {
-        "postinstall": "bower install && cd ./app/bower_components/remarkable && npm i && npm run-script build",
         "prestart": "npm install",
-        "start": "http-server -a localhost -p 8421"
+        "start": "http-server -a localhost -p 8421",
+        "sass": "node-sass --output-style compressed --include-path node_modules/foundation-sites/scss scss/app.scss app/css/app.css",
+        "watch": "npm run sass -- -w"
     }
 }
