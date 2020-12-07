@@ -456,7 +456,7 @@ define(["react", "jquery"], function(React,$) {
 										</div>
 									</div>
 									<div className="row" style={{display: this.props.doc.type === "isaacParsonsQuestion" ? "block" : "none"}}>
-										<div ref="disableIndentationCheckbox" className="small-6 small-offset-4 columns">
+										<div ref="disableIndentationCheckbox" className="small-6 columns">
 											<label><input type="checkbox" checked={this.props.doc.disableIndentation} onChange={this.onCheckboxChange.bind(this, "disableIndentation")} /> Disable indentation</label>
 										</div>
 									</div>
