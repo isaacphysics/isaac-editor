@@ -455,6 +455,11 @@ define(["react", "jquery"], function(React,$) {
 											<input type="checkbox" checked={this.props.doc.multiLineEntry} onChange={this.onCheckboxChange.bind(this, "multiLineEntry")} /> Multi-line
 										</div>
 									</div>
+									<div className="row" style={{display: this.props.doc.type === "isaacParsonsQuestion" ? "block" : "none"}}>
+										<div ref="disableIndentationCheckbox" className="small-6 columns">
+											<label><input type="checkbox" checked={this.props.doc.disableIndentation} onChange={this.onCheckboxChange.bind(this, "disableIndentation")} /> Disable indentation</label>
+										</div>
+									</div>
 								</div>
 								<div className="small-6 columns">
 									<select value={this.props.doc.type} onChange={this.type_Change}>
