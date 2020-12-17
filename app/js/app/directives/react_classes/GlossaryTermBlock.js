@@ -10,9 +10,13 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.value = e.target.value;
-                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
-                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
-                newDoc.id = e.target.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
+            onIdChange: function(e) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+                newDoc.id = e.target.value;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -27,9 +31,6 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.autoId = !newDoc.autoId;
-                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
-                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
-                newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -37,9 +38,6 @@ define(["react", "jquery"], function(React,$) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.examBoard = c.target.value;
-                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
-                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
-                newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
@@ -56,9 +54,6 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.tags = newTags;
-                var examBoard = newDoc.examBoard ? '|' + newDoc.examBoard.toLowerCase() : '';
-                var tags = newDoc.tags && newDoc.tags.length > 0 ? '|' + newDoc.tags.join('~').toLowerCase() : '';
-                newDoc.id = newDoc.value.toLowerCase().replace(/[^\w]/g, '-') + examBoard + tags;
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -79,7 +74,11 @@ define(["react", "jquery"], function(React,$) {
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="small-5 columns">
+                                <div className="small-8 columns">
+                                    <label>Term ID:</label>
+                                    <input type="text" value={this.props.doc.id} onChange={this.onIdChange} placeholder="Term ID" />
+                                </div>
+                                <div className="small-4 columns">
                                     <label>Exam board:</label>
                                     <select value={this.props.doc.examBoard} onChange={this.onExamBoardChange}>
                                         <option value="">Any</option>
