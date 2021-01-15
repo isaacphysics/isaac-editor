@@ -15,18 +15,8 @@
   "date": 1442430000000,
   "numberOfPlaces": 20,
   "eventStatus": "CLOSED",
-  "preResources": [
-    {
-      "title": "Event brochure",
-      "url": "somewhere/interesting.pdf"
-    }
-  ],
-  "postResources": [
-    {
-      "title": "Event brochure",
-      "url": "somewhere/interesting.pdf"
-    }
-  ],
+  "preResources": [],
+  "postResources": [],
   "emailEventDetails": "Check the online events page for additional details.",
   "emailConfirmedBookingText": "",
   "emailWaitingListBookingText": "",
