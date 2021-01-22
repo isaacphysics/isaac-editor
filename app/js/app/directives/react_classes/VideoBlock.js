@@ -6,10 +6,10 @@ define(["react", "jquery"], function(React,$) {
 				this.props.onChange(this, oldDoc, newDoc);
 			},
 
-			onCaptionChange: function(c, oldVal, newVal, oldChildren, newChildren) {
+			onAltTextChange: function(c, oldVal, newVal, oldChildren, newChildren) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, this.props.doc);
-				newDoc.value = newVal;
+				newDoc.altText = newVal;
 				newDoc.children = newChildren;
 
 				this.onDocChange(this, oldDoc, newDoc);
@@ -17,7 +17,7 @@ define(["react", "jquery"], function(React,$) {
 
 			render: function() {
 
-				var optionalCaption = <ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onCaptionChange}/>;
+				var optionalAltText = <ContentValueOrChildren value={this.props.doc.altText} children={this.props.doc.children} encoding={this.props.doc.encoding} onChange={this.onAltTextChange}/>;
 
 				return (
 					<Block type="video" blockTypeTitle="Video" doc={this.props.doc} onChange={this.onDocChange}>
@@ -26,7 +26,7 @@ define(["react", "jquery"], function(React,$) {
 								Video src: {this.props.doc.src}
 							</div>
 							<div className="small-6 columns">
-								{optionalCaption}
+								{optionalAltText}
 							</div>
 						</div>
 					</Block>
