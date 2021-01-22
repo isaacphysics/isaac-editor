@@ -2,6 +2,5 @@
 	"type": "video",
 	"encoding": "markdown",
 	"altText": "_Add video alt text here_",
-	"value": "",
 	"src": "https://www.youtube.com/watch?v=<video_id>"
 }
