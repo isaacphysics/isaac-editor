@@ -192,7 +192,7 @@ define([
 
 	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren);
 
-	var CodeBlock = _CodeBlock(ContentEditor, Block, VariantBlock, ContentValueOrChildren);
+	var CodeBlock = _CodeBlock(ContentEditor, Block, ContentValueOrChildren);
 
 	var ChoiceBlock = _ChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
@@ -225,7 +225,7 @@ define([
 	typeMap["image"] = FigureBlock;
 	typeMap["figure"] = FigureBlock;
 	typeMap["content"] = ContentBlock;
-	typeMap["code"] = CodeBlock;
+	typeMap["codeSnippet"] = CodeBlock;
 	typeMap["concept"] = ContentBlock;
 	typeMap["isaacQuestionPage"] = ContentBlock;
 	typeMap["isaacFastTrackQuestionPage"] = ContentBlock;

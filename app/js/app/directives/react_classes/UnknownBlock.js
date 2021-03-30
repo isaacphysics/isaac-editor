@@ -40,7 +40,7 @@ define(["react", "jquery"], function(React,$) {
 							<div className="large-8 large-offset-2 columns text-center">
 								Please choose a block type: <br/>
 								<a onClick={this.chooseType} data-chosen-type="content">content</a>&nbsp; | &nbsp;
-								<a onClick={this.chooseType} data-chosen-type="code">code</a>&nbsp; | &nbsp;
+								<a onClick={this.chooseType} data-chosen-type="codeSnippet">code snippet</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseQuestion} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="glossaryTerm">glossary term</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="figure">figure</a>&nbsp; | &nbsp;
