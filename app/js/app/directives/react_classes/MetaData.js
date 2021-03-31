@@ -21,8 +21,6 @@ define(["react", "jquery"], function(React,$) {
 					author: this.props.doc.author,
 					summary: this.props.doc.summary,
 					altText: this.props.doc.altText,
-					code: this.props.doc.code,
-					pythonUrl: this.props.doc.pythonUrl,
 					attribution: this.props.doc.attribution,
 					level: this.props.doc.level,
 					difficulty: this.props.doc.difficulty,
@@ -213,14 +211,6 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.altText || this.props.doc.altText) {
 					newDoc.altText = this.state.altText;
-				}
-
-				if (this.state.code || this.props.doc.code) {
-					newDoc.code = this.state.code;
-				}
-
-				if (this.state.pythonUrl || this.props.doc.pythonUrl) {
-					newDoc.pythonUrl = this.state.pythonUrl;
 				}
 
 				if (this.state.published === true || this.state.published === false) {
