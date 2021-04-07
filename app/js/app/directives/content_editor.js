@@ -21,6 +21,7 @@ define([
 	"jsx!./react_classes/CardDeckBlock",
 	"jsx!./react_classes/FigureBlock",
 	"jsx!./react_classes/VideoBlock",
+	"jsx!./react_classes/CodeBlock",
 	"jsx!./react_classes/AnvilAppBlock",
 	"jsx!./react_classes/QuestionBlock",
 	"jsx!./react_classes/EventPageBlock",
@@ -59,6 +60,7 @@ define([
 		_CardDeckBlock,
 		_FigureBlock,
 		_VideoBlock,
+		_CodeBlock,
 		_AnvilAppBlock,
 		_QuestionBlock,
 		_EventPageBlock,
@@ -201,6 +203,8 @@ define([
 
 	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren);
 
+	var CodeBlock = _CodeBlock(ContentEditor, Block, ContentValueOrChildren);
+
 	var ChoiceBlock = _ChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
 	var StringChoiceBlock = _StringChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
@@ -232,6 +236,7 @@ define([
 	typeMap["image"] = FigureBlock;
 	typeMap["figure"] = FigureBlock;
 	typeMap["content"] = ContentBlock;
+	typeMap["codeSnippet"] = CodeBlock;
 	typeMap["concept"] = ContentBlock;
 	typeMap["isaacQuestionPage"] = ContentBlock;
 	typeMap["isaacFastTrackQuestionPage"] = ContentBlock;
