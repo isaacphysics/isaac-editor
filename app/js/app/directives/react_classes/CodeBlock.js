@@ -24,7 +24,7 @@ define(["react", "jquery"], function(React,$) {
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
-            onLanguageChange: function(e) {
+            onLanguageStyleChange: function(e) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
                 newDoc.language = e.target.value;
@@ -43,8 +43,13 @@ define(["react", "jquery"], function(React,$) {
                 return (
                     <Block type="codeSnippet" blockTypeTitle="CodeSnippet" doc={this.props.doc} onChange={this.onDocChange}>
                         <div>
-                            <label>Language:</label>
-                            <input type="text" value={this.props.doc.language} onChange={this.onLanguageChange} placeholder="Language" />
+                            <label>Language Style:</label>
+                            <select value={this.props.doc.language} onChange={this.onLanguageStyleChange}>
+                                <option value="python">Python</option>
+                                <option value="javascript">Javascript</option>
+                                <option value="csharp">C#</option>
+                                <option value="php">PHP</option>
+                            </select>
                         </div>
                         <div ref="disableHighlightingCheckbox">
                             <label><input type="checkbox" checked={this.props.doc.disableHighlighting} onChange={this.onCheckboxChange.bind(this, "disableHighlighting")} />Disable Highlighting</label>
