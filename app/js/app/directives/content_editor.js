@@ -6,6 +6,7 @@ define([
 	"jsx!./react_classes/Title",
 	"jsx!./react_classes/Tags",
 	"jsx!./react_classes/RelatedContent",
+	"jsx!./react_classes/LinkedGameboards",
 	"jsx!./react_classes/MetaData",
 	"jsx!./react_classes/ContentValue",
 	"jsx!./react_classes/ContentChildren",
@@ -43,6 +44,7 @@ define([
 		_Title,
 		_Tags,
 		_RelatedContent,
+		_LinkedGameboards,
 		_MetaData,
 		_ContentValue,
 		_ContentChildren,
@@ -132,6 +134,13 @@ define([
 		})
 	}
 
+	ContentEditor.getGameboardExistenceChecker = function() {
+		return new Promise(function(resolve, reject) {
+			console.error("No gameboard existence checker provided");
+			return reject();
+		})
+	}
+
 	ContentEditor.dateFilter = function(d) {
 		return d.toString(); // Replace this with something nicer. Like the angular date filter, for instance.
 	}
@@ -148,7 +157,9 @@ define([
 
 	var RelatedContent = _RelatedContent(ContentEditor);
 
-	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent);
+	var LinkedGameboards = _LinkedGameboards(ContentEditor);
+
+	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent, LinkedGameboards);
 
 	var JSONEditor = _JSONEditor(ContentEditor);
 
