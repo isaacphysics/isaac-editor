@@ -45,7 +45,7 @@ define(["react", "jquery"], function(React,$) {
                         Tags: {
                             !this.state.result.tags ? "gameboard not found" :
                             this.state.result.tags.length === 0 ? "No Tags!" :
-                            this.state.result.tags
+                            this.state.result.tags.join(", ")
                         }<br /><br />
                         <i className="general foundicon-plus"/>
                     </button>;
