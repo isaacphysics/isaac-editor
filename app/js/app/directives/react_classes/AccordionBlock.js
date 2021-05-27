@@ -17,7 +17,7 @@ define(["react", "jquery"], function(React,$) {
 					activeSection: null
 				}, function() {
 					this.setState({
-						activeSection: i
+						activeSection: parseInt(i)
 					})
 				});
 			},
@@ -95,6 +95,23 @@ define(["react", "jquery"], function(React,$) {
 
 			},
 
+			moveSection: function(increment) {
+				return function() {
+					// Duplicate doc
+					var oldDoc = this.props.doc;
+					var newDoc = $.extend({}, this.props.doc);
+
+					// Use destructured assignment
+					var oldIndex = this.state.activeSection;
+					var newIndex = oldIndex + increment;
+					[newDoc.children[oldIndex], newDoc.children[newIndex]] = [newDoc.children[newIndex], newDoc.children[oldIndex]];
+
+					// Update
+					this.setState({activeSection: newIndex});
+					this.onDocChange(this, oldDoc, newDoc);
+				}.bind(this);
+			},
+
 			onSectionChange: function(activeSection, c, oldVal, newVal) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, this.props.doc);
@@ -146,6 +163,8 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.setId} className="tiny radius">Edit section ID...</button>&nbsp;
 							<button onClick={this.setTitle} className="tiny radius">Edit section title...</button>&nbsp;
 							<button onClick={this.setLevel} className="tiny radius">Edit section level...</button>&nbsp;
+							<button onClick={this.moveSection(-1)} className="tiny secondary" disabled={this.state.activeSection === 0}>🔺</button>
+							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>🔻</button>&nbsp;
 							<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 						</div>
 						<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
