@@ -545,6 +545,18 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
+				if (this.props.doc.type == "isaacQuiz") {
+					var levelMeta = <div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Level:</span></div>
+						<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
+					</div>;
+
+					var visibleToStudentsMeta = <div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students:</span></div>
+						<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /></div>
+					</div>;
+				}
+
 				if (this.props.doc.type == "anvilApp") {
 					var anvilAppMeta = [<div className="row">
 						<div className="small-2 columns text-right">
@@ -606,6 +618,7 @@ define(["react", "jquery"], function(React,$) {
 							{eventMetadata}
 							{published}
 							{anvilAppMeta}
+							{visibleToStudentsMeta}
 						</div>
 					</div>
 				);

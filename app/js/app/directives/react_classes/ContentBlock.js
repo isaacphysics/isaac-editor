@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren) {
+	return function(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren, IsaacQuizSection) {
 		var ContentBlock = React.createClass({
 
 			onDocChange: function(c, oldDoc, newDoc) {

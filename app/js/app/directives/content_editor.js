@@ -38,7 +38,9 @@ define([
 	"jsx!./react_classes/AccordionBlock",
 	"jsx!./react_classes/UnknownBlock",
 	"jsx!./react_classes/Block",
-	"jsx!./react_classes/GlossaryTermBlock"
+	"jsx!./react_classes/GlossaryTermBlock",
+	"jsx!./react_classes/IsaacQuiz",
+	"jsx!./react_classes/IsaacQuizSection"
 	], function(React, $, mjc,
 		_Title,
 		_Tags,
@@ -75,7 +77,9 @@ define([
 		_AccordionBlock,
 		_UnknownBlock,
 		_Block,
-		_GlossaryTermBlock
+		_GlossaryTermBlock,
+		_IsaacQuiz,
+		_IsaacQuizSection
 	) {
 
 /////////////////////////////////
@@ -188,7 +192,9 @@ define([
 
 	var EventPageBlock = _EventPageBlock(ContentEditor, Block, FigureBlock, ContentValueOrChildren);
 
-	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren);
+	var IsaacQuizSection = _IsaacQuizSection(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock);
+
+	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren, IsaacQuizSection);
 
 	var ChoiceBlock = _ChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
@@ -261,6 +267,8 @@ define([
 	typeMap["isaacCard"] = CardBlock;
 	typeMap["isaacCardDeck"] = CardDeckBlock;
 	typeMap["glossaryTerm"] = GlossaryTermBlock;
+	typeMap["isaacQuiz"] = ContentBlock;
+	typeMap["isaacQuizSection"] = ContentBlock;
 
 
 /////////////////////////////////

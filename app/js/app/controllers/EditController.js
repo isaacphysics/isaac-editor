@@ -41,6 +41,10 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 						value: "isaacTopicSummaryPage"
 					},
 					{
+						caption: "Quiz",
+						value: "isaacQuiz"
+					},
+					{
 						caption: "General",
 						value: "page"
 					},

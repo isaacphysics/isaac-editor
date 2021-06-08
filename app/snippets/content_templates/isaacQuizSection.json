@@ -1,0 +1,11 @@
+{
+    "type": "isaacQuizSection",
+    "encoding": "markdown",
+    "children": [
+        {
+			"type": "content",
+			"encoding": "markdown",
+			"value": "Add content or questions here"
+		}       
+    ]
+}
