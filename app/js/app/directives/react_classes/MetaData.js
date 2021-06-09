@@ -53,6 +53,7 @@ define(["react", "jquery"], function(React,$) {
 					emailWaitingListBookingText: this.props.doc.emailWaitingListBookingText,
 					preResources: this.props.doc.preResources,
 					postResources: this.props.doc.postResources,
+					visibleToStudents: this.props.doc.visibleToStudents,
 				};
 			},
 

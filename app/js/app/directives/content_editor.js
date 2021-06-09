@@ -38,9 +38,7 @@ define([
 	"jsx!./react_classes/AccordionBlock",
 	"jsx!./react_classes/UnknownBlock",
 	"jsx!./react_classes/Block",
-	"jsx!./react_classes/GlossaryTermBlock",
-	"jsx!./react_classes/IsaacQuiz",
-	"jsx!./react_classes/IsaacQuizSection"
+	"jsx!./react_classes/GlossaryTermBlock"
 	], function(React, $, mjc,
 		_Title,
 		_Tags,
@@ -77,9 +75,7 @@ define([
 		_AccordionBlock,
 		_UnknownBlock,
 		_Block,
-		_GlossaryTermBlock,
-		_IsaacQuiz,
-		_IsaacQuizSection
+		_GlossaryTermBlock
 	) {
 
 /////////////////////////////////
@@ -192,9 +188,7 @@ define([
 
 	var EventPageBlock = _EventPageBlock(ContentEditor, Block, FigureBlock, ContentValueOrChildren);
 
-	var IsaacQuizSection = _IsaacQuizSection(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock);
-
-	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren, IsaacQuizSection);
+	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren);
 
 	var ChoiceBlock = _ChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
