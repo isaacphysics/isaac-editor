@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Tags, RelatedContent) {
+	return function(ContentEditor, Tags, RelatedContent, LinkedGameboards) {
 		var TITLE_MAX_LENGTH = 32;
 
 		return React.createClass({
@@ -73,6 +73,14 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.relatedContent = newRelatedContent;
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
+			onLinkedGameboardsChange: function(c, oldLinkedGameboards, newLinkedGameboards) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.linkedGameboards = newLinkedGameboards;
 
 				this.onDocChange(this, oldDoc, newDoc);
 			},
@@ -577,6 +585,15 @@ define(["react", "jquery"], function(React,$) {
 					</div>];
 				}
 
+				if (this.props.doc.type == "isaacTopicSummaryPage") {
+					var linkedGameboards = <div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Gameboards: </span></div>
+						<div className="small-10 columns">
+							<LinkedGameboards linkedGameboards={this.props.doc.linkedGameboards || []} onChange={this.onLinkedGameboardsChange} />
+						</div>
+					</div>;
+				}
+
 				var titleGreaterThanMaxLength = this.props.doc.title && this.props.doc.title.length > TITLE_MAX_LENGTH;
 				var idInvalid = this.props.doc.id && !this.props.doc.id.match(/^[a-z0-9_-]+$/);
 
@@ -616,6 +633,7 @@ define(["react", "jquery"], function(React,$) {
 							{supersededByMeta}
 							{pageMeta}
 							{summary}
+							{linkedGameboards}
 							{eventMetadata}
 							{published}
 							{anvilAppMeta}

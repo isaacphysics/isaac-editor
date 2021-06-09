@@ -1,6 +1,6 @@
 'use strict';
 
-define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader", "app/services/SnippetLoader", "app/services/TagLoader", "app/services/IdLoader"], function() {
+define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/services/FigureUploader", "app/services/SnippetLoader", "app/services/TagLoader", "app/services/IdLoader", "app/services/GameboardChecker"], function() {
 
     /* Services */
 
@@ -20,6 +20,12 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
         "editor.isaaccomputerscience.org": "https://staging.isaaccomputerscience.org"
     }[document.location.host])
 
+    .constant('LiveServer', {
+         "localhost:8421": "https://isaacphysics.org",
+         "editor.isaacphysics.org": "https://isaacphysics.org",
+         "editor.isaaccomputerscience.org": "https://isaaccomputerscience.org"
+    }[document.location.host])
+
     .service('LoginChecker', require("app/services/LoginChecker"))
 
     .factory('FileLoader', require("app/services/FileLoader"))
@@ -31,6 +37,8 @@ define(["angular", "app/services/LoginChecker", "app/services/FileLoader", "app/
     .factory('TagLoader', require("app/services/TagLoader"))
 
     .factory('IdLoader', require("app/services/IdLoader"))
+
+    .factory('GameboardChecker', require("app/services/GameboardChecker"))
 
 
 });

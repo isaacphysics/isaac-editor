@@ -6,12 +6,10 @@ define(["react", "jquery"], function(React,$) {
 				this.props.onChange(this, oldDoc, newDoc);
 			},
 
-			onContentChange: function(_c, _oldVal, newVal, _oldChildren, newChildren) {
-				// newVal could be a string or a list.
+			onValueChange: function(e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-				newDoc.value = newVal;
-				newDoc.children = newChildren;
+				newDoc.value = e.target.value;
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -51,7 +49,7 @@ define(["react", "jquery"], function(React,$) {
 									<i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
 							</div>
 							<div className="small-6 columns" >
-								<ContentValueOrChildren value={this.props.doc.value} children={this.props.doc.children} disableListOps={this.props.disableListOps} encoding={this.props.doc.encoding} onChange={this.onContentChange}/>
+								<input type="text" value={this.props.doc.value || ""} onChange={this.onValueChange} />
 								<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.caseInsensitive} onChange={this.caseInsensitive_toggle} /> Case insensitive
 							</div>
 							<div className="small-5 columns" >

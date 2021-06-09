@@ -17,7 +17,7 @@ define(["react", "jquery"], function(React,$) {
 					activeTab: null
 				}, function() {
 					this.setState({
-						activeTab: i
+						activeTab: parseInt(i)
 					})
 				});
 			},
@@ -81,6 +81,23 @@ define(["react", "jquery"], function(React,$) {
 
 			},
 
+			moveTab: function(increment) {
+				return function() {
+					// Duplicate doc
+					var oldDoc = this.props.doc;
+					var newDoc = $.extend({}, this.props.doc);
+
+					// Use destructured assignment
+					var oldIndex = this.state.activeTab;
+					var newIndex = oldIndex + increment;
+					[newDoc.children[oldIndex], newDoc.children[newIndex]] = [newDoc.children[newIndex], newDoc.children[oldIndex]];
+
+					// Update
+					this.setState({activeTab: newIndex});
+					this.onDocChange(this, oldDoc, newDoc);
+				}.bind(this);
+			},
+
 			onTabChange: function(activeTab, c, oldVal, newVal) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, this.props.doc);
@@ -114,6 +131,8 @@ define(["react", "jquery"], function(React,$) {
 							<span><small>ID: {this.props.doc.children[this.state.activeTab].id}&nbsp;</small></span>
 							<button onClick={this.setId} className="tiny radius">Edit tab ID...</button>&nbsp;
 							{editTitle}
+							<button onClick={this.moveTab(-1)} className="tiny secondary" disabled={this.state.activeTab === 0}>ᐊ</button>
+							<button onClick={this.moveTab(1)} className="tiny secondary" disabled={this.state.activeTab === this.props.doc.children.length - 1}>ᐅ</button>&nbsp;
 							<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
 						</div>
 						<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange.bind(this, this.state.activeTab)} />

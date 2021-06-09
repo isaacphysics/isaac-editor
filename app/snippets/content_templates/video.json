@@ -1,6 +1,5 @@
 {
 	"type": "video",
 	"encoding": "markdown",
-	"value": "_Add video caption here_",
 	"src": "https://www.youtube.com/watch?v=<video_id>"
 }
