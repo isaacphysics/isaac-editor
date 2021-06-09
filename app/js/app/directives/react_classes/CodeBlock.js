@@ -49,6 +49,8 @@ define(["react", "jquery"], function(React,$) {
                                 <option value="javascript">Javascript</option>
                                 <option value="csharp">C#</option>
                                 <option value="php">PHP</option>
+                                <option value="sql">SQL</option>
+                                <option value="plaintext">Isaac Pseudocode</option>
                             </select>
                         </div>
                         <div ref="disableHighlightingCheckbox">
