@@ -7,6 +7,7 @@ define([
 	"jsx!./react_classes/Tags",
 	"jsx!./react_classes/RelatedContent",
 	"jsx!./react_classes/LinkedGameboards",
+	"jsx!./react_classes/AudienceBuilder",
 	"jsx!./react_classes/MetaData",
 	"jsx!./react_classes/ContentValue",
 	"jsx!./react_classes/ContentChildren",
@@ -46,6 +47,7 @@ define([
 		_Tags,
 		_RelatedContent,
 		_LinkedGameboards,
+		_AudienceBuilder,
 		_MetaData,
 		_ContentValue,
 		_ContentChildren,
@@ -161,7 +163,9 @@ define([
 
 	var LinkedGameboards = _LinkedGameboards(ContentEditor);
 
-	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent, LinkedGameboards);
+	var AudienceBuilder = _AudienceBuilder(ContentEditor);
+
+	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent, LinkedGameboards, AudienceBuilder);
 
 	var JSONEditor = _JSONEditor(ContentEditor);
 
