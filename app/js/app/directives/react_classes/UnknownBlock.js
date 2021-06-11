@@ -36,7 +36,7 @@ define(["react", "jquery"], function(React,$) {
 			render: function() {
 				return (
 					<Block type="unknown" blockTypeTitle="?" doc={this.props.doc} onChange={this.onDocChange}>
-						<div className="row">{this.props.doc}
+						<div className="row">
 							<div className="large-8 large-offset-2 columns text-center">
 								Please choose a block type: <br/>
 								<strong>Careful:</strong> if you are creating a quiz, please only choose a <strong>quiz section</strong> at the top level <br />
