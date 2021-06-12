@@ -167,7 +167,7 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>🔻</button>&nbsp;
 							<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 						</div>
-						<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
+						<VariantBlock key={this.state.activeSection} doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
 					</div>;
 				}
 
