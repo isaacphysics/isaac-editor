@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock) {
+	return function(ContentEditor, Block, VariantBlock, AudienceBuilder) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -60,6 +60,15 @@ define(["react", "jquery"], function(React,$) {
 				} else {
 					window.alert("Invalid level entered: " + newLevel);
 				}
+			},
+
+			onAudienceChange: function(audience) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeSection].audience = audience;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
 			},
 
 			deleteSection: function() {
@@ -166,6 +175,12 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.moveSection(-1)} className="tiny secondary" disabled={this.state.activeSection === 0}>🔺</button>
 							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>🔻</button>&nbsp;
 							<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
+						</div>
+						<div style={{display: "flex", "justify-content": "flex-end", textAlign: "right"}}>
+							<div>Audience: </div>&nbsp;
+							<div>
+								<AudienceBuilder audience={this.props.doc.children[this.state.activeSection].audience} onAudienceChange={this.onAudienceChange} />
+							</div>
 						</div>
 						<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
 					</div>;

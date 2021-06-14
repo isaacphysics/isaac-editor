@@ -189,7 +189,7 @@ define([
 
 	var TabsBlock = _TabsBlock(ContentEditor, Block, VariantBlock);
 
-	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock);
+	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock, AudienceBuilder);
 
 	var EmailTemplateBlock = _EmailTemplateBlock(ContentEditor, Block, ContentValueOrChildren);
 

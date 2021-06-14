@@ -196,7 +196,8 @@ define(["react"], function(React) {
                                     {fieldObjectIndex !== fieldsObjects.length - 1 && <span> OR <br /></span>}
                                 </span>
                             )}
-                            {" "}<button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addNewFieldsObject}>
+                            {" "}
+                            <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addNewFieldsObject}>
                                 OR ➕
                             </button>
                         </div>
