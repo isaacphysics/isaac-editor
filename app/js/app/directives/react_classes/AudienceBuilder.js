@@ -144,11 +144,13 @@ define(["react"], function(React) {
 
             render: function() {
                 var conciseRepresentation = <span>
+                    {this.state.localAudience.length > 1 && "("}
                     {this.state.localAudience.map(expressionToOr =>
                         Object.values(expressionToOr).map(expressionToAnd =>
-                            expressionToAnd.length === 1 ? expressionToAnd[0] : "(" + expressionToAnd.join(", ") + ")"
+                            expressionToAnd.length === 1 ? expressionToAnd[0] : "(" + expressionToAnd.join(" or ") + ")"
                         ).join(" and ")
-                    ).join(" or ")}
+                    ).join(") or (")}
+                    {this.state.localAudience.length > 1 && ")"}
                 </span>;
 
                 return <div>
@@ -199,7 +201,7 @@ define(["react"], function(React) {
                             </button>
                         </div>
                         <div>
-                            Concise Representation: {conciseRepresentation} &nbsp;&nbsp;
+                            Concise: {conciseRepresentation} &nbsp;&nbsp;
                             <button className={actionBtnCls} onClick={this.saveChanges}>
                                 Save
                             </button> &nbsp;
