@@ -14,11 +14,12 @@ define(["angular", "angular-route", "app/filters", "jsx!app/directives/content_e
 	    };
 	}])
 
-	.directive("contentEditor", ["SnippetLoader", "TagLoader", "IdLoader", "GameboardChecker", "$filter", function(snippetLoader, tagLoader, idLoader, gameboardChecker, $filter) {
+	.directive("contentEditor", ["SiteSubject", "SnippetLoader", "TagLoader", "IdLoader", "GameboardChecker", "$filter", function(SITE_SUBJECT, snippetLoader, tagLoader, idLoader, gameboardChecker, $filter) {
 
 		function link(scope, element, attrs) {
 			scope.$watch("document", function(newVal, oldVal, scope) {
 				console.log("document changed!", scope.document);
+				ContentEditor.SITE_SUBJECT = SITE_SUBJECT;
 				ContentEditor.fileLoader = scope.fileLoader;
 				ContentEditor.figureUploader = scope.figureUploader;
 				ContentEditor.snippetLoader = snippetLoader;

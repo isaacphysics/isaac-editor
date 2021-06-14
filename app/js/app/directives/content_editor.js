@@ -107,6 +107,8 @@ define([
 
 	ContentEditor.enableMathJax = true;
 
+	ContentEditor.SITE_SUBJECT = null;
+
 	ContentEditor.fileLoader = function(path) {
 		return new Promise(function(resolve, reject) {
 			console.error("No file loader provided for file", path);

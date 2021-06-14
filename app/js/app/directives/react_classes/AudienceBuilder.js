@@ -1,14 +1,14 @@
 define(["react"], function(React) {
-    var possibleFields = {
-        stage: ["A Level", "GCSE", "9", "8", "7"],
-        difficulty: ["P1", "P2", "P3", "C1", "C2", "C3"],
-        examBoard: ["AQA", "OCR", "WJEC"],
-    };
-
     var tinyBtnCls = "button tiny secondary radius";
     var tinyBtnCSS = {padding: "0.5rem", background: "none", border: "solid 1px lightgrey"};
     var actionBtnCls = "button tiny radius";
     var selectCSS = {"width": "auto", "padding-right": "1rem"};
+
+    var phyStages = ["A Level", "GCSE", "9", "8", "7"];
+    var phyDifficulties = ["P1", "P2", "P3", "C1", "C2", "C3"];
+
+    var csStages = ["A Level", "GCSE", "9", "8", "7"];
+    var csExamBoards = ["AQA", "OCR", "WJEC"];
 
     return function(ContentEditor) {
         return React.createClass({
@@ -16,18 +16,33 @@ define(["react"], function(React) {
                 return {"stage": ["A Level"]};
             },
 
+            getPossibleFields: function getPossibleFields() {
+                if (ContentEditor.SITE_SUBJECT === "CS") {
+                    switch (this.state.componentLevel) {
+                        case "document": return {stage: csStages, examBoard: csExamBoards};
+                        case "accordion": return {stage: csStages, examBoard: csExamBoards};
+                    }
+                } else { //if (ContentEditor.SITE_SUBJECT === "PHY") OR default
+                    switch (this.state.componentLevel) {
+                        case "document": return {stage: phyStages, difficulty: phyDifficulties};
+                        case "accordion": return {stage: phyStages};
+                    }
+                }
+            },
+
             getRemainingFieldsAndValue: function(existingFieldsObject) {
-                return Object.entries(possibleFields)
+                return Object.entries(this.getPossibleFields())
                     .filter(fieldsEntry => Object.keys(existingFieldsObject).indexOf(fieldsEntry[0]) === -1)
                     .map(fieldsEntry => [fieldsEntry[0], fieldsEntry[1].slice(0, 1)]);
             },
 
             getRemainingValues: function(fieldName, existingValues) {
-                return possibleFields[fieldName].filter(possibleValue => existingValues.indexOf(possibleValue) === -1);
+                return (this.getPossibleFields()[fieldName] || []).filter(possibleValue => existingValues.indexOf(possibleValue) === -1);
             },
 
             getInitialState: function() {
                 return {
+                    componentLevel: this.props.accordion ? "accordion" : "document",
                     localAudience: this.props.audience || [this.getDefaultFieldsObject()],
                     editing: false,
                 };
@@ -61,17 +76,17 @@ define(["react"], function(React) {
                 return function(event) {
                     var newFieldObject = Object.assign({}, this.state.localAudience[fieldsObjectIndex]);
                     delete newFieldObject[previousField];
-                    newFieldObject[event.target.value] = possibleFields[event.target.value].slice(0, 1);
+                    newFieldObject[event.target.value] = getPossibleFields(this.state.componentLevel)[event.target.value].slice(0, 1);
                     this.setState({
                         localAudience: this.state.localAudience.map((existingFieldObject, index) => index === fieldsObjectIndex ? newFieldObject : existingFieldObject)
                     });
                 }.bind(this);
             },
 
-            removeFieldFromFieldsObject: function(fieldsObjectIndex, field) {
+            removeFieldFromFieldsObject: function(fieldsObjectIndex, fieldToRemove) {
                 return function() {
                     var newFieldObject = Object.assign({}, this.state.localAudience[fieldsObjectIndex]);
-                    delete newFieldObject[previousField];
+                    delete newFieldObject[fieldToRemove];
                     this.setState({
                         localAudience: this.state.localAudience.map((existingFieldObject, index) => index === fieldsObjectIndex ? newFieldObject : existingFieldObject)
                     });
