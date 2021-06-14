@@ -55,7 +55,7 @@ define(["react"], function(React) {
 
             removeFieldsObject: function(fieldsObjectIndex) {
                 return function() {
-                    this.setState({localAudience: this.state.local.filter((fieldsObject, index) => index !== fieldsObjectIndex)});
+                    this.setState({localAudience: this.state.localAudience.filter((fieldsObject, index) => index !== fieldsObjectIndex)});
                 }.bind(this);
             },
 
