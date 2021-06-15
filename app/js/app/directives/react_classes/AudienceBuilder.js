@@ -8,7 +8,7 @@ define(["react"], function(React) {
     var phyDifficulties = ["P1", "P2", "P3", "C1", "C2", "C3"];
 
     var csStages = ["A Level", "GCSE", "9", "8", "7"];
-    var csExamBoards = ["AQA", "OCR", "WJEC"];
+    var csExamBoards = ["AQA", "OCR", "CIE", "EDEXCEL", "EDUQAS", "WJEC"];
 
     return function(ContentEditor) {
         return React.createClass({
