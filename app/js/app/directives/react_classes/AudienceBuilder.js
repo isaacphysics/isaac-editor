@@ -175,7 +175,7 @@ define(["react"], function(React) {
                                         {values.map((value, valueIndex, values) => <span>
                                             <select value={value} style={selectCSS} onChange={this.updateValueSelection(fieldObjectIndex, field, value)}>
                                                 <option value={value}>{value}</option>
-                                                {this.getRemainingValues(field, values).map(value => <option values={value}>{value}</option>)}
+                                                {this.getRemainingValues(field, values).map(value => <option value={value}>{value}</option>)}
                                             </select>
                                             {values.length > 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeValueFromFieldObject(fieldObjectIndex, field, value)}>🗙</button>}
                                             {valueIndex !== values.length - 1 && ", "}
