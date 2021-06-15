@@ -7,6 +7,7 @@ define([
 	"jsx!./react_classes/Tags",
 	"jsx!./react_classes/RelatedContent",
 	"jsx!./react_classes/LinkedGameboards",
+	"jsx!./react_classes/AudienceDisplayBuilder",
 	"jsx!./react_classes/AudienceBuilder",
 	"jsx!./react_classes/MetaData",
 	"jsx!./react_classes/ContentValue",
@@ -47,6 +48,7 @@ define([
 		_Tags,
 		_RelatedContent,
 		_LinkedGameboards,
+		_AudienceDisplayBuilder,
 		_AudienceBuilder,
 		_MetaData,
 		_ContentValue,
@@ -165,6 +167,8 @@ define([
 
 	var LinkedGameboards = _LinkedGameboards(ContentEditor);
 
+	var AudienceDisplayBuilder = _AudienceDisplayBuilder(ContentEditor);
+
 	var AudienceBuilder = _AudienceBuilder(ContentEditor);
 
 	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent, LinkedGameboards, AudienceBuilder);
@@ -189,7 +193,7 @@ define([
 
 	var TabsBlock = _TabsBlock(ContentEditor, Block, VariantBlock);
 
-	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock, AudienceBuilder);
+	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock, AudienceDisplayBuilder, AudienceBuilder);
 
 	var EmailTemplateBlock = _EmailTemplateBlock(ContentEditor, Block, ContentValueOrChildren);
 
