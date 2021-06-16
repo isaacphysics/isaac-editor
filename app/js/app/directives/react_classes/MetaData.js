@@ -226,6 +226,10 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.published = this.state.published;
 				}
 
+				if (this.state.visibleToStudents === true || this.state.visibleToStudents === false) {
+					newDoc.visibleToStudents = this.state.visibleToStudents;
+				}
+
 				if (this.state.attribution || this.props.doc.attribution) {
 					newDoc.attribution = this.state.attribution;
 				}
@@ -555,15 +559,20 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type == "isaacQuiz") {
-					var levelMeta = <div className="row">
-						<div className="small-2 columns text-right"><span className="metadataLabel">Level:</span></div>
-						<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
-					</div>;
-
-					var visibleToStudentsMeta = <div className="row">
-						<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students:</span></div>
-						<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /></div>
-					</div>;
+					var quizPageMeta = [
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Level:</span></div>
+							<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /> </div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
+						</div>,
+					];
 				}
 
 				if (this.props.doc.type == "anvilApp") {
@@ -637,7 +646,7 @@ define(["react", "jquery"], function(React,$) {
 							{eventMetadata}
 							{published}
 							{anvilAppMeta}
-							{visibleToStudentsMeta}
+							{quizPageMeta}
 						</div>
 					</div>
 				);
