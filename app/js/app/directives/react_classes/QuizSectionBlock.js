@@ -15,7 +15,7 @@ define(["react", "jquery"], function(React,$) {
 
                 this.onDocChange(this, oldDoc, newDoc);
             },
-            
+
             setTitle: function() {
                 var newTitle = window.prompt("Type a new title for this quiz section:", this.props.doc.title);
                 if (newTitle != null)
