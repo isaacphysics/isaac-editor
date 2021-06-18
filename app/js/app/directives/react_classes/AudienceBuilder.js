@@ -4,10 +4,10 @@ define(["react"], function(React) {
     var actionBtnCls = "button tiny radius";
     var selectCSS = {"width": "auto", "padding-right": "1rem"};
 
-    var phyStages = ["A Level", "GCSE", "9", "8", "7"];
-    var phyDifficulties = ["P1", "P2", "P3", "C1", "C2", "C3"];
+    var phyStages = ["Pre-University", "A Level Further", "A Level", "GCSE", "9", "8", "7"];
+    var phyDifficulties = ["Practice 1", "Practice 2", "Practice 3", "Challenge 1", "Challenge 2", "Challenge 3"];
 
-    var csStages = ["A Level", "GCSE", "9", "8", "7"];
+    var csStages = ["A Level", "GCSE"];
     var csExamBoards = ["AQA", "OCR", "CIE", "EDEXCEL", "EDUQAS", "WJEC"];
 
     return function(ContentEditor) {
