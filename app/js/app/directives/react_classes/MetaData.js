@@ -410,7 +410,7 @@ define(["react", "jquery"], function(React,$) {
 					</div>
 				}
 
-				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "isaacTopicSummaryPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment" || this.props.doc.type == "isaacEventPage") {
+				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" || this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "isaacTopicSummaryPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacPageFragment" || this.props.doc.type == "isaacEventPage" || this.props.doc.type == "isaacQuiz") {
 					var pageMeta = [
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
@@ -536,7 +536,7 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type == "isaacQuestionPage" || this.props.doc.type == "isaacFastTrackQuestionPage" ||
-					this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page") { // FIXME Needs refactoring
+					this.props.doc.type == "isaacConceptPage" || this.props.doc.type == "page" || this.props.doc.type == "isaacQuiz") { // FIXME Needs refactoring
 					var questionPageMeta = <div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Attribution:</span></div>
 						<div className="small-10 columns"><input type="text" value={this.state.attribution} onChange={this.onTextboxChange.bind(this, "attribution")} /></div>
@@ -561,16 +561,8 @@ define(["react", "jquery"], function(React,$) {
 				if (this.props.doc.type == "isaacQuiz") {
 					var quizPageMeta = [
 						<div className="row">
-							<div className="small-2 columns text-right"><span className="metadataLabel">Level:</span></div>
-							<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
-						</div>,
-						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students?</span></div>
 							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /> </div>
-						</div>,
-						<div className="row">
-							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
-							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
 						</div>,
 					];
 				}
