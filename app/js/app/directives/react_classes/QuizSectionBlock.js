@@ -32,8 +32,10 @@ define(["react", "jquery"], function(React,$) {
 
                 return (
                     <Block type="isaacQuizSection" blockTypeTitle="Quiz Section" doc={this.props.doc} onChange={this.onDocChange}>
-                        <button onClick={this.setTitle} className="tiny radius">Edit quiz section title...</button>&nbsp;
-                        <ContentValueOrChildren children={this.props.doc.children} onChange={this.onContentChange}/>
+                        <div className="quiz-section">
+                            <button onClick={this.setTitle} className="tiny radius">Edit quiz section title...</button>&nbsp;
+                            <ContentValueOrChildren children={this.props.doc.children} onChange={this.onContentChange}/>
+                        </div>
                     </Block>
                 );
             }

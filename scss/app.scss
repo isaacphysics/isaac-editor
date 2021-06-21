@@ -492,6 +492,12 @@ hr {
   }
 }
 
+.quiz-section {
+  border-radius: 10px;
+  border: 2px solid grey;
+  padding: 10px;
+}
+
 .card-deck-children {
   margin-left: 2rem;
 }
@@ -528,9 +534,9 @@ input.inline {
 }
 
 ::-moz-placeholder {  /* Firefox 19+ */
-   color: #bbb;  
+   color: #bbb;
 }
 
-:-ms-input-placeholder {  
-   color: #bbb;  
+:-ms-input-placeholder {
+   color: #bbb;
 }
