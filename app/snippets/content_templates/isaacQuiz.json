@@ -1,0 +1,10 @@
+{
+    "type": "isaacQuiz",
+    "encoding": "markdown",
+    "title": "New Quiz",
+    "visibleToStudents": false,
+    "published": false,
+	"children": [
+
+	]
+}

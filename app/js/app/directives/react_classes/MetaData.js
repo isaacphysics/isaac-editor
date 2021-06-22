@@ -53,6 +53,7 @@ define(["react", "jquery"], function(React,$) {
 					emailWaitingListBookingText: this.props.doc.emailWaitingListBookingText,
 					preResources: this.props.doc.preResources,
 					postResources: this.props.doc.postResources,
+					visibleToStudents: this.props.doc.visibleToStudents,
 				};
 			},
 
@@ -223,6 +224,10 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.published === true || this.state.published === false) {
 					newDoc.published = this.state.published;
+				}
+
+				if (this.state.visibleToStudents === true || this.state.visibleToStudents === false) {
+					newDoc.visibleToStudents = this.state.visibleToStudents;
 				}
 
 				if (this.state.attribution || this.props.doc.attribution) {
@@ -553,6 +558,23 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
+				if (this.props.doc.type == "isaacQuiz") {
+					var quizPageMeta = [
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Level:</span></div>
+							<div className="small-10 columns"><input type="text" value={this.state.level} onChange={this.onTextboxChange.bind(this, "level")} /></div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /> </div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
+						</div>,
+					];
+				}
+
 				if (this.props.doc.type == "anvilApp") {
 					var anvilAppMeta = [<div className="row">
 						<div className="small-2 columns text-right">
@@ -624,6 +646,7 @@ define(["react", "jquery"], function(React,$) {
 							{eventMetadata}
 							{published}
 							{anvilAppMeta}
+							{quizPageMeta}
 						</div>
 					</div>
 				);
