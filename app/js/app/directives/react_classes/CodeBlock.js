@@ -58,7 +58,7 @@ define(["react", "jquery"], function(React,$) {
                         </div>
                         <div>
                             <label>Code:</label>
-                            <textarea style={{fontFamily: "monospace"}} value={this.props.doc.code || ''} st rows="10" onChange={this.onCodeChange}></textarea>
+                            <textarea style={{fontFamily: "monospace"}} value={this.props.doc.code || ''} rows="10" onChange={this.onCodeChange}></textarea>
                         </div>
                         <div>
                             <label>Url:</label>
