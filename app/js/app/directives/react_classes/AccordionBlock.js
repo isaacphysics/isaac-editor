@@ -190,10 +190,11 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.setId} className="tiny radius">Edit section ID...</button>&nbsp;
 							<button onClick={this.setTitle} className="tiny radius">Edit section title...</button>&nbsp;
 							<button onClick={this.setLevel} className="tiny radius">Edit section level...</button>&nbsp;
-							<button onClick={this.moveSection(-1)} className="tiny secondary" disabled={this.state.activeSection === 0}>🔺</button>
-							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>🔻</button>&nbsp;
+							<button onClick={this.moveSection(-1)} className="tiny secondary" disabled={this.state.activeSection === 0}>▲</button>
+							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>▼</button>&nbsp;
 							<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 						</div>
+<<<<<<< HEAD
 						<div style={{display: "flex", "justify-content": "flex-end", textAlign: "right"}}>
 							<div><small>Audience:</small></div>&nbsp;
 							<div>
@@ -210,7 +211,7 @@ define(["react", "jquery"], function(React,$) {
 								<AudienceDisplayBuilder display={this.props.doc.children[this.state.activeSection].display} onDisplayChange={this.onSectionDisplayChange} />
 							</div>
 						</div>}
-						<VariantBlock doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
+						<VariantBlock key={this.state.activeSection} doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
 					</div>;
 				}
 

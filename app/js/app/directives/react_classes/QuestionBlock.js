@@ -422,7 +422,7 @@ define(["react", "jquery"], function(React,$) {
 						<form>
 							<div className="row">
 								<div className="small-6 columns">
-									<input type="text" value={this.state.title} onChange={this.onTitleChange} placeholder="Question title"/>
+									<input type="text" value={this.props.doc.title || ""} onChange={this.onTitleChange} placeholder="Question title"/>
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
 										<div className="small-6 columns text-right">
 											Significant figures:

@@ -39,6 +39,7 @@ define(["react", "jquery"], function(React,$) {
 						<div className="row">
 							<div className="large-8 large-offset-2 columns text-center">
 								Please choose a block type: <br/>
+								{/* <strong>Careful:</strong> if you are creating a quiz, please only choose a <strong>quiz section</strong> at the top level <br /> */}
 								<a onClick={this.chooseType} data-chosen-type="content">content</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="codeSnippet">code snippet</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseQuestion} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp;
@@ -46,7 +47,8 @@ define(["react", "jquery"], function(React,$) {
 								<a onClick={this.chooseType} data-chosen-type="figure">figure</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="video">video</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="tabs">tabs</a>&nbsp; | &nbsp;
-								<a onClick={this.chooseType} data-chosen-type="accordion">accordion</a>
+								<a onClick={this.chooseType} data-chosen-type="accordion">accordion</a>&nbsp; | &nbsp;
+								<a onClick={this.chooseType} data-chosen-type="isaacQuizSection">quiz section</a>
 							</div>
 						</div>
 					</Block>

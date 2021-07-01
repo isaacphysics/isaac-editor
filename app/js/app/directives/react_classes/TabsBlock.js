@@ -135,7 +135,7 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.moveTab(1)} className="tiny secondary" disabled={this.state.activeTab === this.props.doc.children.length - 1}>ᐅ</button>&nbsp;
 							<button onClick={this.deleteTab} className="tiny radius alert">Delete tab</button>
 						</div>
-						<VariantBlock doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange.bind(this, this.state.activeTab)} />
+						<VariantBlock key={this.state.activeTab} doc={this.props.doc.children[this.state.activeTab]} onChange={this.onTabChange.bind(this, this.state.activeTab)} />
 					</div>;
 				}
 

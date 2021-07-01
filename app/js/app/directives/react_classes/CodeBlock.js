@@ -49,6 +49,8 @@ define(["react", "jquery"], function(React,$) {
                                 <option value="javascript">Javascript</option>
                                 <option value="csharp">C#</option>
                                 <option value="php">PHP</option>
+                                <option value="sql">SQL</option>
+                                <option value="plaintext">Isaac Pseudocode</option>
                             </select>
                         </div>
                         <div ref="disableHighlightingCheckbox">
@@ -56,7 +58,7 @@ define(["react", "jquery"], function(React,$) {
                         </div>
                         <div>
                             <label>Code:</label>
-                            <textarea value={this.props.doc.code || ''} rows="10" onChange={this.onCodeChange}></textarea>
+                            <textarea style={{fontFamily: "monospace"}} value={this.props.doc.code || ''} rows="10" onChange={this.onCodeChange}></textarea>
                         </div>
                         <div>
                             <label>Url:</label>
