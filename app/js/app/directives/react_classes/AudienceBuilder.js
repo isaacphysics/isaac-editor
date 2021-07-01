@@ -16,7 +16,7 @@ define(["react"], function(React) {
                 return {"stage": ["a_level"]};
             },
 
-            getPossibleFields: function getPossibleFields() {
+            getPossibleFields: function() {
                 if (ContentEditor.SITE_SUBJECT === "CS") {
                     switch (this.state.componentLevel) {
                         case "document": return {stage: csStages, examBoard: csExamBoards};
@@ -76,7 +76,7 @@ define(["react"], function(React) {
                 return function(event) {
                     var newFieldObject = Object.assign({}, this.state.localAudience[fieldsObjectIndex]);
                     delete newFieldObject[previousField];
-                    newFieldObject[event.target.value] = getPossibleFields(this.state.componentLevel)[event.target.value].slice(0, 1);
+                    newFieldObject[event.target.value] = this.getPossibleFields(this.state.componentLevel)[event.target.value].slice(0, 1);
                     this.setState({
                         localAudience: this.state.localAudience.map((existingFieldObject, index) => index === fieldsObjectIndex ? newFieldObject : existingFieldObject)
                     });
@@ -133,17 +133,17 @@ define(["react"], function(React) {
             },
 
             cancelChanges: function() {
-                this.setState({editing: false, localAudience: this.props.audience});
+                this.setState({editing: false, localAudience: this.props.audience || [this.getDefaultFieldsObject()]});
             },
 
             clearAudience: function() {
                 this.props.onAudienceChange(null);
-                this.setState({editing: false});
+                this.setState({editing: false, localAudience: [this.getDefaultFieldsObject()]});
             },
 
 
             render: function() {
-                var conciseRepresentation = <span>
+                var conciseRepresentation = this.state.localAudience && <span>
                     {this.state.localAudience.length > 1 && "("}
                     {this.state.localAudience.map(expressionToOr =>
                         Object.values(expressionToOr).map(expressionToAnd =>
@@ -156,7 +156,11 @@ define(["react"], function(React) {
                 return <div>
                     {/* Display mode (concise representation) */}
                     {!this.state.editing && <div>
-                        {this.props.audience ? conciseRepresentation : "All"} &nbsp;&nbsp;
+                        {
+                            this.props.audience ? conciseRepresentation :
+                            this.props.accordion ? "All" :
+                            /* document level ? */ "None Specified"
+                        } &nbsp;&nbsp;
                         <button className={actionBtnCls} onClick={() => this.setState({editing: !this.state.editing})}>Edit</button>
                     </div>}
 

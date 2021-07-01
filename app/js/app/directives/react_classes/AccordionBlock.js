@@ -194,11 +194,10 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>▼</button>&nbsp;
 							<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 						</div>
-<<<<<<< HEAD
 						<div style={{display: "flex", "justify-content": "flex-end", textAlign: "right"}}>
 							<div><small>Audience:</small></div>&nbsp;
 							<div>
-								<AudienceBuilder audience={this.props.doc.children[this.state.activeSection].audience} onAudienceChange={this.onAudienceChange} />
+								<AudienceBuilder accordion audience={this.props.doc.children[this.state.activeSection].audience} onAudienceChange={this.onAudienceChange} />
 							</div>
 							&nbsp;
 							{this.props.doc.children[this.state.activeSection].display === undefined && <button onClick={() => this.onSectionDisplayChange({audience: [], nonAudience: []})} className="tiny secondary radius">
