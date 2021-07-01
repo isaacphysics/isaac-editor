@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Tags, RelatedContent, LinkedGameboards) {
+	return function(ContentEditor, Tags, RelatedContent, LinkedGameboards, AudienceBuilder) {
 		var TITLE_MAX_LENGTH = 32;
 
 		return React.createClass({
@@ -53,6 +53,7 @@ define(["react", "jquery"], function(React,$) {
 					emailWaitingListBookingText: this.props.doc.emailWaitingListBookingText,
 					preResources: this.props.doc.preResources,
 					postResources: this.props.doc.postResources,
+					audience: this.props.doc.audience,
 					visibleToStudents: this.props.doc.visibleToStudents,
 				};
 			},
@@ -194,6 +195,12 @@ define(["react", "jquery"], function(React,$) {
 				}
 			},
 
+			onAudienceChange: function(audience) {
+				this.setState({audience});
+				clearTimeout(this.metadataChangeTimeout);
+				this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+			},
+
 			onMetadataChangeTimeout: function() {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
@@ -314,6 +321,10 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.emailWaitingListBookingText = this.state.emailWaitingListBookingText;
 				}
 
+				if (this.state.audience || this.props.doc.audience) {
+					newDoc.audience = this.state.audience;
+				}
+
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -418,6 +429,12 @@ define(["react", "jquery"], function(React,$) {
 						</div>,
 					];
 
+					var audience = <div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Audience:</span></div>
+						<div className="small-10 columns">
+							<AudienceBuilder audience={this.state.audience} onAudienceChange={this.onAudienceChange} />
+						</div>
+					</div>;
 
 					var relatedContent = <div className="row">
 						<div className="small-2 columns text-right"><span className="metadataLabel">Related Content:</span></div>
@@ -610,6 +627,7 @@ define(["react", "jquery"], function(React,$) {
 					<div className="metadata-container">
 						<button onClick={this.toggleMetaData_click} className="button tiny round" ref="toggleButton">Show MetaData</button>
 						<div className="metadata" ref="metadata">
+							{audience}
 							<div className="row">
 								<div className="small-2 columns text-right"><span className="metadataLabel">Tags: </span></div>
 								<div className="small-10 columns">{tagsComponent}</div>

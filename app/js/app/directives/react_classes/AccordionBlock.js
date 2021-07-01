@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock) {
+	return function(ContentEditor, Block, VariantBlock, AudienceDisplayBuilder, AudienceBuilder) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -60,6 +60,33 @@ define(["react", "jquery"], function(React,$) {
 				} else {
 					window.alert("Invalid level entered: " + newLevel);
 				}
+			},
+
+			onAudienceChange: function(audience) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeSection].audience = audience;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			},
+
+			onDisplayChange: function(display) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.display = display;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
+			},
+
+			onSectionDisplayChange: function(display) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, this.props.doc);
+				newDoc.children[this.state.activeSection].display = display;
+
+				this.onDocChange(this, oldDoc, newDoc);
+				this.forceUpdate();
 			},
 
 			deleteSection: function() {
@@ -167,12 +194,33 @@ define(["react", "jquery"], function(React,$) {
 							<button onClick={this.moveSection(1)} className="tiny secondary" disabled={this.state.activeSection === this.props.doc.children.length - 1}>▼</button>&nbsp;
 							<button onClick={this.deleteSection} className="tiny radius alert">Delete section</button>
 						</div>
+<<<<<<< HEAD
+						<div style={{display: "flex", "justify-content": "flex-end", textAlign: "right"}}>
+							<div><small>Audience:</small></div>&nbsp;
+							<div>
+								<AudienceBuilder audience={this.props.doc.children[this.state.activeSection].audience} onAudienceChange={this.onAudienceChange} />
+							</div>
+							&nbsp;
+							{this.props.doc.children[this.state.activeSection].display === undefined && <button onClick={() => this.onSectionDisplayChange({audience: [], nonAudience: []})} className="tiny secondary radius">
+								Override Display
+							</button>}
+						</div>
+						{this.props.doc.children[this.state.activeSection].display && <div style={{display: "flex", "justify-content": "flex-end", textAlign: "right"}}>
+							<div><small>Display Override:</small></div>&nbsp;
+							<div>
+								<AudienceDisplayBuilder display={this.props.doc.children[this.state.activeSection].display} onDisplayChange={this.onSectionDisplayChange} />
+							</div>
+						</div>}
 						<VariantBlock key={this.state.activeSection} doc={this.props.doc.children[this.state.activeSection]} onChange={this.onSectionChange.bind(this, this.state.activeSection)} />
 					</div>;
 				}
 
 				return 	(
 					<Block type="accordion" blockTypeTitle="Accordion" doc={this.props.doc} onChange={this.onDocChange}>
+						<div style={{display: "flex", "justify-content": "flex-end", textAlign: "right"}}>
+							<div><small>Accordion Display:</small></div>&nbsp;
+							<div><AudienceDisplayBuilder display={this.props.doc.display} onDisplayChange={this.onDisplayChange} /></div>
+						</div>
 						<div className="row accordion-content">
 							<div className="small-2 columns section-buttons" ref="sectionButtons">
 								{sectionButtons}

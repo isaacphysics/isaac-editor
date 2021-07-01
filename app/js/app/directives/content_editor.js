@@ -7,6 +7,8 @@ define([
 	"jsx!./react_classes/Tags",
 	"jsx!./react_classes/RelatedContent",
 	"jsx!./react_classes/LinkedGameboards",
+	"jsx!./react_classes/AudienceDisplayBuilder",
+	"jsx!./react_classes/AudienceBuilder",
 	"jsx!./react_classes/MetaData",
 	"jsx!./react_classes/ContentValue",
 	"jsx!./react_classes/ContentChildren",
@@ -47,6 +49,8 @@ define([
 		_Tags,
 		_RelatedContent,
 		_LinkedGameboards,
+		_AudienceDisplayBuilder,
+		_AudienceBuilder,
 		_MetaData,
 		_ContentValue,
 		_ContentChildren,
@@ -107,6 +111,8 @@ define([
 
 	ContentEditor.enableMathJax = true;
 
+	ContentEditor.SITE_SUBJECT = null;
+
 	ContentEditor.fileLoader = function(path) {
 		return new Promise(function(resolve, reject) {
 			console.error("No file loader provided for file", path);
@@ -163,7 +169,11 @@ define([
 
 	var LinkedGameboards = _LinkedGameboards(ContentEditor);
 
-	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent, LinkedGameboards);
+	var AudienceDisplayBuilder = _AudienceDisplayBuilder(ContentEditor);
+
+	var AudienceBuilder = _AudienceBuilder(ContentEditor);
+
+	var MetaData = _MetaData(ContentEditor, Tags, RelatedContent, LinkedGameboards, AudienceBuilder);
 
 	var JSONEditor = _JSONEditor(ContentEditor);
 
@@ -185,7 +195,7 @@ define([
 
 	var TabsBlock = _TabsBlock(ContentEditor, Block, VariantBlock);
 
-	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock);
+	var AccordionBlock = _AccordionBlock(ContentEditor, Block, VariantBlock, AudienceDisplayBuilder, AudienceBuilder);
 
 	var EmailTemplateBlock = _EmailTemplateBlock(ContentEditor, Block, ContentValueOrChildren);
 
