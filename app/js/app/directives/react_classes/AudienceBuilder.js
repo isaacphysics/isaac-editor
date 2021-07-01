@@ -4,16 +4,16 @@ define(["react"], function(React) {
     var actionBtnCls = "button tiny radius";
     var selectCSS = {"width": "auto", "padding-right": "1rem"};
 
-    var phyStages = ["Pre-University", "A Level Further", "A Level", "GCSE", "9", "8", "7"];
-    var phyDifficulties = ["Practice 1", "Practice 2", "Practice 3", "Challenge 1", "Challenge 2", "Challenge 3"];
+    var phyStages = ["university", "further_a", "a_level", "gcse", "year_9", "year_8", "year_7"];
+    var phyDifficulties = ["practice_1", "practice_2", "practice_3", "challenge_1", "challenge_2", "challenge_3"];
 
-    var csStages = ["A Level", "GCSE"];
-    var csExamBoards = ["AQA", "OCR", "CIE", "EDEXCEL", "EDUQAS", "WJEC"];
+    var csStages = ["a_level", "gcse"];
+    var csExamBoards = ["aqa", "ocr", "cie", "edexcel", "eduqas", "wjec"];
 
     return function(ContentEditor) {
         return React.createClass({
             getDefaultFieldsObject: function() {
-                return {"stage": ["A Level"]};
+                return {"stage": ["a_level"]};
             },
 
             getPossibleFields: function getPossibleFields() {
