@@ -55,6 +55,7 @@ define(["react", "jquery"], function(React,$) {
 					postResources: this.props.doc.postResources,
 					audience: this.props.doc.audience,
 					visibleToStudents: this.props.doc.visibleToStudents,
+					rubric: this.props.doc.rubric,
 				};
 			},
 
@@ -325,6 +326,10 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.audience = this.state.audience;
 				}
 
+				if (this.state.rubric || this.props.doc.rubric) {
+					newDoc.rubric = this.state.rubric;
+				}
+
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -584,6 +589,12 @@ define(["react", "jquery"], function(React,$) {
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students?</span></div>
 							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /> </div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Rubric:<br /><small>(markdown)</small></span></div>
+							<div className="small-10 columns">
+								<textarea value={this.state.rubric} rows="6" onChange={this.onTextboxChange.bind(this, "rubric")}></textarea>
+							</div>
 						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
