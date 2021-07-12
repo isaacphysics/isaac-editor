@@ -5,7 +5,7 @@ define(["react"], function(React) {
     var selectCSS = {"width": "auto", "padding-right": "1rem"};
 
     var audienceOptions = ["open"];
-    var nonAudienceOptions = ["close", "deEmphasise", "hide"];
+    var nonAudienceOptions = ["closed", "de-emphasised", "hidden"];
 
     return function(ContentEditor) {
         return React.createClass({
@@ -105,7 +105,7 @@ define(["react"], function(React) {
                             {this.state.localDisplay.nonAudience.map((selection, i, selections) => <span>
                                 <select value={selection} style={selectCSS} onChange={this.updateSelection("nonAudience", selection)}>
                                     {nonAudienceOptions.map(option => <option value={option}>{option}</option>)}
-                                    {audienceOptions.indexOf(selection) === -1 && <option value={selection}>{selection}</option>}
+                                    {nonAudienceOptions.indexOf(selection) === -1 && <option value={selection}>{selection}</option>}
                                 </select>
                                 <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.deleteSelection("nonAudience", selection)}>
                                     🗙
