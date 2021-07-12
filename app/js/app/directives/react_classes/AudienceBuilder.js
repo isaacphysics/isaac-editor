@@ -10,6 +10,8 @@ define(["react"], function(React) {
     var csStages = ["a_level", "gcse"];
     var csExamBoards = ["aqa", "ocr", "cie", "edexcel", "eduqas", "wjec"];
 
+    var roles = ["logged_in", "teacher"]; //, "event_leader", "content_editor", "event_manager", "admin"];
+
     return function(ContentEditor) {
         return React.createClass({
             getDefaultFieldsObject: function() {
@@ -20,7 +22,7 @@ define(["react"], function(React) {
                 if (ContentEditor.SITE_SUBJECT === "CS") {
                     switch (this.state.componentLevel) {
                         case "document": return {stage: csStages, examBoard: csExamBoards};
-                        case "accordion": return {stage: csStages, examBoard: csExamBoards};
+                        case "accordion": return {stage: csStages, examBoard: csExamBoards, role: roles};
                     }
                 } else { //if (ContentEditor.SITE_SUBJECT === "PHY") OR default
                     switch (this.state.componentLevel) {
