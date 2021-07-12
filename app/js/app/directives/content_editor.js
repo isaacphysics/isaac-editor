@@ -31,6 +31,7 @@ define([
 	"jsx!./react_classes/ContentBlock",
 	"jsx!./react_classes/ChoiceBlock",
 	"jsx!./react_classes/StringChoiceBlock",
+	"jsx!./react_classes/RegexPatternBlock",
 	"jsx!./react_classes/FreeTextRuleBlock",
 	"jsx!./react_classes/QuantityChoiceBlock",
 	"jsx!./react_classes/FormulaChoiceBlock",
@@ -73,6 +74,7 @@ define([
 		_ContentBlock,
 		_ChoiceBlock,
 		_StringChoiceBlock,
+		_RegexPatternBlock,
 		_FreeTextRuleBlock,
 		_QuantityChoiceBlock,
 		_FormulaChoiceBlock,
@@ -223,6 +225,8 @@ define([
 
 	var StringChoiceBlock = _StringChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
+	var RegexPatternBlock = _RegexPatternBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
+
 	var FreeTextRuleBlock = _FreeTextRuleBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
 	var QuantityChoiceBlock = _QuantityChoiceBlock(ContentEditor, Block, ContentBlock);
@@ -263,6 +267,7 @@ define([
 	typeMap["isaacPageFragment"] = ContentBlock;
 	typeMap["choice"] = ChoiceBlock;
 	typeMap["stringChoice"] = StringChoiceBlock;
+	typeMap["regexPattern"] = RegexPatternBlock;
 	typeMap["freeTextRule"] = FreeTextRuleBlock;
 	typeMap["quantity"] = QuantityChoiceBlock;
 	typeMap["formula"] = FormulaChoiceBlock;
@@ -282,6 +287,7 @@ define([
 	typeMap["isaacSymbolicQuestion"] = QuestionBlock;
 	typeMap["isaacGraphSketcherQuestion"] = QuestionBlock;
 	typeMap["isaacStringMatchQuestion"] = QuestionBlock;
+	typeMap["isaacRegexStringMatchQuestion"] = QuestionBlock;
 	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
