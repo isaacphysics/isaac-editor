@@ -121,7 +121,7 @@ define(["react"], function(React) {
                         </div>
                         <div>
                             <button className={actionBtnCls} onClick={this.saveChanges}>
-                                Save
+                                Set
                             </button> &nbsp;
                             <button className={actionBtnCls + " secondary"} onClick={this.cancelChanges}>
                                 Cancel
