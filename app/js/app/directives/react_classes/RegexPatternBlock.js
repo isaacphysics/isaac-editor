@@ -57,11 +57,14 @@ define(["react", "jquery"], function(React,$) {
 							</div>
 							<div className="small-6 columns" >
 								<input type="text" value={this.props.doc.value || ""} onChange={this.onValueChange} />
-								<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.caseInsensitive} onChange={this.caseInsensitive_toggle} /> Case insensitive
-							</div>
-							<div className="small-6 columns" >
-								<input type="text" value={this.props.doc.value || ""} onChange={this.onValueChange} />
-								<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.multiLineRegex} onChange={this.multiLineRegex_toggle} /> Multi-line regular expression
+								<div className="row">
+									<div className="column">
+										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.caseInsensitive} onChange={this.caseInsensitive_toggle} /> Case insensitive
+									</div>
+									<div className="column">
+										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.multiLineRegex} onChange={this.multiLineRegex_toggle} /> Multi-line regular expression
+									</div>
+								</div>
 							</div>
 							<div className="small-5 columns" >
 								<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />

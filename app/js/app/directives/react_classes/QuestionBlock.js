@@ -452,12 +452,7 @@ define(["react", "jquery"], function(React,$) {
 											<label><input type="checkbox" checked={this.props.doc.randomiseChoices} onChange={this.onCheckboxChange.bind(this, "randomiseChoices")} />Randomise Choices</label>
 										</div>
 									</div>
-									<div className="row" style={{display: this.props.doc.type == "isaacStringMatchQuestion" ? "block" : "none"}}>
-										<div ref="multiLineCheckbox" className="small-6 small-offset-6 columns">
-											<input type="checkbox" checked={this.props.doc.multiLineEntry} onChange={this.onCheckboxChange.bind(this, "multiLineEntry")} /> Multi-line
-										</div>
-									</div>
-									<div className="row" style={{display: this.props.doc.type == "isaacRegexStringMatchQuestion" ? "block" : "none"}}>
+									<div className="row" style={{display: this.props.doc.type in ["isaacStringMatchQuestion", "isaacRegexStringMatchQuestion"] ? "block" : "none"}}>
 										<div ref="multiLineCheckbox" className="small-6 small-offset-6 columns">
 											<input type="checkbox" checked={this.props.doc.multiLineEntry} onChange={this.onCheckboxChange.bind(this, "multiLineEntry")} /> Multi-line
 										</div>
