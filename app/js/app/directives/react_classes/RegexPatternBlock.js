@@ -20,6 +20,13 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
+			matchWholeString_toggle: function(_e) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.matchWholeString = !oldDoc.matchWholeString;
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
 			caseInsensitive_toggle: function(_e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
@@ -32,6 +39,16 @@ define(["react", "jquery"], function(React,$) {
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.multiLineRegex = !oldDoc.multiLineRegex;
 				this.onDocChange(this, oldDoc, newDoc);
+			},
+
+			regexHelper: function(_e) {
+				var regex = this.props.doc.value
+				if (this.props.doc.matchWholeString) {
+					// Add caret and dollar sign if the whole string should be matched
+					regex = "^" + regex + "$"
+				}
+				var flags = "g" + (this.props.doc.multiLineRegex ? "m" : "") + (this.props.doc.caseInsensitive ? "i" : "")
+				window.open(`https://regex101.com/?regex=${encodeURI(regex)}&flags=${flags}&delimiter=@&flavor=java`)
 			},
 
 			correct_toggle: function(_e) {
@@ -59,12 +76,16 @@ define(["react", "jquery"], function(React,$) {
 								<input type="text" value={this.props.doc.value || ""} onChange={this.onValueChange} />
 								<div className="row">
 									<div className="column">
+										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.matchWholeString} onChange={this.matchWholeString_toggle} /> Entire answer has to match this pattern exactly
+									</div>
+									<div className="column">
 										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.caseInsensitive} onChange={this.caseInsensitive_toggle} /> Case insensitive
 									</div>
 									<div className="column">
 										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.multiLineRegex} onChange={this.multiLineRegex_toggle} /> Multi-line regular expression
 									</div>
 								</div>
+								<button className="button tiny tag radius" onClick={this.regexHelper}>Test Regex</button>
 							</div>
 							<div className="small-5 columns" >
 								<ContentBlock type="content" blockTypeTitle="Explanation" doc={this.props.doc.explanation || emptyExplanation} onChange={this.onExplanationChange} />

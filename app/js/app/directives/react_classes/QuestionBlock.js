@@ -295,7 +295,7 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "formula";
 				} else if (this.props.doc.type == "isaacStringMatchQuestion") {
 					var requiredChildType = "stringChoice";
-				} else if (this.props.doc.type == "isaacRegexStringMatchQuestion") {
+				} else if (this.props.doc.type == "isaacRegexMatchQuestion") {
 					var requiredChildType = "regexPattern";
 				} else if (this.props.doc.type == "isaacFreeTextQuestion") {
 					var requiredChildType = "freeTextRule";
@@ -313,7 +313,7 @@ define(["react", "jquery"], function(React,$) {
 					var requiredChildType = "choice";
 				}
 
-				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacRegexStringMatchQuestion", "isaacFreeTextQuestion", "isaacGraphSketcherQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type)) {
+				if (["isaacMultiChoiceQuestion", "isaacNumericQuestion", "isaacSymbolicQuestion", "isaacStringMatchQuestion", "isaacRegexMatchQuestion", "isaacFreeTextQuestion", "isaacGraphSketcherQuestion", "isaacSymbolicLogicQuestion", "isaacSymbolicChemistryQuestion"].includes(this.props.doc.type)) {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
@@ -452,7 +452,7 @@ define(["react", "jquery"], function(React,$) {
 											<label><input type="checkbox" checked={this.props.doc.randomiseChoices} onChange={this.onCheckboxChange.bind(this, "randomiseChoices")} />Randomise Choices</label>
 										</div>
 									</div>
-									<div className="row" style={{display: this.props.doc.type in ["isaacStringMatchQuestion", "isaacRegexStringMatchQuestion"] ? "block" : "none"}}>
+									<div className="row" style={{display: this.props.doc.type in ["isaacStringMatchQuestion", "isaacRegexMatchQuestion"] ? "block" : "none"}}>
 										<div ref="multiLineCheckbox" className="small-6 small-offset-6 columns">
 											<input type="checkbox" checked={this.props.doc.multiLineEntry} onChange={this.onCheckboxChange.bind(this, "multiLineEntry")} /> Multi-line
 										</div>
@@ -470,7 +470,7 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacNumericQuestion">Numeric Question</option>
 										<option value="isaacSymbolicQuestion">Symbolic Question</option>
 										<option value="isaacStringMatchQuestion">String Match Question</option>
-										<option value="isaacRegexStringMatchQuestion">Regex String Match Question</option>
+										<option value="isaacRegexMatchQuestion">Regex Match Question</option>
 										<option value="isaacFreeTextQuestion">Free Text Question</option>
 										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
 										<option value="isaacItemQuestion">Item Question</option>

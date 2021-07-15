@@ -287,7 +287,7 @@ define([
 	typeMap["isaacSymbolicQuestion"] = QuestionBlock;
 	typeMap["isaacGraphSketcherQuestion"] = QuestionBlock;
 	typeMap["isaacStringMatchQuestion"] = QuestionBlock;
-	typeMap["isaacRegexStringMatchQuestion"] = QuestionBlock;
+	typeMap["isaacRegexMatchQuestion"] = QuestionBlock;
 	typeMap["isaacFreeTextQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicChemistryQuestion"] = QuestionBlock;
 	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
