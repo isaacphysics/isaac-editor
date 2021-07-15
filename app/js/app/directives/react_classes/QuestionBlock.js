@@ -8,6 +8,8 @@ define(["react", "jquery"], function(React,$) {
 				return {
 					significantFiguresMin: this.props.doc.significantFiguresMin,
 					significantFiguresMax: this.props.doc.significantFiguresMax,
+					xLimit: this.props.doc.xLimit,
+					yLimit: this.props.doc.yLimit,
 					title: this.props.doc.title,
 					availableUnits: au.map(u => u.trim()).join(" | "),
 					availableSymbols: sy.map(s => s.trim()).join(" , "),
@@ -64,15 +66,28 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			onSignificantFiguresMinChange: function(e) {
+			onXLimitChange: function(e) {
 
 				this.setState({
-					significantFiguresMin: e.target.value
+					xLimit: e.target.value
 				});
 
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-				newDoc.significantFiguresMin = parseInt(e.target.value);
+				newDoc.xLimit = parseInt(e.target.value);
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
+			onYLimitChange: function(e) {
+
+				this.setState({
+					yLimit: e.target.value
+				});
+
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.yLimit = parseInt(e.target.value);
 
 				this.onDocChange(this, oldDoc, newDoc);
 			},
@@ -423,6 +438,23 @@ define(["react", "jquery"], function(React,$) {
 							<div className="row">
 								<div className="small-6 columns">
 									<input type="text" value={this.props.doc.title || ""} onChange={this.onTitleChange} placeholder="Question title"/>
+									<div className="row" style={{display: this.props.doc.type == "isaacGraphSketcherQuestion" ? "block" : "none"}}>
+										<div className="small-6 columns text-right">
+											Axis limits:
+											</div>
+										<div className="small-1 columns text-right">
+											X lim:
+										</div>
+										<div className="small-2 columns">
+											<input type="text" value={this.state.xLimit} onChange={this.onXLimitChange}/>
+										</div>
+										<div className="small-1 columns text-right">
+											Y Lim:
+										</div>
+										<div className="small-2 columns">
+											<input type="text" value={this.state.yLimit} onChange={this.onYLimitChange}/>
+										</div>
+									</div>
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
 										<div className="small-6 columns text-right">
 											Significant figures:
