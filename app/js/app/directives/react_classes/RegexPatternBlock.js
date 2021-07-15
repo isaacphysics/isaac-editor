@@ -20,24 +20,10 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			matchWholeString_toggle: function(_e) {
+			onCheckboxToggle: function (key, _e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-				newDoc.matchWholeString = !oldDoc.matchWholeString;
-				this.onDocChange(this, oldDoc, newDoc);
-			},
-
-			caseInsensitive_toggle: function(_e) {
-				var oldDoc = this.props.doc;
-				var newDoc = $.extend({}, oldDoc);
-				newDoc.caseInsensitive = !oldDoc.caseInsensitive;
-				this.onDocChange(this, oldDoc, newDoc);
-			},
-
-			multiLineRegex_toggle: function(_e) {
-				var oldDoc = this.props.doc;
-				var newDoc = $.extend({}, oldDoc);
-				newDoc.multiLineRegex = !oldDoc.multiLineRegex;
+				newDoc[key] = !oldDoc[key];
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
@@ -76,13 +62,13 @@ define(["react", "jquery"], function(React,$) {
 								<input type="text" value={this.props.doc.value || ""} onChange={this.onValueChange} />
 								<div className="row">
 									<div className="column">
-										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.matchWholeString} onChange={this.matchWholeString_toggle} /> Entire answer has to match this pattern exactly
+										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.matchWholeString} onChange={this.onCheckboxToggle.bind(this, "matchWholeString")} /> Entire answer has to match this pattern exactly
 									</div>
 									<div className="column">
-										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.caseInsensitive} onChange={this.caseInsensitive_toggle} /> Case insensitive
+										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.caseInsensitive} onChange={this.onCheckboxToggle.bind(this, "caseInsensitive")} /> Case insensitive
 									</div>
 									<div className="column">
-										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.multiLineRegex} onChange={this.multiLineRegex_toggle} /> Multi-line regular expression
+										<input style={{marginTop: "0"}} type="checkbox" checked={this.props.doc.multiLineRegex} onChange={this.onCheckboxToggle.bind(this, "multiLineRegex")} /> Multi-line regular expression
 									</div>
 								</div>
 								<button className="button tiny tag radius" onClick={this.regexHelper}>Test Regex</button>
