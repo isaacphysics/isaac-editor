@@ -41,6 +41,13 @@ define(["react", "jquery"], function(React,$) {
                 this.onDocChange(this, oldDoc, newDoc);
             },
 
+            onAllowSubsetMatchToggle: function (e) {
+                var oldDoc = this.props.doc;
+                var newDoc = $.extend({}, oldDoc);
+                newDoc.allowSubsetMatch = !oldDoc.allowSubsetMatch;
+                this.onDocChange(this, oldDoc, newDoc);
+            },
+
             onParsonsChoiceChange: function(c, oldVal, newVal) {
                 var oldDoc = this.props.doc;
                 var newDoc = $.extend({}, oldDoc);
@@ -114,6 +121,11 @@ define(["react", "jquery"], function(React,$) {
                                 {this.props.doc.correct ?
                                     <i style={{color: "#0a0"}} className="correct-mark general foundicon-checkmark" onClick={this.correct_toggle}/> :
                                     <i style={{color: "#a00"}} className="correct-mark general foundicon-remove" onClick={this.correct_toggle} />}
+                            </div>
+                            <div className="row" style={{display: this.props.doc.type === "itemChoice" ? "block" : "none"}}>
+                                <div ref="allowSubsetMatchCheckbox" className="small-6 columns">
+                                    <label><input type="checkbox" checked={this.props.doc.allowSubsetMatch} onChange={this.onAllowSubsetMatchToggle} /> Can match if a subset of the answer </label>
+                                </div>
                             </div>
                             <div className="small-7 columns" >
                                 {content}

@@ -2,6 +2,7 @@
   "type": "itemChoice",
   "items": [],
   "correct": true,
+  "allowSubsetMatch": false,
   "explanation": {
     "type": "content",
     "children": [],
