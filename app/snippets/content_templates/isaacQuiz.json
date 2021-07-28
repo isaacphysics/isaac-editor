@@ -4,6 +4,17 @@
     "title": "New Quiz",
     "visibleToStudents": false,
     "published": false,
+    "rubric": {
+      "type": "content",
+      "encoding": "markdown",
+      "children": [
+        {
+          "type": "content",
+          "value": "_Enter rubric here or remove this section if not wanted_",
+          "encoding": "markdown"
+        }
+      ]
+    },
 	"children": [
 
 	]
