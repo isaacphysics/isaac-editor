@@ -25,6 +25,7 @@ define([
 	"jsx!./react_classes/VideoBlock",
 	"jsx!./react_classes/CodeBlock",
 	"jsx!./react_classes/QuizSectionBlock",
+	"jsx!./react_classes/QuizRubricBlock",
 	"jsx!./react_classes/AnvilAppBlock",
 	"jsx!./react_classes/QuestionBlock",
 	"jsx!./react_classes/EventPageBlock",
@@ -67,6 +68,7 @@ define([
 		_VideoBlock,
 		_CodeBlock,
 		_QuizSectionBlock,
+		_QuizRubricBlock,
 		_AnvilAppBlock,
 		_QuestionBlock,
 		_EventPageBlock,
@@ -219,6 +221,8 @@ define([
 
 	var QuizSectionBlock = _QuizSectionBlock(ContentEditor, Block, ContentValueOrChildren);
 
+	var QuizRubricBlock = _QuizRubricBlock(ContentEditor, Block, ContentValueOrChildren);
+
 	var ChoiceBlock = _ChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
 
 	var StringChoiceBlock = _StringChoiceBlock(ContentEditor, Block, ContentBlock, ContentValueOrChildren);
@@ -252,6 +256,7 @@ define([
 	typeMap["content"] = ContentBlock;
 	typeMap["codeSnippet"] = CodeBlock;
 	typeMap["isaacQuizSection"] = QuizSectionBlock;
+	typeMap["isaacQuizRubric"] = QuizRubricBlock;
 	typeMap["concept"] = ContentBlock;
 	typeMap["isaacQuestionPage"] = ContentBlock;
 	typeMap["isaacFastTrackQuestionPage"] = ContentBlock;

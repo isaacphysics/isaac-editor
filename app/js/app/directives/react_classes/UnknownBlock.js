@@ -48,7 +48,8 @@ define(["react", "jquery"], function(React,$) {
 								<a onClick={this.chooseType} data-chosen-type="video">video</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="tabs">tabs</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="accordion">accordion</a>&nbsp; | &nbsp;
-								<a onClick={this.chooseType} data-chosen-type="isaacQuizSection">quiz section</a>
+								<a onClick={this.chooseType} data-chosen-type="isaacQuizSection">quiz section</a>&nbsp; | &nbsp;
+								<a onClick={this.chooseType} data-chosen-type="isaacQuizRubric">quiz rubric</a>
 							</div>
 						</div>
 					</Block>
