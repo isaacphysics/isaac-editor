@@ -213,7 +213,7 @@ define([
 
 	var EventPageBlock = _EventPageBlock(ContentEditor, Block, FigureBlock, ContentValueOrChildren);
 
-	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, VariantBlock, TabsBlock, AccordionBlock, ContentValueOrChildren);
+	var ContentBlock = _ContentBlock(ContentEditor, typeMap, Block, TabsBlock, AccordionBlock, ContentValueOrChildren);
 
 	var CodeBlock = _CodeBlock(ContentEditor, Block, ContentValueOrChildren);
 
