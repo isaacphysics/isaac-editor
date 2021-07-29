@@ -34,7 +34,7 @@ define(["react", "jquery"], function(React,$) {
 					regex = "^" + regex + "$"
 				}
 				var flags = "g" + (this.props.doc.multiLineRegex ? "m" : "") + (this.props.doc.caseInsensitive ? "i" : "")
-				window.open(`https://regex101.com/?regex=${encodeURI(regex)}&flags=${flags}&delimiter=@&flavor=java`)
+				window.open(`https://regex101.com/?regex=${encodeURIComponent(regex)}&flags=${flags}&delimiter=@&flavor=java`)
 			},
 
 			correct_toggle: function(_e) {
