@@ -64,10 +64,19 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			onDefaultFeedbackChange: function(c, oldDefaultFeedbackDoc, newDefaultFeedbackDoc) {
+			onDefaultFeedbackChange: function(e) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
-				newDoc.defaultFeedback = newDefaultFeedbackDoc;
+
+				if (!e.target.value.replace(/\s/g, '').length) {
+					newDoc.defaultFeedback = null;
+				} else {
+					newDoc.defaultFeedback = {
+						"type": "content",
+						"value": e.target.value,
+						"encoding": "markdown"
+					};
+				}
 
 				this.onDocChange(this, oldDoc, newDoc);
 			},
@@ -126,6 +135,13 @@ define(["react", "jquery"], function(React,$) {
 					delete newDoc.requireUnits;
 					// Remove the randomiseChoices property as it is no longer applicable to this type of question
 					delete newDoc.randomiseChoices;
+				}
+
+				if (newType != "isaacQuestion" && !newDoc.hasOwnProperty("defaultFeedback")) {
+					newDoc.defaultFeedback = null;
+				} else {
+					// Remove the defaultFeedback property as it is not applicable to quick questions
+					delete newDoc.defaultFeedback;
 				}
 
 				this.onDocChange(this, oldDoc, newDoc);
@@ -426,11 +442,16 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type != "isaacQuestion") {
+					var defaultFeedbackVal = "";
+					if (this.props.doc.defaultFeedback != null && this.props.doc.defaultFeedback.value) {
+						defaultFeedbackVal = this.props.doc.defaultFeedback.value;
+					}
+
 					var defaultFeedback = <div className="row">
 						<div className="large-12 columns">
-							<div className="question-default-feedback"><VariantBlock blockTypeTitle="DefaultFeedback" doc={this.props.doc.defaultFeedback} onChange={this.onDefaultFeedbackChange}/></div>
+							<label>Default feedback <input value={defaultFeedbackVal} placeholder="Enter default feedback here" onChange={this.onDefaultFeedbackChange}/></label>
 						</div>
-					</div>
+					</div>;
 				}
 
 				return (
