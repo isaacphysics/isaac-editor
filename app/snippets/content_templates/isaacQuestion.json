@@ -7,5 +7,10 @@
 		"type": "content",
 		"value": "_Enter answer here_", 
 		"encoding": "markdown"
+	},
+	"defaultFeedback": {
+		"type": "content",
+		"value": "_Enter default feedback here_",
+		"encoding": "markdown"
 	}
 }

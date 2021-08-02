@@ -64,6 +64,14 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
+			onDefaultFeedbackChange: function(c, oldDefaultFeedbackDoc, newDefaultFeedbackDoc) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				newDoc.defaultFeedback = newDefaultFeedbackDoc;
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
 			onSignificantFiguresMinChange: function(e) {
 
 				this.setState({
@@ -417,6 +425,14 @@ define(["react", "jquery"], function(React,$) {
 					</div>
 				}
 
+				if (this.props.doc.type != "isaacQuestion") {
+					var defaultFeedback = <div className="row">
+						<div className="large-12 columns">
+							<div className="question-default-feedback"><VariantBlock blockTypeTitle="DefaultFeedback" doc={this.props.doc.defaultFeedback} onChange={this.onDefaultFeedbackChange}/></div>
+						</div>
+					</div>
+				}
+
 				return (
 					<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 						<form>
@@ -485,6 +501,7 @@ define(["react", "jquery"], function(React,$) {
 						{parsonsItemsList}
 						{choices}
 						{freeTextHelpTable}
+						{defaultFeedback}
 						<div className="row">
 							<div className="large-12 columns">
 								<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
