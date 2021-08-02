@@ -469,8 +469,11 @@ define(["react", "jquery"], function(React,$) {
 										<div className="small-3 columns">
 											<input type="text" value={this.props.doc.displayUnit} onChange={this.onDisplayUnitChange}/>
 										</div>
-										<div ref="requireUnitsCheckbox" className="small-6 columns">
-											<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+										<div className="small-1 columns">
+											OR
+										</div>
+										<div ref="requireUnitsCheckbox" className="small-5 columns">
+											<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require choice of units</label>
 										</div>
 									</div>
 
