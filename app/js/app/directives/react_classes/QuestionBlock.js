@@ -68,7 +68,7 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 
-				if (!e.target.value.replace(/\s/g, '').length) {
+				if (!e.target.value.replace(/\s/gm, '').length) {
 					newDoc.defaultFeedback = null;
 				} else {
 					newDoc.defaultFeedback = {
@@ -447,11 +447,9 @@ define(["react", "jquery"], function(React,$) {
 						defaultFeedbackVal = this.props.doc.defaultFeedback.value;
 					}
 
-					var defaultFeedback = <div className="row">
-						<div className="large-12 columns">
-							<label>Default feedback <input value={defaultFeedbackVal} placeholder="Enter default feedback here" onChange={this.onDefaultFeedbackChange}/></label>
-						</div>
-					</div>;
+					var defaultFeedback = <label>Default feedback
+						<textarea value={defaultFeedbackVal} placeholder="Enter default feedback here" onChange={this.onDefaultFeedbackChange}/>
+					</label>
 				}
 
 				return (
@@ -522,7 +520,11 @@ define(["react", "jquery"], function(React,$) {
 						{parsonsItemsList}
 						{choices}
 						{freeTextHelpTable}
-						{defaultFeedback}
+						<div className="row">
+							<div className="large-12 columns">
+								{defaultFeedback}
+							</div>
+						</div>
 						<div className="row">
 							<div className="large-12 columns">
 								<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>
