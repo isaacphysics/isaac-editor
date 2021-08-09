@@ -316,6 +316,8 @@ define(["github/github", "app/helpers", "angulartics"], function(github, helpers
 					scope.previewLink = previewURL + "/events/" + latestDocument.id;
 				} else if (latestDocument.type == "page") {
 					scope.previewLink = previewURL + "/pages/" + latestDocument.id;
+				} else if (latestDocument.type == "isaacQuiz") {
+					scope.previewLink = previewURL + "/quiz/preview/" + latestDocument.id;
 				} else {
 					delete scope.previewLink;
 				}
