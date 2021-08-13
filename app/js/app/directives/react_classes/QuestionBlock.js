@@ -147,11 +147,9 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				if (key === "requireUnits" && e.target.checked) {
-					newDoc[key] = e.target.checked;
 					newDoc["displayUnit"] = null;
-				} else {
-					newDoc[key] = e.target.checked;
 				}
+				newDoc[key] = e.target.checked;
 
 				this.onDocChange(this, oldDoc, newDoc);
 			},
