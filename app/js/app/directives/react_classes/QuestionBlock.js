@@ -90,6 +90,20 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
+			onDisplayUnitChange: function(e) {
+
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+				if (!e.target.value.replace(/\s/g, '').length) {
+					newDoc.displayUnit = null;
+				} else {
+					newDoc.displayUnit = e.target.value;
+					newDoc.requireUnits = false;
+				}
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
 
 			onTitleChange: function(e) {
 
@@ -110,12 +124,15 @@ define(["react", "jquery"], function(React,$) {
 				if (newType == "isaacNumericQuestion" && !newDoc.hasOwnProperty("requireUnits")) {
 					// Add the default value if it is missing
 					newDoc.requireUnits = true;
+					newDoc.displayUnit = null;
 				} else if (newType == "isaacMultiChoiceQuestion" && !newDoc.hasOwnProperty("randomiseChoices")) {
 					// Add the default value if it is missing
 					newDoc.randomiseChoices = true;
 				} else {
 					// Remove the requireUnits property as it is no longer applicable to this type of question
 					delete newDoc.requireUnits;
+					// Remove the displayUnit property as it is no longer applicable to this type of question
+					delete newDoc.displayUnit;
 					// Remove the randomiseChoices property as it is no longer applicable to this type of question
 					delete newDoc.randomiseChoices;
 				}
@@ -129,6 +146,9 @@ define(["react", "jquery"], function(React,$) {
 				// newVal must be a doc
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
+				if (key === "requireUnits" && e.target.checked) {
+					newDoc["displayUnit"] = null;
+				}
 				newDoc[key] = e.target.checked;
 
 				this.onDocChange(this, oldDoc, newDoc);
@@ -441,10 +461,20 @@ define(["react", "jquery"], function(React,$) {
 										</div>
 									</div>
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
-										<div ref="requireUnitsCheckbox" className="small-6 small-offset-6 columns">
-											<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require Units</label>
+										<div className="small-3 columns text-right">
+											Display unit:
+										</div>
+										<div className="small-3 columns">
+											<input type="text" value={this.props.doc.displayUnit} onChange={this.onDisplayUnitChange}/>
+										</div>
+										<div className="small-1 columns">
+											OR
+										</div>
+										<div ref="requireUnitsCheckbox" className="small-5 columns">
+											<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require choice of units</label>
 										</div>
 									</div>
+
 									<div className="row" style={{display: this.props.doc.type == "isaacMultiChoiceQuestion" ? "block" : "none"}}>
 										<div ref="randomiseChoicesCheckbox" className="small-6 small-offset-6 columns">
 											<label><input type="checkbox" checked={this.props.doc.randomiseChoices} onChange={this.onCheckboxChange.bind(this, "randomiseChoices")} />Randomise Choices</label>
