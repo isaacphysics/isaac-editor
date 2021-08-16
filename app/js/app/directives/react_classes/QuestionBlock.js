@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock) {
+	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValue, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -64,16 +64,16 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			onDefaultFeedbackChange: function(e) {
+			onDefaultFeedbackChange: function(e, oldDefaultFeedbackValue, newDefaultFeedbackValue) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 
-				if (!e.target.value.replace(/\s/gm, '').length) {
-					newDoc.defaultFeedback = null;
+				if (newDefaultFeedbackValue.replace(/\s/gm, '').length === 0) {
+					delete newDoc.defaultFeedback;
 				} else {
 					newDoc.defaultFeedback = {
 						"type": "content",
-						"value": e.target.value,
+						"value": newDefaultFeedbackValue,
 						"encoding": "markdown"
 					};
 				}
@@ -442,14 +442,9 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type != "isaacQuestion") {
-					var defaultFeedbackVal = "";
-					if (this.props.doc.defaultFeedback != null && this.props.doc.defaultFeedback.value) {
-						defaultFeedbackVal = this.props.doc.defaultFeedback.value;
-					}
-
-					var defaultFeedback = <label>Default feedback
-						<textarea value={defaultFeedbackVal} placeholder="Enter default feedback here" onChange={this.onDefaultFeedbackChange}/>
-					</label>
+					var defaultFeedback = <Block type="content" blockTypeTitle="Default Feedback">
+						<ContentValue value={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.value) || "_Enter default feedback here_"} encoding="markdown" onChange={this.onDefaultFeedbackChange} />
+					</Block>;
 				}
 
 				return (

@@ -239,7 +239,7 @@ define([
 
 	var ChemicalFormulaChoiceBlock = _ChemicalFormulaChoiceBlock(ContentEditor, Block, ContentBlock);
 
-	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock);
+	var QuestionBlock = _QuestionBlock(ContentEditor, Block, VariantBlock, ContentChildren, ContentValue, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock);
 
 	var GlossaryTermBlock = _GlossaryTermBlock(ContentEditor, Block, Tags, ContentBlock);
 
