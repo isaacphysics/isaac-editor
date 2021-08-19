@@ -1,5 +1,5 @@
 define(["react", "jquery"], function(React,$) {
-	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock) {
+	return function(ContentEditor, Block, VariantBlock, ContentChildren, ContentValue, ContentValueOrChildren, TabsBlock, ParsonsItemBlock, ParsonsChoiceBlock) {
 		return React.createClass({
 
 			getInitialState: function() {
@@ -60,6 +60,23 @@ define(["react", "jquery"], function(React,$) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 				newDoc.answer = newAnswerDoc;
+
+				this.onDocChange(this, oldDoc, newDoc);
+			},
+
+			onDefaultFeedbackChange: function(e, oldDefaultFeedbackChildren, newDefaultFeedbackChildren) {
+				var oldDoc = this.props.doc;
+				var newDoc = $.extend({}, oldDoc);
+
+				if (!newDefaultFeedbackChildren || newDefaultFeedbackChildren.length === 0) {
+					delete newDoc.defaultFeedback;
+				} else {
+					newDoc.defaultFeedback = {
+						"type": "content",
+						"children": newDefaultFeedbackChildren,
+						"encoding": "markdown"
+					};
+				}
 
 				this.onDocChange(this, oldDoc, newDoc);
 			},
@@ -135,6 +152,13 @@ define(["react", "jquery"], function(React,$) {
 					delete newDoc.displayUnit;
 					// Remove the randomiseChoices property as it is no longer applicable to this type of question
 					delete newDoc.randomiseChoices;
+				}
+
+				if (newType != "isaacQuestion" && !newDoc.hasOwnProperty("defaultFeedback")) {
+					newDoc.defaultFeedback = null;
+				} else {
+					// Remove the defaultFeedback property as it is not applicable to quick questions
+					delete newDoc.defaultFeedback;
 				}
 
 				this.onDocChange(this, oldDoc, newDoc);
@@ -437,6 +461,12 @@ define(["react", "jquery"], function(React,$) {
 					</div>
 				}
 
+				if (this.props.doc.type != "isaacQuestion") {
+					var defaultFeedback = <Block type="content" blockTypeTitle="Default Feedback">
+						<ContentChildren items={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.children) || []} encoding="markdown" onChange={this.onDefaultFeedbackChange} />
+					</Block>;
+				}
+
 				return (
 					<Block type="question" blockTypeTitle="Question" doc={this.props.doc} onChange={this.onDocChange}>
 						<form>
@@ -515,6 +545,11 @@ define(["react", "jquery"], function(React,$) {
 						{parsonsItemsList}
 						{choices}
 						{freeTextHelpTable}
+						<div className="row">
+							<div className="large-12 columns">
+								{defaultFeedback}
+							</div>
+						</div>
 						<div className="row">
 							<div className="large-12 columns">
 								<div className="question-answer"><VariantBlock blockTypeTitle="Answer" doc={this.props.doc.answer} onChange={this.onAnswerChange}/></div>

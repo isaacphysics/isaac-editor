@@ -5,7 +5,7 @@
 	"choices": [],
 	"answer": {
 		"type": "content",
-		"value": "_Enter answer here_", 
+		"value": "_Enter answer here_",
 		"encoding": "markdown"
 	}
 }
