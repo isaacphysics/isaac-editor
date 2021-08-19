@@ -461,7 +461,7 @@ define(["react", "jquery"], function(React,$) {
 				if (this.props.doc.type != "isaacQuestion") {
 					var defaultFeedback = <Block type="content" blockTypeTitle="Default Feedback">
 						{/*<ContentValue value={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.value) || "_Enter default feedback here_"} encoding="markdown" onChange={this.onDefaultFeedbackChange} />*/}
-						<ContentValueOrChildren children={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.children) || []} encoding="markdown" onChange={this.onDefaultFeedbackChange} />
+						<ContentChildren items={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.children) || []} encoding="markdown" onChange={this.onDefaultFeedbackChange} />
 					</Block>;
 				}
 
