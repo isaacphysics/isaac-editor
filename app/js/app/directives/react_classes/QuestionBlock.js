@@ -64,16 +64,33 @@ define(["react", "jquery"], function(React,$) {
 				this.onDocChange(this, oldDoc, newDoc);
 			},
 
-			onDefaultFeedbackChange: function(e, oldDefaultFeedbackValue, newDefaultFeedbackValue) {
+			// onDefaultFeedbackChange: function(e, oldDefaultFeedbackValue, newDefaultFeedbackValue) {
+			// 	var oldDoc = this.props.doc;
+			// 	var newDoc = $.extend({}, oldDoc);
+			//
+			// 	if (newDefaultFeedbackValue.replace(/\s/gm, '').length === 0) {
+			// 		delete newDoc.defaultFeedback;
+			// 	} else {
+			// 		newDoc.defaultFeedback = {
+			// 			"type": "content",
+			// 			"value": newDefaultFeedbackValue,
+			// 			"encoding": "markdown"
+			// 		};
+			// 	}
+			//
+			// 	this.onDocChange(this, oldDoc, newDoc);
+			// },
+
+			onDefaultFeedbackChange: function(e, oldDefaultFeedbackChildren, newDefaultFeedbackChildren) {
 				var oldDoc = this.props.doc;
 				var newDoc = $.extend({}, oldDoc);
 
-				if (newDefaultFeedbackValue.replace(/\s/gm, '').length === 0) {
+				if (newDefaultFeedbackChildren.length === 0) {
 					delete newDoc.defaultFeedback;
 				} else {
 					newDoc.defaultFeedback = {
 						"type": "content",
-						"value": newDefaultFeedbackValue,
+						"children": newDefaultFeedbackChildren,
 						"encoding": "markdown"
 					};
 				}
@@ -443,7 +460,8 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.props.doc.type != "isaacQuestion") {
 					var defaultFeedback = <Block type="content" blockTypeTitle="Default Feedback">
-						<ContentValue value={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.value) || "_Enter default feedback here_"} encoding="markdown" onChange={this.onDefaultFeedbackChange} />
+						{/*<ContentValue value={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.value) || "_Enter default feedback here_"} encoding="markdown" onChange={this.onDefaultFeedbackChange} />*/}
+						<ContentValueOrChildren children={(this.props.doc.defaultFeedback && this.props.doc.defaultFeedback.children) || []} encoding="markdown" onChange={this.onDefaultFeedbackChange} />
 					</Block>;
 				}
 
