@@ -65,6 +65,10 @@ define(["react", "jquery"], function(React,$) {
 						var questionId = <h5 className="question-id-meta">{this.props.doc.id}</h5>
 					}
 
+					if (this.props.doc && this.props.doc.id && typeMap[this.props.doc.type] == typeMap["isaacQuizSection"]) {
+						var quizSectionId = <h5 className="question-id-meta">{this.props.doc.id}</h5>
+					}
+
 					return (
 						<div className={"block type-" + this.props.type}  ref="block">
 							<div className="row">
@@ -74,6 +78,7 @@ define(["react", "jquery"], function(React,$) {
 									{title}
 									{subtitle}
 									{questionId}
+									{quizSectionId}
 									{this.props.children}
 								</div>
 							</div>

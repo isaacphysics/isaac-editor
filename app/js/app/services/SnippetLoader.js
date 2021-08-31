@@ -1,5 +1,5 @@
 define(["app/helpers"], function(helpers) {
-	
+
 	return ["$http", function($http) {
 
 		// This is a constructor function for the singleton SnippetLoader service. It will be called exactly once by the AngularJS Dependecy Injector.
@@ -16,6 +16,9 @@ define(["app/helpers"], function(helpers) {
 				$http.get("snippets/content_templates/" + contentType + ".json").then(function(r) {
 					var template = r.data;
 					console.log("Received content template:", template);
+					if (contentType === "isaacQuizSection") {
+						template.id = helpers.generateGuid().substr(0,8);
+					}
 					resolve(template);
 				}).catch(function (e) {
 					console.error("Error requesting content template:", e);
