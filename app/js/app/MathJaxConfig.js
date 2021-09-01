@@ -53,7 +53,7 @@ define(["mathjax"], function() {
 				"R": "\\mathbb{R}",
 				"C": "\\mathbb{C}"
 			},
-			extensions: ["mhchem.js"],
+			extensions: ["mhchem.js", "cancel.js"],
 
 		},
 	});
