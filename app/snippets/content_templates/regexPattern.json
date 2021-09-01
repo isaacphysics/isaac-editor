@@ -1,0 +1,13 @@
+{
+	"encoding": "markdown",
+	"value": "_Enter regex pattern here_",
+	"type": "regexPattern",
+	"matchWholeString": false,
+	"caseInsensitive": false,
+	"multiLineRegex": true,
+	"explanation": {
+		"type": "content",
+		"children": [],
+		"encoding": "markdown"
+	}
+}
