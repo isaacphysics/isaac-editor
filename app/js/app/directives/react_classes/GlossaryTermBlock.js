@@ -78,14 +78,6 @@ define(["react", "jquery"], function(React,$) {
                                     <label>Term ID:</label>
                                     <input type="text" value={this.props.doc.id} onChange={this.onIdChange} placeholder="Term ID" />
                                 </div>
-                                <div className="small-4 columns">
-                                    <label>Exam board:</label>
-                                    <select value={this.props.doc.examBoard} onChange={this.onExamBoardChange}>
-                                        <option value="">Any</option>
-                                        <option value="AQA">AQA</option>
-                                        <option value="OCR">OCR</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
                         <div className="small-7 columns">
