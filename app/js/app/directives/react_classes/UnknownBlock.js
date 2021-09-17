@@ -35,7 +35,8 @@ define(["react", "jquery"], function(React,$) {
 
 			render: function() {
 				return (
-					<Block type="unknown" blockTypeTitle="?" doc={this.props.doc} onChange={this.onDocChange}>
+					<Block type="unknown" blockTypeTitle="Error" doc={this.props.doc} onChange={this.onDocChange}>
+						<div className="content-choice">
 						<div className="row">
 							<div className="large-8 large-offset-2 columns text-center">
 								Please choose a block type: <br/>
@@ -50,6 +51,7 @@ define(["react", "jquery"], function(React,$) {
 								<a onClick={this.chooseType} data-chosen-type="accordion">accordion</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="isaacQuizSection">quiz section</a>
 							</div>
+						</div>
 						</div>
 					</Block>
 				);
