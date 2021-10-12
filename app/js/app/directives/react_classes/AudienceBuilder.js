@@ -5,7 +5,7 @@ define(["react"], function(React) {
     var selectCSS = {"width": "auto", "padding-right": "1rem"};
 
     var phyStages = ["university", "further_a", "a_level", "gcse", "year_9", "year_8", "year_7"];
-    var phyDifficulties = ["practice_1", "practice_2", "practice_3", "challenge_1", "challenge_2", "challenge_3"];
+    var difficulties = ["practice_1", "practice_2", "practice_3", "challenge_1", "challenge_2", "challenge_3"];
 
     var csStages = ["a_level", "gcse"];
     var csExamBoards = ["aqa", "ocr", "cie", "edexcel", "eduqas", "wjec"];
@@ -21,12 +21,12 @@ define(["react"], function(React) {
             getPossibleFields: function() {
                 if (ContentEditor.SITE_SUBJECT === "CS") {
                     switch (this.state.componentLevel) {
-                        case "document": return {stage: csStages, examBoard: csExamBoards};
+                        case "document": return {stage: csStages, examBoard: csExamBoards, difficulty: difficulties};
                         case "accordion": return {stage: csStages, examBoard: csExamBoards, role: roles};
                     }
                 } else { //if (ContentEditor.SITE_SUBJECT === "PHY") OR default
                     switch (this.state.componentLevel) {
-                        case "document": return {stage: phyStages, difficulty: phyDifficulties};
+                        case "document": return {stage: phyStages, difficulty: difficulties};
                         case "accordion": return {stage: phyStages};
                     }
                 }
