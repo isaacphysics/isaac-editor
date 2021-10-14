@@ -289,11 +289,11 @@ define(["react", "jquery"], function(React,$) {
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
 					var newItem = {
-						"type": { "isaacParsonsQuestion": "parsonsItem", "isaacItemQuestion" : "item" }[this.props.doc.type],
+						"type": { "isaacParsonsQuestion": "parsonsItem", "isaacClozeQuestion": "parsonsItem", "isaacItemQuestion" : "item" }[this.props.doc.type],
 						"value": "",
 						"id": Math.random().toString(16).toLowerCase().slice(-4)
 					};
-					if (this.props.doc.type === "isaacParsonsQuestion") {
+					if (this.props.doc.type === "isaacParsonsQuestion" || this.props.doc.type === "isaacClozeQuestion") {
 						newItem["indentation"] = 0;
 					}
 					newDoc.items.push(newItem);
@@ -316,7 +316,7 @@ define(["react", "jquery"], function(React,$) {
 					this.props.doc.requireUnits = true;
 				} else if (this.props.doc.type == "isaacMultiChoiceQuestion" && !this.props.doc.hasOwnProperty("randomiseChoices")) {
 					this.props.doc.randomiseChoices = true;
-				} else if ((this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacItemQuestion") && !this.props.doc.items) {
+				} else if ((this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacClozeQuestion" || this.props.doc.type == "isaacItemQuestion") && !this.props.doc.items) {
 					this.props.doc.items = [];
 				}
 
@@ -348,6 +348,8 @@ define(["react", "jquery"], function(React,$) {
 				} else if (this.props.doc.type == "isaacItemQuestion") {
 					var requiredChildType = "itemChoice";
 				} else if (this.props.doc.type == "isaacParsonsQuestion") {
+					var requiredChildType = "parsonsChoice";
+				} else if (this.props.doc.type == "isaacClozeQuestion") {
 					var requiredChildType = "parsonsChoice";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
@@ -433,7 +435,7 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
-				if (this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacItemQuestion") {
+				if (this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacItemQuestion" || this.props.doc.type == "isaacClozeQuestion") {
 					var parsonsItemsListItems = [];
 					for (const index in this.props.doc.items) {
 						const element = this.props.doc.items[index];
@@ -460,6 +462,16 @@ define(["react", "jquery"], function(React,$) {
 								<button className={"button tiny tag radius success"} onClick={this.addParsonsItem}><i className="foundicon-plus" /></button>
 							</div>
 						</div>
+					</div>
+				}
+
+				if (this.props.doc.type === "isaacClozeQuestion") {
+					this.props.doc.disableIndentation = true
+
+					var clozeDndHelp = <div style={{marginBottom: "10px"}}>
+						<h3>Defining drop zones</h3>
+						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment</p> (but see disclaimer)
+						<small>Disclaimer: drop zones in LaTeX work for basic equations, but drop zones in integral limits will probably not work as intended - in summary drop zones in LaTeX are not explicitly supported by us, but they can work in some situations</small>
 					</div>
 				}
 
@@ -535,6 +547,7 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
 										<option value="isaacItemQuestion">Item Question</option>
 										<option value="isaacParsonsQuestion">Parsons Question</option>
+										<option value="isaacClozeQuestion">Cloze (Drag and Drop) Question</option>
 										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
                     					<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
 									</select>
@@ -548,6 +561,7 @@ define(["react", "jquery"], function(React,$) {
 						{parsonsItemsList}
 						{choices}
 						{freeTextHelpTable}
+						{clozeDndHelp}
 						<div className="row">
 							<div className="large-12 columns">
 								{defaultFeedback}

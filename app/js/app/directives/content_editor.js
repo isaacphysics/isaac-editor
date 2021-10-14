@@ -293,6 +293,7 @@ define([
 	typeMap["isaacSymbolicLogicQuestion"] = QuestionBlock;
 	typeMap["isaacItemQuestion"] = QuestionBlock;
 	typeMap["isaacParsonsQuestion"] = QuestionBlock;
+	typeMap["isaacClozeQuestion"] = QuestionBlock;
 	typeMap["emailTemplate"] = EmailTemplateBlock;
 	typeMap["isaacPod"] = PodBlock;
 	typeMap["isaacCard"] = CardBlock;
