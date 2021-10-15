@@ -470,7 +470,7 @@ define(["react", "jquery"], function(React,$) {
 
 					var clozeDndHelp = <div style={{marginBottom: "10px"}}>
 						<h3>Defining drop zones</h3>
-						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment</p> (but see disclaimer)
+						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment (but see disclaimer)</p>
 						<small>Disclaimer: drop zones in LaTeX work for basic equations, but drop zones in integral limits will probably not work as intended - in summary drop zones in LaTeX are not explicitly supported by us, but they can work in some situations</small>
 					</div>
 				}
@@ -551,6 +551,11 @@ define(["react", "jquery"], function(React,$) {
 										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
                     					<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
 									</select>
+								</div>
+								<div className="row" style={{display: this.props.doc.type == "isaacClozeQuestion" ? "block" : "none"}}>
+									<div ref="withReplacementCheckbox" className="small-6 small-offset-6 columns">
+										<label><input type="checkbox" checked={this.props.doc.withReplacement} onChange={this.onCheckboxChange.bind(this, "withReplacement")} /> Allow items to be used more than once</label>
+									</div>
 								</div>
 							</div>
 						</form>
