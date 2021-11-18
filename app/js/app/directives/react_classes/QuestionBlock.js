@@ -289,11 +289,11 @@ define(["react", "jquery"], function(React,$) {
 					var oldDoc = this.props.doc;
 					var newDoc = $.extend({}, oldDoc);
 					var newItem = {
-						"type": { "isaacParsonsQuestion": "parsonsItem", "isaacClozeQuestion": "parsonsItem", "isaacItemQuestion" : "item" }[this.props.doc.type],
+						"type": { "isaacParsonsQuestion": "parsonsItem", "isaacClozeQuestion": "item", "isaacItemQuestion" : "item" }[this.props.doc.type],
 						"value": "",
 						"id": Math.random().toString(16).toLowerCase().slice(-4)
 					};
-					if (this.props.doc.type === "isaacParsonsQuestion" || this.props.doc.type === "isaacClozeQuestion") {
+					if (this.props.doc.type === "isaacParsonsQuestion") {
 						newItem["indentation"] = 0;
 					}
 					newDoc.items.push(newItem);
