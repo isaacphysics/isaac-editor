@@ -466,8 +466,6 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type === "isaacClozeQuestion") {
-					this.props.doc.disableIndentation = true
-
 					var clozeDndHelp = <div style={{marginBottom: "10px"}}>
 						<h3>Defining drop zones</h3>
 						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment (but see disclaimer)</p>
