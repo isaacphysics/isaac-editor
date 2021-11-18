@@ -350,7 +350,7 @@ define(["react", "jquery"], function(React,$) {
 				} else if (this.props.doc.type == "isaacParsonsQuestion") {
 					var requiredChildType = "parsonsChoice";
 				} else if (this.props.doc.type == "isaacClozeQuestion") {
-					var requiredChildType = "parsonsChoice";
+					var requiredChildType = "itemChoice";
 				} else if (this.props.doc.type == "isaacSymbolicChemistryQuestion") {
 					var requiredChildType = "chemicalFormula";
                 } else if (this.props.doc.type == "isaacGraphSketcherQuestion") {
@@ -363,7 +363,7 @@ define(["react", "jquery"], function(React,$) {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
-				} else if (this.props.doc.type === "isaacParsonsQuestion" || this.props.doc.type === "isaacItemQuestion") {
+				} else if (this.props.doc.type === "isaacParsonsQuestion" || this.props.doc.type === "isaacItemQuestion" || this.props.doc.type === "isaacClozeQuestion") {
 					var choices = <Block type="choices" blockTypeTitle="Choices">
 						<ContentChildren globalItems={this.props.doc.items || []} items={this.props.doc.choices || []} encoding={this.encoding} onChange={this.onChoicesChange} requiredChildType={requiredChildType}/>
 					</Block>
