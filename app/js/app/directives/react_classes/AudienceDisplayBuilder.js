@@ -58,7 +58,7 @@ define(["react"], function(React) {
             },
 
             clearDisplay: function() {
-                this.props.onDisplayChange(null);
+                this.props.onDisplayChange(undefined);
                 this.setState({editing: false, localDisplay: {audience: [], nonAudience: []}});
             },
 
