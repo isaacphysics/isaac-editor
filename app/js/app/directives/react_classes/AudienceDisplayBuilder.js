@@ -4,7 +4,7 @@ define(["react"], function(React) {
     var actionBtnCls = "button tiny radius";
     var selectCSS = {"width": "auto", "padding-right": "1rem"};
 
-    var audienceOptions = ["open"];
+    var audienceOptions = ["open", "closed"];
     var nonAudienceOptions = ["closed", "de-emphasised", "hidden"];
 
     return function(ContentEditor) {
