@@ -320,6 +320,11 @@ define(["react", "jquery"], function(React,$) {
 					this.props.doc.items = [];
 				}
 
+				// Make sure encoding is HTML otherwise text around drop-zones is rendered weirdly
+				if (this.props.doc.type == "isaacClozeQuestion") {
+					this.props.doc.encoding = "html";
+				}
+
 				var hints = {
 					"type": "content",
 					"layout": "tabs",
@@ -469,7 +474,8 @@ define(["react", "jquery"], function(React,$) {
 					var clozeDndHelp = <div style={{marginBottom: "10px"}}>
 						<h3>Defining drop zones</h3>
 						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment (but see disclaimer)</p>
-						<small>Disclaimer: drop zones in LaTeX work for basic equations, but drop zones in integral limits will probably not work as intended - in summary drop zones in LaTeX are not explicitly supported by us, but they can work in some situations</small>
+						<p>For the drop zones to work correctly, the question exposition must be HTML encoded - if you would like to use markdown please use a <a href={"https://markdowntohtml.com/"}>markdown to HTML converter</a>.</p>
+						<small>Disclaimer: drop zones will work in LaTeX for simple use cases, but for very complex and/or nested equations may not work as intended - in summary drop zones in LaTeX are not explicitly supported by us, but it can work for <em>most</em> use cases</small>
 					</div>
 				}
 
