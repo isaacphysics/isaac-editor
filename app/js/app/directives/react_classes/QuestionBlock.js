@@ -472,6 +472,8 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.props.doc.type === "isaacClozeQuestion") {
 					var clozeDndHelp = <div style={{marginBottom: "10px"}}>
+						<h3>Item ordering</h3>
+						<p>Items in the items section will be ordered based on their id (initially, after the question loads). The best way to make use of this is to prefix their ids with numbers, i.e. 1-item1id, 2-item2id, etc.</p>
 						<h3>Defining drop zones</h3>
 						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment (but see disclaimer)</p>
 						<p>For the drop zones to work correctly, the question exposition must be HTML encoded - if you would like to use markdown please use a <a href={"https://markdowntohtml.com/"}>markdown to HTML converter</a>.</p>
