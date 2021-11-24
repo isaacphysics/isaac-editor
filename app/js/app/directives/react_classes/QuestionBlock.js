@@ -142,11 +142,19 @@ define(["react", "jquery"], function(React,$) {
 					// Add the default value if it is missing
 					newDoc.requireUnits = true;
 					newDoc.displayUnit = null;
+					delete newDoc.showConfidence;
+					delete newDoc.randomiseChoices;
 				} else if (newType == "isaacQuestion" && !newDoc.hasOwnProperty("showConfidence")) {
 					newDoc.showConfidence = false;
+					delete newDoc.requireUnits
+					delete newDoc.displayUnit;
+					delete newDoc.randomiseChoices
 				} else if (newType == "isaacMultiChoiceQuestion" && !newDoc.hasOwnProperty("randomiseChoices")) {
 					// Add the default value if it is missing
 					newDoc.randomiseChoices = true;
+					delete newDoc.requireUnits
+					delete newDoc.displayUnit;
+					delete newDoc.showConfidence
 				} else {
 					// Remove the requireUnits property as it is no longer applicable to this type of question
 					delete newDoc.requireUnits;
