@@ -564,6 +564,11 @@ define(["react", "jquery"], function(React,$) {
 										<label><input type="checkbox" checked={this.props.doc.withReplacement} onChange={this.onCheckboxChange.bind(this, "withReplacement")} /> Allow items to be used more than once</label>
 									</div>
 								</div>
+								<div className="row" style={{display: this.props.doc.type == "isaacClozeQuestion" ? "block" : "none"}}>
+									<div ref="randomiseItemsCheckbox" className="small-6 small-offset-6 columns">
+										<label><input type="checkbox" checked={this.props.doc.randomiseItems} onChange={this.onCheckboxChange.bind(this, "randomiseItems")} />Randomise items on question load</label>
+									</div>
+								</div>
 							</div>
 						</form>
 						{unitsList}
