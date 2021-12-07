@@ -255,6 +255,7 @@ define([
 	typeMap["figure"] = FigureBlock;
 	typeMap["content"] = ContentBlock;
 	typeMap["codeSnippet"] = CodeBlock;
+	typeMap["interactiveCodeSnippet"] = CodeBlock;
 	typeMap["isaacQuizSection"] = QuizSectionBlock;
 	typeMap["concept"] = ContentBlock;
 	typeMap["isaacQuestionPage"] = ContentBlock;

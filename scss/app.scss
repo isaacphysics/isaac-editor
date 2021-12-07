@@ -266,6 +266,12 @@ $transformDelay: 0.2s;
   opacity: 0;
 }
 
+.code-textbox {
+  font-family: monospace;
+  -moz-tab-size : 4;
+  tab-size : 4;
+}
+
 .cm-error-line {
   background-color: red;
 }
