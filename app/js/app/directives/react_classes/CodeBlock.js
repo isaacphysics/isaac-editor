@@ -107,8 +107,7 @@ define(["react", "jquery"], function(React,$) {
             },
 
             regexHelper: function(_e) {
-                var regex = this.props.doc.outputRegex || ""
-                window.open(`https://regex101.com/?regex=${encodeURIComponent(regex)}&delimiter=%22&flavor=javascript&flags=`)
+                window.open(`https://regex101.com/?regex=&delimiter=%22&flavor=javascript&flags=`)
             },
 
             render: function() {
@@ -153,32 +152,21 @@ define(["react", "jquery"], function(React,$) {
                             <label>Setup code:</label>
                             <textarea id={"setup-code-textbox" + this.state.uid} className={"code-textbox"} value={this.props.doc.setupCode || ''} rows="10" onChange={this.onSetupCodeChange}/>
                         </div>
-                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}} ref="wrapCodeInMainCheckbox">
-                            <label><input type="checkbox" checked={this.props.doc.wrapCodeInMain} onChange={this.onCheckboxChange.bind(this, "wrapCodeInMain")} /> Wrap the users code in a main function</label>
-                        </div>
                         <div>
                             <label>Code:</label>
                             <textarea id={"code-textbox" + this.state.uid} className={"code-textbox"} value={this.props.doc.code || ''} rows="10" onChange={this.onCodeChange}/>
                         </div>
-                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}}>
+                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}} ref="wrapCodeInMainCheckbox">
+                            <label><input type="checkbox" checked={this.props.doc.wrapCodeInMain} onChange={this.onCheckboxChange.bind(this, "wrapCodeInMain")} /> Wrap the users code in a main function</label>
+                        </div>
+                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none", paddingBottom: "5px"}}>
                             <label>Test code:</label>
                             <textarea id={"test-code-textbox" + this.state.uid} className={"code-textbox"} value={this.props.doc.testCode || ''} rows="10" onChange={this.onTestCodeChange}/>
-                        </div>
-                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}} ref="useAllTestInputsCheckbox">
-                            <label><input type="checkbox" checked={this.props.doc.useAllTestInputs} onChange={this.onCheckboxChange.bind(this, "useAllTestInputs")} /> All test inputs must be consumed</label>
-                        </div>
-                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}}>
-                            <label>Test inputs:</label>
-                            <textarea style={{fontFamily: "monospace"}} value={this.props.doc.testInput} onChange={this.onTestInputChange} placeholder="Newline-separated test inputs" />
+                            <button className="button tiny tag radius" onClick={this.regexHelper}>Regex helper</button>
                         </div>
                         <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}}>
                             <label>Expected test result:</label>
                             <input type="text" style={{fontFamily: "monospace"}} value={this.props.doc.expectedResult} onChange={this.onExpectedResultChange} placeholder="Expected result" />
-                        </div>
-                        <div style={{display: this.props.doc.type === "interactiveCodeSnippet" ? "block" : "none"}}>
-                            <label>Output regex:</label>
-                            <input type="text" style={{fontFamily: "monospace"}} value={this.props.doc.outputRegex} onChange={this.onOutputRegexChange} placeholder="Regex to test printed output" />
-                            <button className="button tiny tag radius" onClick={this.regexHelper}>Test Regex</button>
                         </div>
                         <div>
                             <label>Url of code:</label>
