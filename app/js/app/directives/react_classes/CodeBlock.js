@@ -10,13 +10,13 @@ define(["react", "jquery"], function(React,$) {
                             var start = this.selectionStart;
                             var end = this.selectionEnd;
 
-                            // set textarea value to: text before caret + tab + text after caret
+                            // set textarea value to: text before caret + two spaces + text after caret
                             this.value = this.value.substring(0, start) +
-                                "\t" + this.value.substring(end);
+                                "  " + this.value.substring(end);
 
                             // put caret at right position again
                             this.selectionStart =
-                                this.selectionEnd = start + 1;
+                                this.selectionEnd = start + 2;
                         }
                     },
                     uid: (Math.floor(Math.random() * 99999999)).toString()
@@ -138,6 +138,7 @@ define(["react", "jquery"], function(React,$) {
                             <label>Language:</label>
                             <select value={this.props.doc.language} onChange={this.onLanguageStyleChange}>
                                 <option value="python">Python</option>
+                                <option value="javascript">Javascript</option>
                             </select>
                         </div>
                 }[type];
