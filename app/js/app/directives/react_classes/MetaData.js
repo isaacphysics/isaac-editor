@@ -25,6 +25,7 @@ define(["react", "jquery"], function(React,$) {
 					level: this.props.doc.level,
 					difficulty: this.props.doc.difficulty,
 					published: this.props.doc.published,
+					deprecated: this.props.doc.deprecated,
 					url: this.props.doc.url,
 					description: this.props.doc.description,
 					dateInput: dip,
@@ -102,6 +103,23 @@ define(["react", "jquery"], function(React,$) {
 
 				clearTimeout(this.metadataChangeTimeout);
 				this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
+			},
+
+			onDeprecatedChange: function(e) {
+				this.onCheckboxChange.bind(this, "deprecated")(e);
+
+				const oldTags = this.props.doc.tags !== undefined && this.props.doc.tags !== null ? this.props.doc.tags : [];
+				let newTags = undefined;
+
+				if (e.target.checked && !oldTags.includes("nofilter")) {
+					newTags = oldTags.concat(["nofilter"]);
+				} else if (!e.target.checked) {
+					newTags = oldTags.filter(s => s !== "nofilter");
+				}
+
+				if (newTags !== undefined) {
+					this.onTagsChange(e, this.props.doc.tags, newTags);
+				}
 			},
 
 			onCheckboxChange: function(key, e) {
@@ -231,6 +249,10 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.published === true || this.state.published === false) {
 					newDoc.published = this.state.published;
+				}
+
+				if (this.state.deprecated === true || this.state.deprecated === false) {
+					newDoc.deprecated = this.state.deprecated;
 				}
 
 				if (this.state.visibleToStudents === true || this.state.visibleToStudents === false) {
@@ -427,6 +449,10 @@ define(["react", "jquery"], function(React,$) {
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
 							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.published} onChange={this.onCheckboxChange.bind(this, "published")} /> </div>
 						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Deprecated?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.deprecated} onChange={this.onDeprecatedChange} /> </div>
+						</div>
 					];
 
 					var audience = <div className="row">
