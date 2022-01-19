@@ -55,6 +55,7 @@ define(["react", "jquery"], function(React,$) {
 					postResources: this.props.doc.postResources,
 					audience: this.props.doc.audience,
 					visibleToStudents: this.props.doc.visibleToStudents,
+					hiddenFromRoles: this.props.doc.hiddenFromRoles,
 				};
 			},
 
@@ -119,6 +120,63 @@ define(["react", "jquery"], function(React,$) {
 				if (newTags !== undefined) {
 					this.onTagsChange(e, this.props.doc.tags, newTags);
 				}
+			},
+
+			onHiddenFromRolesChange: function(role, e) {
+				const roleShouldBeIncluded = role === "STUDENT" ? !e.target.checked : e.target.checked;
+
+				let oldHiddenFromRoles = this.state.hiddenFromRoles !== undefined && this.state.hiddenFromRoles !== null ? this.state.hiddenFromRoles : [];
+				if (this.state.visibleToStudents) {
+					oldHiddenFromRoles.push("STUDENT");
+				}
+				let newHiddenFromRoles = [];
+				let newVisibleToStudents = this.state.visibleToStudents;
+
+				switch (role) {
+					case "STUDENT":
+						if (roleShouldBeIncluded) {
+							newHiddenFromRoles.push("STUDENT");
+							oldHiddenFromRoles.forEach(r => {
+								if (r !== "STUDENT") {
+									newHiddenFromRoles.push(r);
+								}
+							});
+							newVisibleToStudents = false;
+						} else {
+							// If students can see it, teachers should be able to see it, so leave newHiddenFromRoles empty
+							newVisibleToStudents = true;
+						}
+						break;
+					case "TEACHER":
+						if (roleShouldBeIncluded) {
+							// If teachers can't see it, neither should students
+							newHiddenFromRoles.push("TEACHER");
+							newHiddenFromRoles.push("STUDENT");
+							newVisibleToStudents = false;
+						} else {
+							// If teachers can see it, students may or may not be able to see it
+							oldHiddenFromRoles.forEach(r => {
+								if (r !== "TEACHER") {
+									newHiddenFromRoles.push(r);
+								}
+							});
+						}
+						break;
+					default:
+						console.error("Unhandled role input to onHiddenFromRolesChange!")
+						newHiddenFromRoles = oldHiddenFromRoles;
+						newVisibleToStudents = this.state.visibleToStudents;
+				}
+
+				var newState = {};
+				newState["hiddenFromRoles"] = newHiddenFromRoles;
+				newState["visibleToStudents"] = newVisibleToStudents;
+				this.setState(newState);
+
+				console.log(newState);
+
+				clearTimeout(this.metadataChangeTimeout);
+				this.metadataChangeTimeout = setTimeout(this.onMetadataChangeTimeout, 500);
 			},
 
 			onCheckboxChange: function(key, e) {
@@ -256,6 +314,10 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.visibleToStudents === true || this.state.visibleToStudents === false) {
 					newDoc.visibleToStudents = this.state.visibleToStudents;
+				}
+
+				if (this.state.hiddenFromRoles || this.props.doc.hiddenFromRoles) {
+					newDoc.hiddenFromRoles = this.state.hiddenFromRoles;
 				}
 
 				if (this.state.attribution || this.props.doc.attribution) {
@@ -599,7 +661,11 @@ define(["react", "jquery"], function(React,$) {
 						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Visible to students?</span></div>
-							<div className="small-10 columns"><input type="checkbox" checked={!!this.state.visibleToStudents} onChange={this.onCheckboxChange.bind(this, "visibleToStudents")} /> </div>
+							<div className="small-10 columns"><input type="checkbox" checked={(this.state.hiddenFromRoles !== undefined && this.state.hiddenFromRoles !== null && !this.state.hiddenFromRoles.includes("STUDENT")) || (!!this.state.visibleToStudents)} onChange={this.onHiddenFromRolesChange.bind(this, "STUDENT")} /> </div>
+						</div>,
+						<div className="row">
+							<div className="small-2 columns text-right"><span className="metadataLabel">Hidden from teachers?</span></div>
+							<div className="small-10 columns"><input type="checkbox" checked={this.state.hiddenFromRoles !== undefined && this.state.hiddenFromRoles !== null && this.state.hiddenFromRoles.includes("TEACHER")} onChange={this.onHiddenFromRolesChange.bind(this, "TEACHER")} /> </div>
 						</div>,
 						<div className="row">
 							<div className="small-2 columns text-right"><span className="metadataLabel">Published?</span></div>
