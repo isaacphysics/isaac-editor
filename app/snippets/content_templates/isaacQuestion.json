@@ -3,6 +3,7 @@
 	"encoding": "markdown",
 	"value": "_Enter exposition here_",
 	"choices": [],
+	"showConfidence": false,
 	"answer": {
 		"type": "content",
 		"value": "_Enter answer here_",

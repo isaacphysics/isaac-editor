@@ -144,11 +144,11 @@ define(["react", "jquery"], function(React,$) {
 					newDoc.displayUnit = null;
 					delete newDoc.showConfidence;
 					delete newDoc.randomiseChoices;
-				} else if (newType == "isaacQuestion" && !newDoc.hasOwnProperty("showConfidence")) {
-					newDoc.showConfidence = false;
-					delete newDoc.requireUnits
-					delete newDoc.displayUnit;
-					delete newDoc.randomiseChoices
+				// } else if (newType == "isaacQuestion" && !newDoc.hasOwnProperty("showConfidence")) {
+				// 	newDoc.showConfidence = false;
+				// 	delete newDoc.requireUnits
+				// 	delete newDoc.displayUnit;
+				// 	delete newDoc.randomiseChoices
 				} else if (newType == "isaacMultiChoiceQuestion" && !newDoc.hasOwnProperty("randomiseChoices")) {
 					// Add the default value if it is missing
 					newDoc.randomiseChoices = true;
@@ -326,8 +326,8 @@ define(["react", "jquery"], function(React,$) {
 			render: function() {
 				if (this.props.doc.type == "isaacNumericQuestion" && !this.props.doc.hasOwnProperty("requireUnits")) {
 					this.props.doc.requireUnits = true;
-				} else if (this.props.doc.type == "isaacQuestion" && !this.props.doc.hasOwnProperty("showConfidence")) {
-					this.props.doc.showConfidence = false;
+				// } else if (this.props.doc.type == "isaacQuestion" && !this.props.doc.hasOwnProperty("showConfidence")) {
+				// 	this.props.doc.showConfidence = false;
 				} else if (this.props.doc.type == "isaacMultiChoiceQuestion" && !this.props.doc.hasOwnProperty("randomiseChoices")) {
 					this.props.doc.randomiseChoices = true;
 				} else if ((this.props.doc.type == "isaacParsonsQuestion" || this.props.doc.type == "isaacClozeQuestion" || this.props.doc.type == "isaacItemQuestion") && !this.props.doc.items) {
@@ -341,6 +341,8 @@ define(["react", "jquery"], function(React,$) {
 						this.props.doc.randomiseItems = false;
 					}
 				}
+
+				// this.props.doc.showConfidence = false;
 
 				var hints = {
 					"type": "content",
@@ -539,9 +541,10 @@ define(["react", "jquery"], function(React,$) {
 											<label><input type="checkbox" checked={this.props.doc.requireUnits} onChange={this.onCheckboxChange.bind(this, "requireUnits")} />Require choice of units</label>
 										</div>
 									</div>
-									<div className="row" style={{display: this.props.doc.type == "isaacQuestion" ? "block" : "none"}}>
+									{/*<div className="row" style={{display: this.props.doc.type == "isaacQuestion" ? "block" : "none"}}>*/}
+									<div className="row" style={{display: "block"}}>
 										<div ref="showConfidenceCheckbox" className="small-5 columns">
-											<label><input type="checkbox" checked={this.props.doc.showConfidence} onChange={this.onCheckboxChange.bind(this, "showConfidence")} />Show confidence question</label>
+											<label><input type="checkbox" checked={this.props.doc.showConfidence} onChange={this.onCheckboxChange.bind(this, "showConfidence")} />Show confidence</label>
 										</div>
 									</div>
 

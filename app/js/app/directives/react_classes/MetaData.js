@@ -22,6 +22,7 @@ define(["react", "jquery"], function(React,$) {
 					summary: this.props.doc.summary,
 					altText: this.props.doc.altText,
 					attribution: this.props.doc.attribution,
+					confidence: this.props.doc.confidence,
 					level: this.props.doc.level,
 					difficulty: this.props.doc.difficulty,
 					published: this.props.doc.published,
@@ -239,6 +240,10 @@ define(["react", "jquery"], function(React,$) {
 
 				if (this.state.attribution || this.props.doc.attribution) {
 					newDoc.attribution = this.state.attribution;
+				}
+
+				if (this.state.confidence || this.props.doc.confidence) {
+					newDoc.confidence = this.state.confidence;
 				}
 
 				if (this.state.level || this.props.doc.level) {
@@ -575,6 +580,13 @@ define(["react", "jquery"], function(React,$) {
 					</div>;
 				}
 
+				if (this.props.doc.type == "isaacConceptPage" ) {
+					var conceptPageMeta = <div className="row">
+						<div className="small-2 columns text-right"><span className="metadataLabel">Confidence:</span></div>
+						<div className="small-10 columns"><input type="checkbox" checked={!!this.state.confidence} onChange={this.onCheckboxChange.bind(this, "confidence")} /></div>
+					</div>;
+				}
+
 				if (this.props.doc.type == "isaacQuiz") {
 					var quizPageMeta = [
 						<div className="row">
@@ -662,6 +674,7 @@ define(["react", "jquery"], function(React,$) {
 							{summary}
 							{linkedGameboards}
 							{eventMetadata}
+							{conceptPageMeta}
 							{published}
 							{anvilAppMeta}
 							{quizPageMeta}
