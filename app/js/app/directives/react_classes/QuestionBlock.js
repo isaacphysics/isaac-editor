@@ -142,22 +142,27 @@ define(["react", "jquery"], function(React,$) {
 					// Add the default value if it is missing
 					newDoc.requireUnits = true;
 					newDoc.displayUnit = null;
+					newDoc.disregardSignificantFigures = false;
 					delete newDoc.showConfidence;
 					delete newDoc.randomiseChoices;
 				} else if (newType == "isaacQuestion" && !newDoc.hasOwnProperty("showConfidence")) {
 					newDoc.showConfidence = false;
 					delete newDoc.requireUnits
+					delete newDoc.disregardSignificantFigures
 					delete newDoc.displayUnit;
 					delete newDoc.randomiseChoices
 				} else if (newType == "isaacMultiChoiceQuestion" && !newDoc.hasOwnProperty("randomiseChoices")) {
 					// Add the default value if it is missing
 					newDoc.randomiseChoices = true;
 					delete newDoc.requireUnits
+					delete newDoc.disregardSignificantFigures
 					delete newDoc.displayUnit;
 					delete newDoc.showConfidence
 				} else {
 					// Remove the requireUnits property as it is no longer applicable to this type of question
 					delete newDoc.requireUnits;
+					// Remove the disregardSignificantFigures property as it is no longer applicable to this type of question
+					delete newDoc.disregardSignificantFigures;
 					// Remove the displayUnit property as it is no longer applicable to this type of question
 					delete newDoc.displayUnit;
 					// Remove the randomiseChoices property as it is no longer applicable to this type of question
@@ -508,21 +513,43 @@ define(["react", "jquery"], function(React,$) {
 							<div className="row">
 								<div className="small-6 columns">
 									<input type="text" value={this.props.doc.title || ""} onChange={this.onTitleChange} placeholder="Question title"/>
+								</div>
+								<div className="small-6 columns">
+									<select value={this.props.doc.type} onChange={this.type_Change}>
+										<option value="isaacQuestion">Quick Question</option>
+										<option value="isaacMultiChoiceQuestion">Multiple Choice Question</option>
+										<option value="isaacNumericQuestion">Numeric Question</option>
+										<option value="isaacSymbolicQuestion">Symbolic Question</option>
+										<option value="isaacStringMatchQuestion">String Match Question</option>
+										<option value="isaacRegexMatchQuestion">Regex Match Question</option>
+										<option value="isaacFreeTextQuestion">Free Text Question</option>
+										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
+										<option value="isaacItemQuestion">Item Question</option>
+										<option value="isaacParsonsQuestion">Parsons Question</option>
+										<option value="isaacClozeQuestion">Cloze (Drag and Drop) Question</option>
+										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
+										<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
+									</select>
+								</div>
+								<div className="row">
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
-										<div className="small-6 columns text-right">
+										<div className="small-3 columns text-right">
 											Significant figures:
 										</div>
-										<div className="small-1 columns text-right">
-											Min
+										<div className="small-2 columns">
+											<input type="text" placeholder="Min" value={this.state.significantFiguresMin} onChange={this.onSignificantFiguresMinChange}/>
+										</div>
+										<div className="small-1 columns">
+											to
 										</div>
 										<div className="small-2 columns">
-											<input type="text" value={this.state.significantFiguresMin} onChange={this.onSignificantFiguresMinChange}/>
+											<input type="text" placeholder="Max" value={this.state.significantFiguresMax} onChange={this.onSignificantFiguresMaxChange}/>
 										</div>
-										<div className="small-1 columns text-right">
-											Max
+										<div className="small-1 columns">
+											OR
 										</div>
-										<div className="small-2 columns">
-											<input type="text" value={this.state.significantFiguresMax} onChange={this.onSignificantFiguresMaxChange}/>
+										<div ref="disregardSigFigsCheckbox" className="small-3 columns">
+											<label><input type="checkbox" checked={this.props.doc.disregardSignificantFigures} onChange={this.onCheckboxChange.bind(this, "disregardSignificantFigures")} />Exact answers only</label>
 										</div>
 									</div>
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
@@ -560,23 +587,6 @@ define(["react", "jquery"], function(React,$) {
 											<label><input type="checkbox" checked={this.props.doc.disableIndentation} onChange={this.onCheckboxChange.bind(this, "disableIndentation")} /> Disable indentation</label>
 										</div>
 									</div>
-								</div>
-								<div className="small-6 columns">
-									<select value={this.props.doc.type} onChange={this.type_Change}>
-										<option value="isaacQuestion">Quick Question</option>
-										<option value="isaacMultiChoiceQuestion">Multiple Choice Question</option>
-										<option value="isaacNumericQuestion">Numeric Question</option>
-										<option value="isaacSymbolicQuestion">Symbolic Question</option>
-										<option value="isaacStringMatchQuestion">String Match Question</option>
-										<option value="isaacRegexMatchQuestion">Regex Match Question</option>
-										<option value="isaacFreeTextQuestion">Free Text Question</option>
-										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
-										<option value="isaacItemQuestion">Item Question</option>
-										<option value="isaacParsonsQuestion">Parsons Question</option>
-										<option value="isaacClozeQuestion">Cloze (Drag and Drop) Question</option>
-										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
-                    					<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
-									</select>
 								</div>
 								<div className="row" style={{display: this.props.doc.type == "isaacClozeQuestion" ? "block" : "none"}}>
 									<div ref="withReplacementCheckbox" className="small-6 small-offset-6 columns">
