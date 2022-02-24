@@ -50,6 +50,7 @@ define(["react", "jquery"], function(React,$) {
                                 <option value="csharp">C#</option>
                                 <option value="php">PHP</option>
                                 <option value="sql">SQL</option>
+                                <option value="assembly">Assembly</option>
                                 <option value="pseudocode">Isaac Pseudocode</option>
                             </select>
                         </div>
