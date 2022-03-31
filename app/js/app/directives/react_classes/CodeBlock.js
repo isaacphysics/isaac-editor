@@ -57,6 +57,9 @@ define(["react", "jquery"], function(React,$) {
                         <div ref="disableHighlightingCheckbox">
                             <label><input type="checkbox" checked={this.props.doc.disableHighlighting} onChange={this.onCheckboxChange.bind(this, "disableHighlighting")} />Disable Highlighting</label>
                         </div>
+                        <div ref="expandableCheckbox">
+                            <label><input type="checkbox" checked={this.props.doc.expandable} onChange={this.onCheckboxChange.bind(this, "expandable")} />Expandable (for wide content)</label>
+                        </div>
                         <div>
                             <label>Code:</label>
                             <textarea style={{fontFamily: "monospace"}} value={this.props.doc.code || ''} rows="10" onChange={this.onCodeChange}></textarea>
