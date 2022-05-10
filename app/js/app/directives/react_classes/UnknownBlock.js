@@ -42,6 +42,7 @@ define(["react", "jquery"], function(React,$) {
 								{/* <strong>Careful:</strong> if you are creating a quiz, please only choose a <strong>quiz section</strong> at the top level <br /> */}
 								<a onClick={this.chooseType} data-chosen-type="content">content</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="codeSnippet">code snippet</a>&nbsp; | &nbsp;
+								<a onClick={this.chooseType} data-chosen-type="interactiveCodeSnippet">interactive code</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseQuestion} data-chosen-type="isaacQuestion">question</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="glossaryTerm">glossary term</a>&nbsp; | &nbsp;
 								<a onClick={this.chooseType} data-chosen-type="figure">figure</a>&nbsp; | &nbsp;
