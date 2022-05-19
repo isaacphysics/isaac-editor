@@ -340,8 +340,6 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type == "isaacClozeQuestion") {
-					// Make sure encoding is HTML otherwise text around drop-zones is rendered weirdly
-					this.props.doc.encoding = "html";
 					if (!this.props.doc.hasOwnProperty("randomiseItems")) {
 						this.props.doc.randomiseItems = false;
 					}
