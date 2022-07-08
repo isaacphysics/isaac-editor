@@ -9,6 +9,10 @@ define(["react"], function(React) {
 
     var csStages = ["a_level", "gcse"];
     var csExamBoards = ["aqa", "ocr", "cie", "edexcel", "eduqas", "wjec"];
+    var csStagedExamBoards = {
+        "a_level": ["aqa", "cie", "eduqas", "ocr", "wjec"],
+        "gcse": ["aqa", "edexcel", "eduqas", "ocr", "wjec"],
+    };
 
     var roles = ["logged_in", "teacher"]; //, "event_leader", "content_editor", "event_manager", "admin"];
 
@@ -38,8 +42,15 @@ define(["react"], function(React) {
                     .map(fieldsEntry => [fieldsEntry[0], fieldsEntry[1].slice(0, 1)]);
             },
 
-            getRemainingValues: function(fieldName, existingValues) {
-                return (this.getPossibleFields()[fieldName] || []).filter(possibleValue => existingValues.indexOf(possibleValue) === -1);
+            getRemainingValues: function(fieldsObject, fieldName, existingValues) {
+                return (this.getPossibleFields()[fieldName] || [])
+                    .filter(function filterExamBoardOptionsByStageIfApplicable(value) {
+                        if (ContentEditor.SITE_SUBJECT !== "CS" || fieldName !== "examBoard") return true;
+                        if (Object.keys(fieldsObject).indexOf("stage") === -1) return true;
+                        if (fieldsObject["stage"].length !== 1) return true;
+                        return (csStagedExamBoards[fieldsObject["stage"][0]] || []).indexOf(value) !== -1;
+                    })
+                    .filter(possibleValue => existingValues.indexOf(possibleValue) === -1);
             },
 
             getInitialState: function() {
@@ -108,10 +119,10 @@ define(["react"], function(React) {
 
             addValueToFieldOnFieldsObject: function(fieldsObjectIndex, field) {
                 return function() {
-                    var fieldObject = this.state.localAudience[fieldsObjectIndex];
-                    var newValue = this.getRemainingValues(field, fieldObject[field])[0];
-                    var newFieldObject = Object.assign({}, fieldObject);
-                    newFieldObject[field] = fieldObject[field].concat([newValue]);
+                    var fieldsObject = this.state.localAudience[fieldsObjectIndex];
+                    var newValue = this.getRemainingValues(fieldsObject, field, fieldsObject[field])[0];
+                    var newFieldObject = Object.assign({}, fieldsObject);
+                    newFieldObject[field] = fieldsObject[field].concat([newValue]);
                     this.setState({
                         localAudience: this.state.localAudience.map((existingFieldObject, index) => index === fieldsObjectIndex ? newFieldObject : existingFieldObject)
                     });
@@ -181,11 +192,12 @@ define(["react"], function(React) {
                                         {values.map((value, valueIndex, values) => <span>
                                             <select value={value} style={selectCSS} onChange={this.updateValueSelection(fieldObjectIndex, field, value)}>
                                                 <option value={value}>{value}</option>
-                                                {this.getRemainingValues(field, values).map(value => <option value={value}>{value}</option>)}
+                                                {this.getRemainingValues(fieldsObject, field, values)
+                                                    .map(value => <option value={value}>{value}</option>)}
                                             </select>
                                             {values.length > 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeValueFromFieldObject(fieldObjectIndex, field, value)}>🗙</button>}
                                             {valueIndex !== values.length - 1 && ", "}
-                                            {this.getRemainingValues(field, values).length !== 0 && valueIndex === values.length - 1 && <span>
+                                            {this.getRemainingValues(fieldsObject, field, values).length !== 0 && valueIndex === values.length - 1 && <span>
                                                 {values.length !== 1 && ", "}
                                                 <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addValueToFieldOnFieldsObject(fieldObjectIndex, field)}>➕</button>
                                             </span>}
