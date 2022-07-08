@@ -13,6 +13,16 @@ define(["react"], function(React) {
         "a_level": ["aqa", "cie", "eduqas", "ocr", "wjec"],
         "gcse": ["aqa", "edexcel", "eduqas", "ocr", "wjec"],
     };
+    function allExamBoardsForStagePresent(fieldsObject) {
+        if (Object.keys(fieldsObject).indexOf("examBoard") === -1) return false;
+        if (Object.keys(fieldsObject).indexOf("stage") === -1) return false;
+        if (fieldsObject["stage"].length !== 1) return false;
+        var possibleExamBoards = csStagedExamBoards[fieldsObject["stage"]] || [];
+        if (possibleExamBoards.length !== fieldsObject["examBoard"].length) return false;
+        return possibleExamBoards.every(examBoard => fieldsObject["examBoard"].indexOf[examBoard] !== -1);
+    }
+
+
 
     var roles = ["logged_in", "teacher"]; //, "event_leader", "content_editor", "event_manager", "admin"];
 
@@ -159,9 +169,11 @@ define(["react"], function(React) {
                 var conciseRepresentation = this.state.localAudience && <span>
                     {this.state.localAudience.length > 1 && "("}
                     {this.state.localAudience.map(expressionToOr =>
-                        Object.values(expressionToOr).map(expressionToAnd =>
-                            expressionToAnd.length === 1 ? expressionToAnd[0] : "(" + expressionToAnd.join(" or ") + ")"
-                        ).join(" and ")
+                        Object.entries(expressionToOr).map(function([field, expressionToAnd]) {
+                            if (field === "examBoard" && allExamBoardsForStagePresent(expressionToOr)) return "any exam board";
+                            if (expressionToAnd.length === 1) return expressionToAnd[0];
+                            else return "(" + expressionToAnd.join(" or ") + ")";
+                        }).join(" and ")
                     ).join(") or (")}
                     {this.state.localAudience.length > 1 && ")"}
                 </span>;
