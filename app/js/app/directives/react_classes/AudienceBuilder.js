@@ -139,6 +139,18 @@ define(["react"], function(React) {
                 }.bind(this);
             },
 
+            addAllExamBoardsToFieldsObject: function(fieldsObjectIndex) {
+                return function() {
+                    var fieldsObject = this.state.localAudience[fieldsObjectIndex];
+                    var examBoardsForStage = fieldsObject["stage"].length === 1 ?
+                        csStagedExamBoards[fieldsObject["stage"][0]] : csExamBoards;
+                    var newFieldsObject = Object.assign({}, fieldsObject, {examBoard: examBoardsForStage});
+                    this.setState({
+                        localAudience: this.state.localAudience.map((existingFieldObject, index) => index === fieldsObjectIndex ? newFieldsObject : existingFieldObject)
+                    });
+                }.bind(this);
+            },
+
             removeValueFromFieldObject: function(fieldsObjectIndex, field, valueToRemove) {
                 return function() {
                     var newFieldObject = Object.assign({}, this.state.localAudience[fieldsObjectIndex]);
@@ -192,38 +204,53 @@ define(["react"], function(React) {
                     {/* Edit mode */}
                     {this.state.editing && <div>
                         <div>
-                            {this.state.localAudience.map((fieldsObject, fieldObjectIndex, fieldsObjects) =>
+                            {this.state.localAudience.map((fieldsObject, fieldsObjectIndex, fieldsObjects) =>
                                 <span>
+                                    {/* Define each demographic */}
                                     {"("}
                                     {Object.entries(fieldsObject).map(([field, values], fieldIndex, fieldEntries) => <span>
-                                        <select value={field} style={selectCSS} onChange={this.updateFieldSelection(fieldObjectIndex, field)}>
+                                        {/* Field */}
+                                        <select value={field} style={selectCSS} onChange={this.updateFieldSelection(fieldsObjectIndex, field)}>
                                             <option value={field}>{field}</option>
                                             {this.getRemainingFieldsAndValue(fieldsObject).map(fieldEntry => <option value={fieldEntry[0]}>{fieldEntry[0]}</option>)}
                                         </select>
+
+                                        {/* Values */}
                                         {values.length === 1 ? " = " : " IN ["}
-                                        {values.map((value, valueIndex, values) => <span>
-                                            <select value={value} style={selectCSS} onChange={this.updateValueSelection(fieldObjectIndex, field, value)}>
-                                                <option value={value}>{value}</option>
-                                                {this.getRemainingValues(fieldsObject, field, values)
-                                                    .map(value => <option value={value}>{value}</option>)}
-                                            </select>
-                                            {values.length > 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeValueFromFieldObject(fieldObjectIndex, field, value)}>🗙</button>}
-                                            {valueIndex !== values.length - 1 && ", "}
-                                            {this.getRemainingValues(fieldsObject, field, values).length !== 0 && valueIndex === values.length - 1 && <span>
-                                                {values.length !== 1 && ", "}
-                                                <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addValueToFieldOnFieldsObject(fieldObjectIndex, field)}>➕</button>
-                                            </span>}
-                                        </span>)}
-                                        {values.length !== 1 && "] "}
-                                        {fieldEntries.length > 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeFieldFromFieldsObject(fieldObjectIndex, field)}>🗙</button>}
+                                        {!(field === "examBoard" && allExamBoardsForStagePresent(fieldsObject)) && <span>
+                                            {values.map((value, valueIndex, values) => <span>
+                                                <select value={value} style={selectCSS} onChange={this.updateValueSelection(fieldsObjectIndex, field, value)}>
+                                                    <option value={value}>{value}</option>
+                                                    {this.getRemainingValues(fieldsObject, field, values)
+                                                        .map(value => <option value={value}>{value}</option>)}
+                                                </select>
+                                                    {values.length > 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeValueFromFieldObject(fieldsObjectIndex, field, value)}>🗙</button>}
+                                                    {valueIndex !== values.length - 1 && ", "}
+                                                    {this.getRemainingValues(fieldsObject, field, values).length !== 0 && valueIndex === values.length - 1 && <span>
+                                                    {values.length !== 1 && ", "}
+                                                        <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addValueToFieldOnFieldsObject(fieldsObjectIndex, field)}>➕</button>
+                                                </span>}
+                                            </span>)}
+                                            {field === "examBoard" && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addAllExamBoardsToFieldsObject(fieldsObjectIndex)}>
+                                                ALL
+                                            </button>}
+                                        </span>}
+                                        {values.length !== 1 && !allExamBoardsForStagePresent(fieldsObject) && "] "}
+                                        {field === "examBoard" && allExamBoardsForStagePresent(fieldsObject) && <span>
+                                            {"ALL] "}
+                                            <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeValueFromFieldObject(fieldsObjectIndex, "examBoard", values[0])}>
+                                                NOT ALL
+                                            </button>
+                                        </span>}
+                                        {fieldEntries.length > 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeFieldFromFieldsObject(fieldsObjectIndex, field)}>🗙</button>}
                                         {fieldIndex !== fieldEntries.length - 1 ? " AND " : " "}
                                         {this.getRemainingFieldsAndValue(fieldsObject).length !== 0 && fieldIndex === fieldEntries.length - 1 && <span>
-                                            <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addFieldToFieldsObject(fieldObjectIndex)}>AND ➕</button>
+                                            <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.addFieldToFieldsObject(fieldsObjectIndex)}>AND ➕</button>
                                         </span>}
                                     </span>)}
                                     {")"}
-                                    {fieldsObjects.length !== 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeFieldsObject(fieldObjectIndex)}>🗙</button>}
-                                    {fieldObjectIndex !== fieldsObjects.length - 1 && <span> OR <br /></span>}
+                                    {fieldsObjects.length !== 1 && <button className={tinyBtnCls} style={tinyBtnCSS} onClick={this.removeFieldsObject(fieldsObjectIndex)}>🗙</button>}
+                                    {fieldsObjectIndex !== fieldsObjects.length - 1 && <span> OR <br /></span>}
                                 </span>
                             )}
                             {" "}
