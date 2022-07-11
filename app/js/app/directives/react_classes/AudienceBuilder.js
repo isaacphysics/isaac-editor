@@ -28,7 +28,8 @@ define(["react"], function(React) {
     return function(ContentEditor) {
         return React.createClass({
             getDefaultFieldsObject: function() {
-                return {"stage": ["a_level"]};
+                return ContentEditor.SITE_SUBJECT === "CS" ?
+                    {stage: ["a_level"], examBoard: ["ocr"]} : {stage: ["a_level"]};
             },
 
             getPossibleFields: function() {
