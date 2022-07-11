@@ -142,22 +142,27 @@ define(["react", "jquery"], function(React,$) {
 					// Add the default value if it is missing
 					newDoc.requireUnits = true;
 					newDoc.displayUnit = null;
+					newDoc.disregardSignificantFigures = false;
 					delete newDoc.showConfidence;
 					delete newDoc.randomiseChoices;
 				} else if (newType == "isaacQuestion" && !newDoc.hasOwnProperty("showConfidence")) {
 					newDoc.showConfidence = false;
 					delete newDoc.requireUnits
+					delete newDoc.disregardSignificantFigures
 					delete newDoc.displayUnit;
 					delete newDoc.randomiseChoices
 				} else if (newType == "isaacMultiChoiceQuestion" && !newDoc.hasOwnProperty("randomiseChoices")) {
 					// Add the default value if it is missing
 					newDoc.randomiseChoices = true;
 					delete newDoc.requireUnits
+					delete newDoc.disregardSignificantFigures
 					delete newDoc.displayUnit;
 					delete newDoc.showConfidence
 				} else {
 					// Remove the requireUnits property as it is no longer applicable to this type of question
 					delete newDoc.requireUnits;
+					// Remove the disregardSignificantFigures property as it is no longer applicable to this type of question
+					delete newDoc.disregardSignificantFigures;
 					// Remove the displayUnit property as it is no longer applicable to this type of question
 					delete newDoc.displayUnit;
 					// Remove the randomiseChoices property as it is no longer applicable to this type of question
@@ -335,8 +340,6 @@ define(["react", "jquery"], function(React,$) {
 				}
 
 				if (this.props.doc.type == "isaacClozeQuestion") {
-					// Make sure encoding is HTML otherwise text around drop-zones is rendered weirdly
-					this.props.doc.encoding = "html";
 					if (!this.props.doc.hasOwnProperty("randomiseItems")) {
 						this.props.doc.randomiseItems = false;
 					}
@@ -491,7 +494,7 @@ define(["react", "jquery"], function(React,$) {
 					var clozeDndHelp = <div style={{marginBottom: "10px"}}>
 						<h3>Defining drop zones</h3>
 						<p>To place drop zones within question text, write [drop-zone] (with the square brackets) - this will then get replaced with a drop zone UI element when the question is rendered. If you want to place drop zones within LaTeX, escape it with the <code>\text</code> environment (but see disclaimer)</p>
-						<p>For the drop zones to work correctly, the question exposition must be HTML encoded - if you would like to use markdown please use a <a href={"https://markdowntohtml.com/"}>markdown to HTML converter</a>.</p>
+						<p>For the drop zones to be rendered, the question exposition must be markdown encoded.</p>
 						<small>Disclaimer: drop zones will work in LaTeX for simple use cases, but for very complex and/or nested equations may not work as intended - in summary drop zones in LaTeX are not explicitly supported by us, but it can work for <em>most</em> use cases</small>
 					</div>
 				}
@@ -508,21 +511,43 @@ define(["react", "jquery"], function(React,$) {
 							<div className="row">
 								<div className="small-6 columns">
 									<input type="text" value={this.props.doc.title || ""} onChange={this.onTitleChange} placeholder="Question title"/>
+								</div>
+								<div className="small-6 columns">
+									<select value={this.props.doc.type} onChange={this.type_Change}>
+										<option value="isaacQuestion">Quick Question</option>
+										<option value="isaacMultiChoiceQuestion">Multiple Choice Question</option>
+										<option value="isaacNumericQuestion">Numeric Question</option>
+										<option value="isaacSymbolicQuestion">Symbolic Question</option>
+										<option value="isaacStringMatchQuestion">String Match Question</option>
+										<option value="isaacRegexMatchQuestion">Regex Match Question</option>
+										<option value="isaacFreeTextQuestion">Free Text Question</option>
+										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
+										<option value="isaacItemQuestion">Item Question</option>
+										<option value="isaacParsonsQuestion">Parsons Question</option>
+										<option value="isaacClozeQuestion">Cloze (Drag and Drop) Question</option>
+										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
+										<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
+									</select>
+								</div>
+								<div className="row">
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
-										<div className="small-6 columns text-right">
+										<div className="small-3 columns text-right">
 											Significant figures:
 										</div>
-										<div className="small-1 columns text-right">
-											Min
+										<div className="small-2 columns">
+											<input type="text" placeholder="Min" value={this.state.significantFiguresMin} onChange={this.onSignificantFiguresMinChange}/>
+										</div>
+										<div className="small-1 columns">
+											to
 										</div>
 										<div className="small-2 columns">
-											<input type="text" value={this.state.significantFiguresMin} onChange={this.onSignificantFiguresMinChange}/>
+											<input type="text" placeholder="Max" value={this.state.significantFiguresMax} onChange={this.onSignificantFiguresMaxChange}/>
 										</div>
-										<div className="small-1 columns text-right">
-											Max
+										<div className="small-1 columns">
+											OR
 										</div>
-										<div className="small-2 columns">
-											<input type="text" value={this.state.significantFiguresMax} onChange={this.onSignificantFiguresMaxChange}/>
+										<div ref="disregardSigFigsCheckbox" className="small-3 columns">
+											<label><input type="checkbox" checked={this.props.doc.disregardSignificantFigures} onChange={this.onCheckboxChange.bind(this, "disregardSignificantFigures")} />Exact answers only</label>
 										</div>
 									</div>
 									<div className="row" style={{display: this.props.doc.type == "isaacNumericQuestion" ? "block" : "none"}}>
@@ -560,23 +585,6 @@ define(["react", "jquery"], function(React,$) {
 											<label><input type="checkbox" checked={this.props.doc.disableIndentation} onChange={this.onCheckboxChange.bind(this, "disableIndentation")} /> Disable indentation</label>
 										</div>
 									</div>
-								</div>
-								<div className="small-6 columns">
-									<select value={this.props.doc.type} onChange={this.type_Change}>
-										<option value="isaacQuestion">Quick Question</option>
-										<option value="isaacMultiChoiceQuestion">Multiple Choice Question</option>
-										<option value="isaacNumericQuestion">Numeric Question</option>
-										<option value="isaacSymbolicQuestion">Symbolic Question</option>
-										<option value="isaacStringMatchQuestion">String Match Question</option>
-										<option value="isaacRegexMatchQuestion">Regex Match Question</option>
-										<option value="isaacFreeTextQuestion">Free Text Question</option>
-										<option value="isaacSymbolicLogicQuestion">Logic Question</option>
-										<option value="isaacItemQuestion">Item Question</option>
-										<option value="isaacParsonsQuestion">Parsons Question</option>
-										<option value="isaacClozeQuestion">Cloze (Drag and Drop) Question</option>
-										<option value="isaacSymbolicChemistryQuestion">Chemistry Question</option>
-                    					<option value="isaacGraphSketcherQuestion">Graph Sketcher Question</option>
-									</select>
 								</div>
 								<div className="row" style={{display: this.props.doc.type == "isaacClozeQuestion" ? "block" : "none"}}>
 									<div ref="withReplacementCheckbox" className="small-6 small-offset-6 columns">
