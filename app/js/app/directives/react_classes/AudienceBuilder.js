@@ -13,16 +13,15 @@ define(["react"], function(React) {
         "a_level": ["aqa", "cie", "eduqas", "ocr", "wjec"],
         "gcse": ["aqa", "edexcel", "eduqas", "ocr", "wjec"],
     };
+
     function allExamBoardsForStagePresent(fieldsObject) {
         if (Object.keys(fieldsObject).indexOf("examBoard") === -1) return false;
         if (Object.keys(fieldsObject).indexOf("stage") === -1) return false;
-        if (fieldsObject["stage"].length !== 1) return false;
-        var possibleExamBoards = csStagedExamBoards[fieldsObject["stage"]] || [];
-        if (possibleExamBoards.length !== fieldsObject["examBoard"].length) return false;
-        return possibleExamBoards.every(examBoard => fieldsObject["examBoard"].indexOf[examBoard] !== -1);
+        if (fieldsObject.stage.length !== 1) return false;
+        var possibleExamBoards = csStagedExamBoards[fieldsObject.stage[0]] || [];
+        if (possibleExamBoards.length !== fieldsObject.examBoard.length) return false;
+        return possibleExamBoards.every(examBoard => fieldsObject.examBoard.indexOf(examBoard) !== -1);
     }
-
-
 
     var roles = ["logged_in", "teacher"]; //, "event_leader", "content_editor", "event_manager", "admin"];
 
@@ -38,7 +37,7 @@ define(["react"], function(React) {
                         case "document": return {stage: csStages, examBoard: csExamBoards, difficulty: difficulties};
                         case "accordion": return {stage: csStages, examBoard: csExamBoards, role: roles};
                     }
-                } else { //if (ContentEditor.SITE_SUBJECT === "PHY") OR default
+                } else { // if (ContentEditor.SITE_SUBJECT === "PHY") OR default
                     switch (this.state.componentLevel) {
                         case "document": return {stage: phyStages, difficulty: difficulties};
                         case "accordion": return {stage: phyStages};
