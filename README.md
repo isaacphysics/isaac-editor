@@ -1,13 +1,6 @@
 # isaac-editor
 
-The Isaac Physics Content Editor, used to create the JSON site content for the Isaac Physics project.
-
-
-#### Using the Content Editor
-
-To use the editor, visit one of the running examples, currently [editor.isaacphysics.org](https://editor.isaacphysics.org) or [editor.isaaccomputerscience.org](https://isaaccomputerscience.org). You will need to have been granted access to the GitHub project in order to use either of these.
-
-Files can be browsed from the menu on the left, and edited by clicking on them. The UI hides away the underlying JSON, but it can be accessed by clicking the grey `Content Object` banner at the top left of any content block.
+The old Isaac Physics Content Editor, used to create the JSON site content for the Isaac Physics project. This project used React components inside an AngularJS app. It was used from 2014 until 2022, when it was superseded by [isaac-content-editor](https://github.com/isaacphysics/isaac-content-editor), a modern React app replacement.
 
 
 #### Developing the Content Editor
